@@ -125,6 +125,33 @@ Syntax
 
 ## **JavaScript**
 
+### Q. Array Methods
+
+| Method           | Description                                                            |
+| ---------------- | ---------------------------------------------------------------------- |
+| **. pop()**      | Removes the last element of an array, and returns that element         |
+| **. shift()**    | Removes the first element of an array, and returns that element        |
+| **. push()**     | Add new elements to the end of an array, and returns the new length    |
+| **. unshift()**  | Adds new elements to the start of an array, and returns the new length |
+| **. join()**     | Returns a new string by concatenating all of the elements in an array  |
+| **. sort()**     | Sorting the array elements based on some condition                     |
+| **. reverse()**  | Reversing the order of the elements in an array                        |
+| **. slice()**    | Pulling a copy of a part of an array into a new array                  |
+| **. toString()** | Converting the array elements into strings                             |
+
+### Q. String Methods
+
+> Ex: _Hello_
+
+| Method                 | Description                                                                         |
+| ---------------------- | ----------------------------------------------------------------------------------- |
+| **. toLowerCase()**    | _hello_ - Converting strings to lower case                                          |
+| **. toUpperCase()**    | _HELLO_ - Converting strings to upper case                                          |
+| **. length()**         | _5_ - Count the characters                                                          |
+| **. charAt(2)**        | _l_ - Returning the character at a particular index of a string                     |
+| **. concat(' world')** | _Hello world_ - Joining multiple strings into a single string                       |
+| **. indexOf('e)**      | _1_ - Providing the index of the first appearance of a given text inside the string |
+
 <div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
 
 ##
