@@ -160,6 +160,62 @@ Syntax
 
 ## **Angular**
 
+### Q 1. What is Angular
+
+### Q What are the building blocks of angular
+
+### Q What are the Angular lifecycle hooks.
+
+### Q What are data binding and how amy types are there
+
+### Q What is directive and how amy types are there
+
+### Q What is pipe and types of pipes
+
+### Q Difference between Pupre and Impure pipe.
+
+### Q What are filters
+
+### Q What is async pipe
+
+### Q How do you share data between components.
+
+### Q What is view encapsulation
+
+### Q What is route and types of routes.
+
+### Q what is interceptor
+
+### Q what is interface
+
+### Q What is lazyloading
+
+### Q What is AOT and JIT
+
+### Q What is Observables and promises
+
+### Q What is RXJS and list some operators
+
+### Q What is the difference between Subject, Behavior subject, Replay subject
+
+### Q What is NGRX
+
+### Q What is standalone component
+
+### Q What is Async/await
+
+### Q What are the decorators
+
+### Q Mention some advantages of Angular
+
+### Q What are Template and Reactive forms
+
+### Q What is dependency injection
+
+### Q What is angular change ditection
+
+### Q Difference between ng-template, ng-container, and ng-content
+
 <div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
 
 ##
