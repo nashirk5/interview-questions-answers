@@ -14,22 +14,22 @@
 
 ## **HTML**
 
-### Q 1. What is HTML ?
+### Q 1. What is HTML?
 
 HTML stands for **_HyperText Markup Language_**. It is a standard text formatting language used for developing web pages released in 1993. HTML is a language that is interpreted by the browser and it tells the browser what to display and how to display.
 
 ![Box model](src/assets/images/html_release_year.png)
 
-### Q 2. What are Tags, Elements and Attributes ?
+### Q 2. What are Tags, Elements and Attributes?
 
 - **Tags:** Tags are the starting and ending parts of an HTML element. They begin with < symbol and end with > symbol. Whatever is written inside < and > are called tags.\
   `<a></a>`
-- **Elements:** Elements enclose the contents in between the tags. They consist of some kind of structure or expression. It generally consists of a start tag, content, and an end tag.\
+- **Elements:** Elements enclose the contents in between the tags. They consist of structure or expression. It generally consists of a start tag, content, and an end tag.\
   `<a>This is the content</a>`
 - **Attributes:** Attribute is used to provide extra or additional information about an element.\
   `<a href="#">This is the content</a>`
 
-### Q 3. What is Semantic Elements ?
+### Q 3. What are Semantic Elements?
 
 Semantic HTML elements are those that clearly describe their meaning in a human- and machine-readable way
 
@@ -39,7 +39,7 @@ Semantic HTML elements are those that clearly describe their meaning in a human-
 - `<section>`
 - `<article>`
 
-### Q 4. What are HTML APIs ?
+### Q 4. What are HTML APIs?
 
 - **Geolocation -** It is used to get the geographical position of a user\
 - **Drag and Drop -** In HTML, any element can be dragged and dropped.
@@ -48,7 +48,7 @@ Semantic HTML elements are those that clearly describe their meaning in a human-
 - **Web Workers -** A web worker is a JavaScript running in the background, without affecting the performance of the page.
 - **SSE -** Server-Sent Events (SSE) allow a web page to get updates from a server.
 
-### Q 5. What are the difference between Cookie, Local storage and Session storage ?
+### Q 5. What is the difference between Cookie, Local storage and Session storage?
 
 |                | Cookie       | Local storage | Session storage        |
 | -------------- | ------------ | ------------- | ---------------------- |
@@ -62,11 +62,11 @@ Semantic HTML elements are those that clearly describe their meaning in a human-
 
 ## **CSS**
 
-### Q 1. What is CSS ?
+### Q 1. What is CSS?
 
-CSS stands for **_Cascading Style Sheets_**. It is a style sheet language which is used to describe the look and formatting of a document written in **_HTML_**.
+CSS stands for **_Cascading Style Sheets_**. It is a style sheet language, which is used to describe the look and formatting of a document written in **_HTML_**.
 
-### Q 2. What is the Box model in CSS ?
+### Q 2. What is the Box model in CSS?
 
 The CSS box model is a container that contains multiple properties like content, padding, border and margin. It is used to create the design and layout of web pages.
 
@@ -79,7 +79,7 @@ The CSS box model is a container that contains multiple properties like content,
   - :active
   - :focus
   - ```css
-    a:hover {
+    a: hover {
       color: #FFOOFF;
     }
     ```
@@ -93,15 +93,15 @@ The CSS box model is a container that contains multiple properties like content,
     }
     ```
 
-### Q 4. What is a z-index ?
+### Q 4. What is a z-index?
 
-It is used to define the order of elements if they overlap on each other.\
+It is used to define the order of elements if they overlap with each other.\
 Syntax
 
 > z-index: auto | number | initial | inherit;
 
 - auto: The stack order is equal to that of the parent(default).
-- number: The stack order depends in the number.
+- number: The stack order depends on the number.
 - initial: Sets the property to its default value.
 - inherit: Inherits the property from the parent element.
 
@@ -160,61 +160,61 @@ Syntax
 
 ## **Angular**
 
-### Q 1. What is Angular
+### Q 1. What is Angular?
 
-### Q What are the building blocks of angular
+### Q What are the building blocks of angular?
 
-### Q What are the Angular lifecycle hooks.
+### Q What are the Angular lifecycle hooks?
 
-### Q What are data binding and how amy types are there
+### Q What are data binding and how many types are there?
 
-### Q What is directive and how amy types are there
+### Q What is directive and how many types are there?
 
-### Q What is pipe and types of pipes
+### Q What is pipe and types of pipes?
 
-### Q Difference between Pupre and Impure pipe.
+### Q Difference between Pupre and Impure pipe?
 
-### Q What are filters
+### Q What are filters?
 
-### Q What is async pipe
+### Q What is the async pipe?
 
-### Q How do you share data between components.
+### Q How do you share data between components?
 
-### Q What is view encapsulation
+### Q What is view encapsulation?
 
-### Q What is route and types of routes.
+### Q What is a route and types of route?
 
-### Q what is interceptor
+### Q What is an interceptor?
 
-### Q what is interface
+### Q What is an interface?
 
-### Q What is lazyloading
+### Q What is lazy loading?
 
-### Q What is AOT and JIT
+### Q What is AOT and JIT?
 
-### Q What is Observables and promises
+### Q What are Observables and Promises?
 
-### Q What is RXJS and list some operators
+### Q What is RXJS and list some operators?
 
-### Q What is the difference between Subject, Behavior subject, Replay subject
+### Q What is the difference between Subject, Behavior subject, and Replay subject?
 
-### Q What is NGRX
+### Q What is NGRX?
 
-### Q What is standalone component
+### Q What is a standalone component?
 
-### Q What is Async/await
+### Q What is Async/await?
 
-### Q What are the decorators
+### Q What are the decorators?
 
-### Q Mention some advantages of Angular
+### Q What are the advantages of Angular?
 
-### Q What are Template and Reactive forms
+### Q What are Template and Reactive forms?
 
-### Q What is dependency injection
+### Q What is dependency injection?
 
-### Q What is angular change ditection
+### Q What is angular change detection?
 
-### Q Difference between ng-template, ng-container, and ng-content
+### Q What are the differences between ng-template, ng-container, and ng-content?
 
 <div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
 
