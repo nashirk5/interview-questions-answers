@@ -107,15 +107,99 @@ Syntax
 
 <div align="center"><img src="src/assets/images/css_z_index.png" height="300"/></div>
 
-### Q 5.
+### Q 5. Explain CSS Absolute and Relative position property?
 
-### Q 6.
+position: relative places an element relative to its current position without changing the layout around it, whereas position: absolute places an element relative to its parent’s position and changing the layout around it
 
-### Q 7.
+- **Absolute:** Position absolute places an element relative to its parent’s position and changing the layout around it.
+- **Relative:** Position relative places an element relative to its current position without changing the layout around it.
 
-### Q 8.
+<div align="center"><img src="src/assets/images/css_positions.png" height="400"/></div>
 
-### Q 9.
+### Q 6. How to center align a div inside another div?
+
+```html
+<div class="”outer”">
+  <div class="”inner”">your content</div>
+</div>
+```
+
+```css
+/* First method */
+.outer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Second method */
+.outer {
+  display: grid;
+  place-content: center;
+}
+```
+
+### Q 7. How can we make our website responsive using CSS?
+
+Media query is used to create a responsive web design. It means that the view of a web page differs from system to system based on screen or media types.
+
+- Width and height of the viewport
+- Width and height of the device
+- Orientation
+- Resolution
+
+Syntax
+
+```css
+/* @media not|only mediatype and (mediafeature and|or|not mediafeature) */
+@media only screen and (max-width: 600px) {
+  /* CSS-Code; */
+}
+```
+
+### Q 8. How to change the color for even and odd list items.
+
+```css
+/* Change the background color odd in list ex. 1,3,5,7  */
+tr:nth-child(odd) {
+  background-color: lightblue;
+}
+
+/* Change the background color even in list ex. 2,4,6,8  */
+tr:nth-child(even) {
+  background-color: lightgreen;
+}
+
+/* Change the background color to specific item in a list  */
+tr:nth-child(4) {
+  background-color: lightcoral;
+}
+```
+
+### Q 9. What is CSS flexbox, and what are its properties?
+
+It is also called a flexible box model. It is basically a layout model that provides an easy and clean way to arrange items within a container. Flexbox is different from the block model which is vertically biased and the inline which is horizontally biased. Flexbox was created for small-scale layouts and there’s another standard called grids which are geared more towards larger-scale layouts, It works similar to the way to Twitter bootstrap grid system works. Flexbox is responsive and mobile-friendly. To start with flexbox firstly create a flex container. To create a flex container set the display property to flex.
+
+**Flex Properties:**
+
+- **flex-direction:** row, column, row-reverse, column-reverse
+- **flex-wrap:** wrap, nowrap, wrap-reverse
+- **flex-flow:** This property is used for setting both flex-direction and flex-wrap properties in one statement
+- **justify-content** center, flex-start, flex-end, space-around, space-between
+- **align-items** This is used for aligning flex items
+- **align-content** This is used for aligning the flex lines
+
+### Q 10. What is CSS Grid?
+
+It is a CSS property that offers a grid-based layout system, with rows and columns, making it easier to design web pages without floats and positioning.
+
+Syntax:
+
+```
+  grid:none|grid-template-rows / grid-template-columns|grid-template-areas|
+  grid-template-rows / [grid-auto-flow] grid-auto-columns|[grid-auto-flow]
+  grid-auto-rows / grid-template-columns|initial|inherit;
+```
 
 <div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
 
