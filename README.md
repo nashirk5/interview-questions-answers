@@ -18,7 +18,7 @@
 
 HTML stands for **_HyperText Markup Language_**. It is a standard text formatting language used for developing web pages released in 1993. HTML is a language that is interpreted by the browser and it tells the browser what to display and how to display.
 
-![Box model](src/assets/images/html_release_year.png)
+<div align="center"><img src="src/assets/images/html_release_year.png" height="200"/></div>
 
 ### Q 2. What are Tags, Elements and Attributes?
 
@@ -70,7 +70,7 @@ CSS stands for **_Cascading Style Sheets_**. It is a style sheet language, which
 
 The CSS box model is a container that contains multiple properties like content, padding, border and margin. It is used to create the design and layout of web pages.
 
-![Box model](src/assets/images/css_box_model.png)
+<div align="center"><img src="src/assets/images/css_box_model.png" height="200"/></div>
 
 ### Q 3. What are Pseudo class and Pseudo element ?
 
@@ -105,7 +105,7 @@ Syntax
 - initial: Sets the property to its default value.
 - inherit: Inherits the property from the parent element.
 
-<div align="center"><img src="src/assets/images/css_z_index.png" height="400"/></div>
+<div align="center"><img src="src/assets/images/css_z_index.png" height="300"/></div>
 
 ### Q 5.
 
