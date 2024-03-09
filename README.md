@@ -62,6 +62,61 @@ Semantic HTML elements are those that clearly describe their meaning in a human-
 
 ## **CSS**
 
+### Q 1. What is CSS ?
+
+CSS stands for **_Cascading Style Sheets_**. It is a style sheet language which is used to describe the look and formatting of a document written in **_HTML_**.
+
+### Q 2. What is the Box model in CSS ?
+
+The CSS box model is a container that contains multiple properties like content, padding, border and margin. It is used to create the design and layout of web pages.
+
+![Box model](src/assets/images/css_box_model.png)
+
+### Q 3. What are Pseudo class and Pseudo element ?
+
+- **Pseudo class** is used to define the special state of an element like when the user is hovering over the link.
+  - :hover
+  - :active
+  - :focus
+  - ```css
+    a:hover {
+      color: #FFOOFF;
+    }
+    ```
+- **Pseudo element** is used to add style to specified parts of an element. Example: Using style before or after an element
+  - ::before
+  - ::after
+  - ::first-letter
+  - ```css
+    p::first-line {
+      color: #ffOOOO;
+    }
+    ```
+
+### Q 4. What is a z-index ?
+
+It is used to define the order of elements if they overlap on each other.\
+Syntax
+
+> z-index: auto | number | initial | inherit;
+
+- auto: The stack order is equal to that of the parent(default).
+- number: The stack order depends in the number.
+- initial: Sets the property to its default value.
+- inherit: Inherits the property from the parent element.
+
+<div align="center"><img src="src/assets/images/css_z_index.png" height="400"/></div>
+
+### Q 5.
+
+### Q 6.
+
+### Q 7.
+
+### Q 8.
+
+### Q 9.
+
 <div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
 
 ##
