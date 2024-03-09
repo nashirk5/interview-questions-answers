@@ -18,8 +18,6 @@
 
 HTML stands for **_HyperText Markup Language_**. It is a standard text formatting language used for developing web pages released in 1993. HTML is a language that is interpreted by the browser and it tells the browser what to display and how to display.
 
-<div align="center"><img src="src/assets/images/html_release_year.png" height="200"/></div>
-
 ### Q 2. What are Tags, Elements and Attributes?
 
 - **Tags:** Tags are the starting and ending parts of an HTML element. They begin with < symbol and end with > symbol. Whatever is written inside < and > are called tags.\
@@ -70,7 +68,7 @@ CSS stands for **_Cascading Style Sheets_**. It is a style sheet language, which
 
 The CSS box model is a container that contains multiple properties like content, padding, border and margin. It is used to create the design and layout of web pages.
 
-<div align="center"><img src="src/assets/images/css_box_model.png" height="200"/></div>
+![css_box_model](src/assets/images/css_box_model.png)
 
 ### Q 3. What are Pseudo class and Pseudo element ?
 
@@ -105,7 +103,7 @@ Syntax
 - initial: Sets the property to its default value.
 - inherit: Inherits the property from the parent element.
 
-<div align="center"><img src="src/assets/images/css_z_index.png" height="300"/></div>
+![css_z_index](src/assets/images/css_z_index.png)
 
 ### Q 5. Explain CSS Absolute and Relative position property?
 
@@ -114,7 +112,7 @@ position: relative places an element relative to its current position without ch
 - **Absolute:** Position absolute places an element relative to its parent’s position and changing the layout around it.
 - **Relative:** Position relative places an element relative to its current position without changing the layout around it.
 
-<div align="center"><img src="src/assets/images/css_positions.png" height="400"/></div>
+![css_positions](src/assets/images/css_positions.png)
 
 ### Q 6. How to center align a div inside another div?
 
