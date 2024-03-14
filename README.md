@@ -2,7 +2,7 @@
 
 ## Table of Contents
 
-- [HTML](/src/app/html_css.MD#q-1-what-is-html)
+- [HTML](html_css.MD)
 - [CSS](/src/app/html_css.MD#q-1-what-is-css)
 - [JavaScript](#javascript)
 - [Angular](#angular)
