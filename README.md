@@ -257,16 +257,16 @@ Angular is an open-source single-page web application framework built on TypeScr
 
 ### Q 3. What are the building blocks of angular?
 
-- Components
-- Modules
-- Services
-- Metadata
-- Decorators
-- Directives
-- Data Binding
-- Pipes
-- Dependency Injection
-- Templates
+1. Components
+2. Modules
+3. Services
+4. Metadata
+5. Decorators
+6. Directives
+7. Data Binding
+8. Pipes
+9. Dependency Injection
+10. Templates
 
 ### Q 4. What is Component?
 
@@ -782,7 +782,7 @@ export class AppRoutingModule {}
 - **JIT:** Just-in-Time (JIT) is a type of compilation that compiles your app in the browser at runtime, as the application is being loaded. .
 - **AOT:** Ahead-of-Time (AOT) is a type of compilation that compiles your app at build time, before the application is deployed to the client's browser.
 
-> AOT compilation offers better performance, smaller bundle sizes, and improved error detection compared to JIT compilation. It is the recommended compilation mode for production deployments of Angular applications. JIT compilation, on the other hand, provides faster development cycles and is suitable for development and testing environments.
+_AOT compilation offers better performance, smaller bundle sizes, and improved error detection compared to JIT compilation. It is the recommended compilation mode for production deployments of Angular applications. JIT compilation, on the other hand, provides faster development cycles and is suitable for development and testing environments._
 
 > **NOTE:** **JIT** compilation was the default until **Angular 8**, now default is **AOT**
 
