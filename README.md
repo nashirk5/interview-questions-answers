@@ -788,11 +788,351 @@ _AOT compilation offers better performance, smaller bundle sizes, and improved e
 
 ### Q 26. What are Observables and Promises?
 
-### Q 27. What is RXJS and list some operators?
+**Observable:** In Angular, Observables are a data streaming abstraction provided by the RxJS library. It is used to handle sequence of asynchronous operation or events over time.
 
-### Q 28. What is the difference between Subject, Behavior subject, and Replay subject?
+```typescript
+import { Observable, Observer } from "rxjs";
+
+// Creating an Observable
+const observable = new Observable<number>((observer: Observer<number>) => {
+  // Emitting values asynchronously
+  setTimeout(() => {
+    observer.next(1); // Emit first value
+  }, 1000);
+
+  setTimeout(() => {
+    observer.next(2); // Emit second value
+  }, 2000);
+
+  setTimeout(() => {
+    observer.next(3); // Emit third value
+    observer.complete(); // Complete the observable
+  }, 3000);
+});
+
+// Subscribing to the Observable
+observable.subscribe(
+  (value: number) => console.log("Next:", value), // Handle emitted values
+  (error: any) => console.error("Error:", error), // Handle errors
+  () => console.log("Completed") // Handle completion
+);
+```
+
+**Promise:** Promises are used to handle asynchronous operations in javascript
+
+```typescript
+let myPromise = new Promise(function (resolve, reject) {
+  // "Producing Code" (May take some time)
+
+  resolve(); // when successful
+  reject(); // when error
+});
+
+// "Consuming Code" (Must wait for a fulfilled Promise)
+myPromise.then();
+myPromise.catch();
+```
+
+### Q 27. What are the difference between Promises and Observables?
+
+| Promise                                               | Observable                                                      |
+| ----------------------------------------------------- | --------------------------------------------------------------- |
+| Emits a single value                                  | Emits multiple values over a period of time                     |
+| Eager, meaning they execute immediately upon creation | Lazy, meaning they do not execute until there is a subscription |
+| cannot be canceled once they are created              | can be unsubscribed                                             |
+
+### Q 28. What are RXJS and list some operators?
+
+RxJS(Reactive Extensions for JavaScript) is a library for composing asynchronous and callback-based code in a functional, reactive style using Observables. Many APIs such as HttpClient produce and consume RxJS Observables and also uses operators for processing observables.
+
+| Area           | Operators                                                     |
+| -------------- | ------------------------------------------------------------- |
+| Creation       | from,fromEvent, of                                            |
+| Combination    | combineLatest, concat, merge, startWith , withLatestFrom, zip |
+| Filtering      | debounceTime, distinctUntilChanged, filter, take, takeUntil   |
+| Transformation | bufferTime, concatMap, map, mergeMap, scan, switchMap         |
+| Utility        | tap                                                           |
+| Multicasting   | share                                                         |
+
+### Q 28. What are the difference between Subject, Behavior subject, and Replay subject?
+
+**1. Subject:**
+
+- A basic observable that emits values to its subscribers.
+- Does not store the previous value, and new subscribers only receive values emitted after they subscribe.
+
+```typescript
+const subject = new Subject<number>();
+
+subject.subscribe({
+  next: (v) => console.log(`observerA: ${v}`),
+});
+
+subject.next(1);
+subject.next("A");
+
+// Logs:
+// observerA: 1
+// observerA: A
+```
+
+**2. BehaviorSubject:**
+
+- Extends Subject and stores the latest value emitted.
+- New subscribers receive the last emitted value immediately upon subscription.
+- Useful for scenarios where you need to access the most recent value or provide an initial value.
+
+```typescript
+import { BehaviorSubject } from "rxjs";
+const subject = new BehaviorSubject(0); // 0 is the initial value
+
+subject.subscribe({
+  next: (v) => console.log(`observerA: ${v}`),
+});
+
+subject.next(1);
+subject.next(2);
+
+// Logs
+// observerA: 0
+// observerA: 1
+// observerA: 2
+```
+
+**3. ReplaySubject:**
+
+- Extends Subject and stores a buffer of previous emissions.
+- New subscribers can receive a specified number of previous emissions (buffer) upon subscription.
+- Useful for scenarios where you need to replay previous emissions to late subscribers or for caching purposes.
+
+```typescript
+import { ReplaySubject } from "rxjs";
+const subject = new ReplaySubject(3); // buffer 3 values for new subscribers
+
+subject.subscribe({
+  next: (v) => console.log(`observerA: ${v}`),
+});
+
+subject.next(1);
+subject.next(2);
+subject.next(3);
+
+// Logs:
+// observerA: 1
+// observerA: 2
+// observerA: 3
+```
 
 ### Q 29. What is NGRX?
+
+**NGRX** is a state management library for Angular applications, inspired by Redux. It provides a centralized store to manage the state of an application and facilitates predictable state management by enforcing unidirectional data flow.
+
+Here's a brief overview of NGRX concepts with an example:
+
+**1. Store:** The central repository for application state. It holds the entire state of the application as a single immutable object.
+
+**2. Actions:** Plain JavaScript objects that represent events or user interactions that can change the state of the application. They are dispatched to the store.
+
+**3. Reducers:** Pure functions that specify how the application's state changes in response to actions. They take the current state and an action as input, and return the new state.
+
+**4. Effects:** Asynchronous operations triggered by actions, such as HTTP requests or accessing browser storage. They listen for dispatched actions, perform side effects, and dispatch new actions in response.
+
+**5. Selectors:** Functions used to derive or select specific pieces of state from the store. They help in composing and optimizing state access.
+
+> Here's a simple example of how NGRX can be used in an Angular application:
+
+**1. Define Reducers:**
+
+```typescript
+import { createAction, props } from "@ngrx/store";
+import { PostInterface } from "src/app/_interface/post.interface";
+
+const prefix = "[POST]";
+
+export const getPost = createAction(`${prefix} Get Post`);
+
+export const getPostSuccess = createAction(
+  `${getPost.type}, Success`,
+  props<{ post: PostInterface[] }>()
+);
+
+export const createPost = createAction(
+  `${prefix} Create Post`,
+  props<{ post: PostInterface }>()
+);
+
+export const createPostSuccess = createAction(
+  `${createPost.type} Success`,
+  props<{ post: PostInterface }>()
+);
+```
+
+**2. Define Reducers:**
+
+```typescript
+import { createReducer, on } from "@ngrx/store";
+import { PostState } from "./post.model";
+import * as fromPost from "./index";
+import { Actions } from "@ngrx/store-devtools/src/reducer";
+
+export const initialPostState: PostState = {
+    isLoading: false,
+    post: []
+}
+
+export const reducer = createReducer<PostState>(
+    initialPostState,
+    on(fromPost.getPost, (state) => {
+        return {
+            ...state,
+            isLoading: true
+        }
+    }),
+    on(fromPost.getPostSuccess, (state, { post }) => {
+        return {
+            ...state,
+            isLoading: false,
+            post
+        }
+    }),
+    on(fromPost.createPost, (state) => {
+        return {
+            ...state,
+            isLoading: true
+        }
+    }),
+    on(fromPost.createPostSuccess, (state, { post }) => {
+        return {
+            ...state,
+            isLoading: false,
+            post: [...state.post, post]
+        }
+    })
+  }
+```
+
+**3. Define Effects (Optional):**
+
+```typescript
+import { Injectable } from "@angular/core";
+import { Actions, createEffect, ofType } from "@ngrx/effects";
+import * as fromPost from "./index";
+import { map, switchMap } from "rxjs";
+import { PostService } from "src/app/_services/post.service";
+import { PostInterface } from "src/app/_interface/post.interface";
+
+@Injectable()
+export class PostEffects {
+  constructor(
+    private readonly actions$: Actions,
+    private readonly postSrv: PostService
+  ) {}
+
+  getPost$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(fromPost.getPost.type),
+      switchMap(() => this.postSrv.getPost()),
+      map((post: PostInterface[]) => fromPost.getPostSuccess({ post }))
+    )
+  );
+
+  createPost$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(fromPost.createPost.type),
+      switchMap(({ post }) => this.postSrv.createPost(post)),
+      map((post: PostInterface) => fromPost.createPostSuccess({ post }))
+    )
+  );
+}
+```
+
+**4. Define Selectors (Optional):**
+
+```typescript
+import { createFeatureSelector, createSelector } from "@ngrx/store";
+import { PostState } from "./post.model";
+
+export const selectPostState = createFeatureSelector<PostState>("post");
+export const selectPostList = createSelector(
+  selectPostState,
+  (state) => state.post
+);
+export const selectPostIsLoading = createSelector(
+  selectPostState,
+  (state) => state.isLoading
+);
+```
+
+**5. Define App State:**
+
+```typescript
+export interface PostInterface {
+  id: number;
+  title: string;
+}
+
+import { PostInterface } from "src/app/_interface/post.interface";
+
+export interface PostState {
+  isLoading: boolean;
+  showAddEditPost: boolean;
+  post: PostInterface[];
+}
+```
+
+**6. Post Store Module Setup:**
+
+```typescript
+import { NgModule } from "@angular/core";
+import { StoreModule } from "@ngrx/store";
+import { postReducer } from "./post.reducers";
+import { EffectsModule } from "@ngrx/effects";
+import { PostEffects } from "./post.effects";
+
+@NgModule({
+  imports: [
+    StoreModule.forFeature("post", postReducer),
+    EffectsModule.forFeature([PostEffects]),
+  ],
+})
+export class PostStoreModule {}
+```
+
+**7. Use in Component:**
+
+```typescript
+import { Component, OnInit } from "@angular/core";
+import { Observable } from "rxjs";
+import { PostInterface } from "../_interface/post.interface";
+import { Store, select } from "@ngrx/store";
+import * as fromPost from "../_store/post";
+
+@Component({
+  selector: "app-post",
+  templateUrl: "./post.component.html",
+  styleUrls: ["./post.component.scss"],
+})
+export class PostComponent implements OnInit {
+  post$!: Observable<PostInterface[]>;
+  isLoading$!: Observable<boolean>;
+
+  constructor(private store: Store) {}
+
+  ngOnInit(): void {
+    this.initDispatch();
+    this.initSubscriptions();
+  }
+
+  private initDispatch(): void {
+    this.store.dispatch(fromPost.getPost());
+  }
+
+  private initSubscriptions(): void {
+    this.post$ = this.store.pipe(select(fromPost.selectPostList));
+    this.isLoading$ = this.store.pipe(select(fromPost.selectPostIsLoading));
+  }
+}
+```
 
 ### Q 30. What is a standalone component?
 
@@ -836,3 +1176,24 @@ _AOT compilation offers better performance, smaller bundle sizes, and improved e
 
 <!-- [Back to top](#table-of-contents) -->
 <!-- <div ><b><a href="#table-of-contents">↥ Back to top</a></b></div> -->
+
+<!-- - HTML
+
+  1. [What is HTML?](#q-1-what-is-html)
+  2. [What are Tags, Elements and Attributes?](#q-2-what-are-tags-elements-and-attributes)
+  3. [What are Semantic Elements?](#q-3-what-are-semantic-elements)
+  4. [What are HTML APIs?](#q-4-what-are-html-apis)
+  5. [What is the difference between Cookie, Local storage and Session storage?](#q-5-what-is-the-difference-between-cookie-local-storage-and-session-storage)
+
+- CSS
+
+  1. [What is CSS?](#q-1-what-is-css)
+  2. [What is the Box model in CSS?](#q-2-what-is-the-box-model-in-css)
+  3. [What are Pseudo class and Pseudo element?](#q-3-what-are-pseudo-class-and-pseudo-element)
+  4. [What is a z-index?](#q-4-what-is-a-z-index)
+  5. [Explain CSS Absolute and Relative position property?](#q-5-explain-css-absolute-and-relative-position-property)
+  6. [How to center align a div inside another div?](#q-6-how-to-center-align-a-div-inside-another-div)
+  7. [How can we make our website responsive using CSS?](#q-7-how-can-we-make-our-website-responsive-using-css)
+  8. [How to change the color for even and odd list items?](#q-8-how-to-change-the-color-for-even-and-odd-list-items)
+  9. [What is CSS flexbox, and what are its properties?](#q-9-what-is-css-flexbox-and-what-are-its-properties)
+  10. [What is CSS Grid?](#q-10-what-is-css-grid) -->
