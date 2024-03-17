@@ -18,6 +18,8 @@
 
 HTML stands for **_HyperText Markup Language_**. It is a standard text formatting language used for developing web pages released in 1993. HTML is a language that is interpreted by the browser and it tells the browser what to display and how to display.
 
+<div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
+
 ### Q 2. What are Tags, Elements and Attributes?
 
 - **Tags:** Tags are the starting and ending parts of an HTML element. They begin with < symbol and end with > symbol. Whatever is written inside < and > are called tags.\
@@ -26,6 +28,8 @@ HTML stands for **_HyperText Markup Language_**. It is a standard text formattin
   `<p>Hello, world!</p>`
 - **Attributes:** Attributes provide additional information about an element. They are placed within the opening tag of an element and consist of a name-value pair.\
   `<a href="https://www.example.com">Visit Example</a>`
+
+<div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
 
 ### Q 3. What are Semantic Elements?
 
@@ -37,6 +41,8 @@ Semantic HTML elements are those that clearly describe their meaning in a human-
 - `<section>`
 - `<article>`
 
+<div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
+
 ### Q 4. What are HTML APIs?
 
 - **Geolocation -** It is used to get the geographical position of a user\
@@ -45,6 +51,8 @@ Semantic HTML elements are those that clearly describe their meaning in a human-
   `LocalStorage` and `SessionStorage`
 - **Web Workers -** A web worker is a JavaScript running in the background, without affecting the performance of the page.
 - **SSE -** Server-Sent Events (SSE) allow a web page to get updates from a server.
+
+<div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
 
 ### Q 5. What is the difference between Cookie, Local storage and Session storage?
 
@@ -64,11 +72,15 @@ Semantic HTML elements are those that clearly describe their meaning in a human-
 
 CSS stands for **_Cascading Style Sheets_**. It is a style sheet language, which is used to describe the look and formatting of a document written in **_HTML_**.
 
+<div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
+
 ### Q 2. What is the Box model in CSS?
 
 The CSS box model is a container that contains multiple properties like content, padding, border and margin. It is used to create the design and layout of web pages.
 
 ![css_box_model](src/assets/images/css_box_model.png)
+
+<div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
 
 ### Q 3. What are Pseudo class and Pseudo element?
 
@@ -91,6 +103,8 @@ The CSS box model is a container that contains multiple properties like content,
     }
     ```
 
+<div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
+
 ### Q 4. What is a z-index?
 
 It is used to define the order of elements if they overlap with each other.\
@@ -105,6 +119,8 @@ Syntax
 
 ![css_z_index](src/assets/images/css_z_index.png)
 
+<div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
+
 ### Q 5. Explain CSS Absolute and Relative position property?
 
 position: relative places an element relative to its current position without changing the layout around it, whereas position: absolute places an element relative to its parent’s position and changing the layout around it
@@ -113,6 +129,8 @@ position: relative places an element relative to its current position without ch
 - **Relative:** Position relative places an element relative to its current position without changing the layout around it.
 
 ![css_positions](src/assets/images/css_positions.png)
+
+<div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
 
 ### Q 6. How to center align a div inside another div?
 
@@ -137,6 +155,8 @@ position: relative places an element relative to its current position without ch
 }
 ```
 
+<div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
+
 ### Q 7. How can we make our website responsive using CSS?
 
 Media query is used to create a responsive web design. It means that the view of a web page differs from system to system based on screen or media types.
@@ -154,6 +174,8 @@ Syntax
   /* CSS-Code; */
 }
 ```
+
+<div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
 
 ### Q 8. How to change the color for even and odd list items?
 
@@ -174,6 +196,8 @@ tr:nth-child(4) {
 }
 ```
 
+<div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
+
 ### Q 9. What is CSS flexbox, and what are its properties?
 
 It is also called a flexible box model. It is basically a layout model that provides an easy and clean way to arrange items within a container. Flexbox is different from the block model which is vertically biased and the inline which is horizontally biased. Flexbox was created for small-scale layouts and there’s another standard called grids which are geared more towards larger-scale layouts, It works similar to the way to Twitter bootstrap grid system works. Flexbox is responsive and mobile-friendly. To start with flexbox firstly create a flex container. To create a flex container set the display property to flex.
@@ -186,6 +210,8 @@ It is also called a flexible box model. It is basically a layout model that prov
 - **justify-content** center, flex-start, flex-end, space-around, space-between
 - **align-items** This is used for aligning flex items
 - **align-content** This is used for aligning the flex lines
+
+<div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
 
 ### Q 10. What is CSS Grid?
 
@@ -244,6 +270,8 @@ Syntax:
 
 Angular is an open-source single-page web application framework built on TypeScript, which makes it easy to build web, and mobile applications.
 
+<div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
+
 ### Q 2. What are the Angular lifecycle hooks?1
 
 1. **ngOnChanges():** This hook is called whenever one or more input properties of the component change. This method/hook receives a SimpleChanges object that contains the previous and current values of the property.
@@ -254,6 +282,8 @@ Angular is an open-source single-page web application framework built on TypeScr
 6. **ngAfterViewInit():** This is called in response after Angular initializes the component's views and child views.
 7. **ngAfterViewChecked():** This is called in response after Angular checks the component's views and child views.
 8. **ngOnDestroy():** This is the cleanup phase just before Angular destroys the directive/component.
+
+<div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
 
 ### Q 3. What are the building blocks of angular?
 
@@ -267,6 +297,8 @@ Angular is an open-source single-page web application framework built on TypeScr
 8. Pipes
 9. Dependency Injection
 10. Templates
+
+<div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
 
 ### Q 4. What is Component?
 
@@ -288,6 +320,8 @@ export class TestComponent implements OnInit {
   ngOnInit() {}
 }
 ```
+
+<div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
 
 ### Q 5. What is Module?
 
@@ -314,6 +348,8 @@ import { TestComponent } from "./test/text.component";
 export class AppModule {}
 ```
 
+<div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
+
 ### Q 6. What is Service?
 
 Services are objects which get instantiated only once during the lifetime of an application. The main objective of a service is to share data, functions with different components of an Angular application. A service is defined with a **@Injectable** decorator.
@@ -328,9 +364,13 @@ export class TestServiceService {
 }
 ```
 
+<div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
+
 ### Q 7. What is Metadata?
 
 Metadata is used to decorate a class so that it can configure the expected behavior of the class. The metadata is represented by decorators
+
+<div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
 
 ### Q 8. What is Decorators?
 
@@ -416,6 +456,8 @@ export class MyComponent {
 }
 ```
 
+<div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
+
 ### Q 9. What is Directive?
 
 Directives are used add behaviour to an existing DOM element or an existing component instance.
@@ -425,6 +467,8 @@ Directives are used add behaviour to an existing DOM element or an existing comp
 1. **Component directives:** These are directives with a template.
 2. **Structural directives:** These directives change the DOM layout by adding and removing DOM elements. Ex. **`ngIf`, `ngFor`,** and **`ngSwitch`**.
 3. **Attribute Directives:** These directives change the appearance or behavior of an element, component, or another directive. Ex. **`ngClass`** and **`ngStyle`**.
+
+<div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
 
 ### Q 10. Write a custom Directive
 
@@ -448,6 +492,8 @@ In the HTML page you can use it like a below
 ```html
 <input formControlName="search" appAutofocus type="text" />
 ```
+
+<div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
 
 ### Q 11. What is Data Binding
 
@@ -480,6 +526,8 @@ There are Four types of Data binding
 <button (click)="onClick()"></button>
 ```
 
+<div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
+
 ### Q 12. What are Pipes?
 
 Pipes are simple functions that use template expressions to accept data as input and transform it into a desired output. For example, let us take a pipe to transform a component's text into upper case using uppercase pipe. Ex. `DatePipe`, `UpperCasePipe`, and `CurrencyPipe`
@@ -488,9 +536,13 @@ Pipes are simple functions that use template expressions to accept data as input
 <p>Hello {{ name | uppercase }}</p>
 ```
 
+<div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
+
 ### Q 13. Difference between Pure and Impure pipe?
 
 A pure pipe is only called when Angular detects a change in the value or the parameters passed to a pipe. For example, any changes to a primitive input value (String, Number, Boolean, Symbol) or a changed object reference (Date, Array, Function, Object). An impure pipe is called for every change detection cycle no matter whether the value or parameters changes. i.e, An impure pipe is called often, as often as every keystroke or mouse-move.
+
+<div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
 
 ### Q 14. What is the async pipe?
 
@@ -516,6 +568,8 @@ export class AsyncObservablePipeComponent {
   }
 }
 ```
+
+<div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
 
 ### Q 15. What is dependency injection?
 
@@ -557,6 +611,8 @@ export class AppComponent {
 }
 ```
 
+<div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
+
 ### Q 16. How do you share data between components?
 
 **1. Input/Output Binding:** You can pass data from a parent component to a child component using input bindings (@Input decorator) and receive data back from the child using output bindings (@Output decorator with EventEmitter).
@@ -592,6 +648,8 @@ export class AppComponent {
     </app-child>
     ```
 
+<div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
+
 ### Q 18. What is view encapsulation?
 
 View encapsulation specifies if the component's template and styles can impact the entire program or vice versa.
@@ -618,6 +676,8 @@ Example:
   // encapsulation: ViewEncapsulation.Emulated is default
 })
 ```
+
+<div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
 
 ### Q 19. How do you define routes?
 
@@ -646,6 +706,8 @@ const appRoutes: Routes = [
 export class AppModule {}
 ```
 
+<div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
+
 ### Q 20. What is the purpose of Wildcard route?
 
 If the URL doesn't match any predefined routes then it causes the router to throw an error and crash the app. In this case, you can use wildcard route. A wildcard route has a path consisting of two asterisks to match every URL.
@@ -655,6 +717,8 @@ If the URL doesn't match any predefined routes then it causes the router to thro
 ```typescript
   { path: '**', component: PageNotFoundComponent }
 ```
+
+<div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
 
 ### Q 21. What is an interceptor?
 
@@ -716,6 +780,8 @@ import { AuthInterceptor } from "./auth.interceptor";
 export class AppModule {}
 ```
 
+<div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
+
 ### Q 22. What is an interface?
 
 In Angular, an interface is a TypeScript feature used to define the structure of objects. It acts as a contract that describes the properties and methods an object must have in order to be considered of that type. Interfaces are commonly used to enforce type-checking and provide better code readability and maintainability
@@ -746,6 +812,8 @@ function printUserInfo(user: User) {
 printUserInfo(user);
 ```
 
+<div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
+
 ### Q 23. What is lazy loading?
 
 Lazy loading in Angular refers to a technique where modules are loaded asynchronously when they are needed, rather than being loaded all at once when the application starts up. This technique improves the initial loading time and reduces the initial bundle size of the application, as only the essential modules are loaded initially.
@@ -769,6 +837,8 @@ const routes: Routes = [
 export class AppRoutingModule {}
 ```
 
+<div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
+
 ### Q 24. How to optimize loading large data in angular?
 
 1. **AOT:** The Angular Ahead-of-Time (AOT) compiler converts your Angular HTML and TypeScript code into efficient JavaScript code during the build phase before the browser downloads and runs that code. Compiling your application during the build process provides a faster rendering in the browser.
@@ -782,6 +852,8 @@ export class AppRoutingModule {}
 9. **Progressive Loading:** Load data progressively by initially displaying a placeholder or summary information while fetching the complete dataset in the background. This gives users immediate feedback and improves perceived performance.
 10. **Optimize Rendering:** Optimize rendering performance by minimizing DOM manipulations, avoiding unnecessary re-renders, and utilizing Angular features like OnPush change detection strategy and trackBy function for ngFor loops.
 
+<div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
+
 ### Q 25. What is AOT and JIT?
 
 - **JIT:** Just-in-Time (JIT) is a type of compilation that compiles your app in the browser at runtime, as the application is being loaded. .
@@ -790,6 +862,8 @@ export class AppRoutingModule {}
 _AOT compilation offers better performance, smaller bundle sizes, and improved error detection compared to JIT compilation. It is the recommended compilation mode for production deployments of Angular applications. JIT compilation, on the other hand, provides faster development cycles and is suitable for development and testing environments._
 
 > **NOTE:** **JIT** compilation was the default until **Angular 8**, now default is **AOT**
+
+<div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
 
 ### Q 26. What are Observables and Promises?
 
@@ -838,6 +912,8 @@ myPromise.then();
 myPromise.catch();
 ```
 
+<div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
+
 ### Q 27. What are the difference between Promises and Observables?
 
 | Promise                                               | Observable                                                      |
@@ -845,6 +921,8 @@ myPromise.catch();
 | Emits a single value                                  | Emits multiple values over a period of time                     |
 | Eager, meaning they execute immediately upon creation | Lazy, meaning they do not execute until there is a subscription |
 | cannot be canceled once they are created              | can be unsubscribed                                             |
+
+<div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
 
 ### Q 28. What are RXJS and list some operators?
 
@@ -858,6 +936,8 @@ RxJS(Reactive Extensions for JavaScript) is a library for composing asynchronous
 | Transformation | bufferTime, concatMap, map, mergeMap, scan, switchMap         |
 | Utility        | tap                                                           |
 | Multicasting   | share                                                         |
+
+<div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
 
 ### Q 28. What are the difference between Subject, Behavior subject, and Replay subject?
 
@@ -927,6 +1007,8 @@ subject.next(3);
 // observerA: 2
 // observerA: 3
 ```
+
+<div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
 
 ### Q 29. What is NGRX?
 
@@ -1139,6 +1221,8 @@ export class PostComponent implements OnInit {
 }
 ```
 
+<div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
+
 ### Q 30. What is a standalone component?
 
 Standalone components are a new feature in Angular that allows you to create reusable components that can be used without the need for an NgModule. This can make your code more modular, efficient, and easier to share. Angular 14+ Standalone Components. If playback doesn't begin shortly, try restarting your device.
@@ -1154,6 +1238,8 @@ export class PhotoGalleryComponent {
   // component logic
 }
 ```
+
+<div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
 
 ### Q 31. What is Async/await?
 
@@ -1193,6 +1279,8 @@ async function getData() {
 getData();
 ```
 
+<div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
+
 ### Q 32. What are Template and Reactive forms?
 
 ### Q 33. What is NgZone?
@@ -1201,6 +1289,8 @@ Angular provides a service called NgZone which creates a zone named angular to a
 
 - When a sync or async function is executed.
 - When there is no microTask scheduled.
+
+<div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
 
 ### Q 34. What is angular change detection?
 
