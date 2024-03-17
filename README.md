@@ -21,11 +21,11 @@ HTML stands for **_HyperText Markup Language_**. It is a standard text formattin
 ### Q 2. What are Tags, Elements and Attributes?
 
 - **Tags:** Tags are the starting and ending parts of an HTML element. They begin with < symbol and end with > symbol. Whatever is written inside < and > are called tags.\
-  `<a></a>`
-- **Elements:** Elements enclose the contents in between the tags. They consist of structure or expression. It generally consists of a start tag, content, and an end tag.\
-  `<a>This is the content</a>`
-- **Attributes:** Attribute is used to provide extra or additional information about an element.\
-  `<a href="#">This is the content</a>`
+  `<p></p>`
+- **Elements:** Elements are made up of tags along with the content they enclose. An element consists of the opening tag, the content, and the closing tag.\
+  `<p>Hello, world!</p>`
+- **Attributes:** Attributes provide additional information about an element. They are placed within the opening tag of an element and consist of a name-value pair.\
+  `<a href="https://www.example.com">Visit Example</a>`
 
 ### Q 3. What are Semantic Elements?
 
@@ -277,16 +277,15 @@ Components are the basic building blocks, which control a part of the UI. A comp
 - **Class :** a class contains the business logic for the component
 
 ```typescript
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit } from "@angular/core";
 @Component({
-  selector: 'app-test',
-  templateUrl: './test.component.html',
-  styleUrls: ['./test.component.css']
+  selector: "app-test",
+  templateUrl: "./test.component.html",
+  styleUrls: ["./test.component.css"],
 })
-export lass TestComponent implements OnInit {
+export class TestComponent implements OnInit {
   constructor() {}
-  ngOnInit() {
-  }
+  ngOnInit() {}
 }
 ```
 
@@ -559,6 +558,12 @@ export class AppComponent {
 ```
 
 ### Q 16. How do you share data between components?
+
+**1. Input/Output Binding:** You can pass data from a parent component to a child component using input bindings (@Input decorator) and receive data back from the child using output bindings (@Output decorator with EventEmitter).
+
+**2. Service:** You can create a service and inject it into the components that need to share data. The service acts as a central place to store and manage the shared data.
+
+**3. RxJS Observables/Subjects:** You can use RxJS Observables or Subjects to create a data stream that multiple components can subscribe to. This allows for more complex scenarios like bi-directional communication and handling asynchronous data.
 
 ### Q 17. What are ng-template, ng-container, and ng-content?
 
@@ -941,7 +946,7 @@ Here's a brief overview of NGRX concepts with an example:
 
 > Here's a simple example of how NGRX can be used in an Angular application:
 
-**1. Define Reducers:**
+**1. Define Actions:**
 
 ```typescript
 import { createAction, props } from "@ngrx/store";
@@ -1136,13 +1141,81 @@ export class PostComponent implements OnInit {
 
 ### Q 30. What is a standalone component?
 
+Standalone components are a new feature in Angular that allows you to create reusable components that can be used without the need for an NgModule. This can make your code more modular, efficient, and easier to share. Angular 14+ Standalone Components. If playback doesn't begin shortly, try restarting your device.
+
+```typescript
+@Component({
+  standalone: true,
+  selector: "photo-gallery",
+  imports: [ImageGridComponent],
+  template: ` ... <image-grid [images]="imageList"></image-grid> `,
+})
+export class PhotoGalleryComponent {
+  // component logic
+}
+```
+
 ### Q 31. What is Async/await?
 
-### Q 32. What are the advantages of Angular?
+Async/await is a feature in JavaScript that allows you to write asynchronous code in a synchronous-looking manner. It provides a more readable and understandable way to work with asynchronous operations, such as fetching data from a server, reading files, or making network requests.
 
-### Q 33. What are Template and Reactive forms?
+_Here's a brief overview of how async/await works:_
+
+**Async Functions:** An async function is a function that operates asynchronously via the event loop, and it always returns a promise. You declare an async function using the async keyword before the function declaration.
+
+**Await Operator:** Inside an async function, you can use the await keyword before an expression that returns a promise. The await keyword pauses the execution of the async function until the promise is resolved, and then it returns the resolved value.
+
+**Example:**
+
+```javascript
+// Example asynchronous function
+function fetchData() {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      resolve("Data fetched successfully");
+    }, 2000);
+  });
+}
+
+// Async function using async/await
+async function getData() {
+  try {
+    console.log("--- Start ---");
+    const result = await fetchData();
+    console.log(result);
+    console.log("--- End ---");
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  }
+}
+
+// Calling the async function
+getData();
+```
+
+### Q 32. What are Template and Reactive forms?
+
+### Q 33. What is NgZone?
+
+Angular provides a service called NgZone which creates a zone named angular to automatically trigger change detection when the following conditions are satisfied.
+
+- When a sync or async function is executed.
+- When there is no microTask scheduled.
 
 ### Q 34. What is angular change detection?
+
+Angular change detection is a built-in framework feature that ensures the automatic synchronization between the data of a component and its HTML template view.
+
+Change detection works by detecting common browser events like mouse clicks, HTTP requests, and other types of events, and deciding if the view of each component needs to be updated or not.
+
+There are two types of change detection:
+
+- **Default change detection:** Angular decides if the view needs to be updated by comparing all the template expression values before and after the occurrence of an event, for all components of the component tree
+- **OnPush change detection:** this works by detecting if some new data has been explicitly pushed into the component, either via a component input or an Observable subscribed to using the async pipe
+
+ApplicationRef.tick(): Invoke this method to explicitly process change detection and its side-effects. It check the full component tree.
+NgZone.run(callback): It evaluate the callback function inside the Angular zone.
+ChangeDetectorRef.detectChanges(): It detects only the components and it's children.
 
 <div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
 
