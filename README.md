@@ -110,7 +110,7 @@ The CSS box model is a container that contains multiple properties like content,
 It is used to define the order of elements if they overlap with each other.\
 Syntax
 
-> z-index: auto | number | initial | inherit;
+> _**z-index:** auto | number | initial | inherit;_
 
 - auto: The stack order is equal to that of the parent(default).
 - number: The stack order depends on the number.
@@ -231,6 +231,175 @@ Syntax:
 
 ## **JavaScript**
 
+### Q 1. What is Javascript?
+
+JavaScript, created by **Brendan Eich** in **1995**. JavaScript is the most popular scripting language for the Web. It is easy to learn, lightweight, cross-platform, single-threaded, and interpreted compiled language. It is widely used for web development, both on the client side and server side.
+
+<div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
+
+### Q 2. What are the data types in JavaScript?
+
+JavaScript is a dynamically typed (also called loosely typed) scripting language. In JavaScript, variables can receive different data types over time.
+
+**1. Primitive Data Type:**
+
+1. **Number:** Represents numeric values, including integers and floating-point numbers.
+2. **String:** Represents textual data enclosed in single quotes ('') or double quotes ("").
+3. **Boolean:** Represents a logical value, either true or false.
+4. **Undefined:** Represents a variable that has been declared but not assigned a value.
+5. **Null:** Represents the intentional absence of any value.
+6. **Symbol (ES6):** Represents a unique and immutable value that may be used as the key of an object property.
+7. **BigInt:** BigInt is a built-in object in JavaScript that provides a way to represent whole numbers larger than 253-1.
+
+**2. Non Primitive Data Type:**
+
+1. **Object:** Represents a collection of key-value pairs where keys are strings (or symbols) and values can be of any data type, including other objects.
+2. **Array:** Represents a collection of elements, usually of the same data type, indexed by non-negative integers.
+
+**3. Special Data Type:**
+
+1. **Function:** Functions are treated as first-class citizens, meaning they can be assigned to variables, passed as arguments to other functions, and returned from other functions.
+
+<div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
+
+### Q 2. What are difference between var, let and const?
+
+| keyword    | var               | let              | const            |
+| ---------- | ----------------- | ---------------- | ---------------- |
+| Scope      | Global & Function | Function & Block | Function & Block |
+| Reassigned | Yes               | Yes              | No               |
+| Redeclare  | Yes               | No               | No               |
+| Hoisted    | Yes               | No               | No               |
+
+### Q 3. What is hoisting?
+
+Hoisting is the default behaviour of javascript where all the variable and function declarations are moved on top during the compilation.
+
+> _**NOTE:** It's important to understand that only the declarations are **hoisted**, not the initializations or assignments._\
+> To avoid hoisting, you can run javascript in strict mode by using `use strict` on top of the code:\_
+
+### Q 4. What is closure?
+
+In JavaScript, returning a function from another function means returning function along with its scope. This allows the function to retain access to memory, which can store live data between executions. This combination of the function and its scope chain is called closure.
+
+```javascript
+function outer() {
+  let counter = 0;
+
+  return function inner() {
+    counter++;
+    console.log(counter);
+  };
+}
+
+const fn = outer();
+fn(); // 1
+fn(); // 2
+fn(); // 3
+```
+
+<div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
+
+### Q 5. What is passed by value and passed by reference?
+
+In JavaScript, primitive data types are passed by value and non-primitive data types are passed by reference.
+
+1. **Passed by Value:** When a primitive data type (such as numbers, strings, booleans, null, or undefined) is passed to a function, it is passed by value. This means that a copy of the value is passed to the function, and any changes made to the parameter inside the function do not affect the original variable outside the function.
+
+```javascript
+function increment(x) {
+  x++;
+  return x;
+}
+
+let num = 5;
+console.log(increment(num)); // Output: 6
+console.log(num); // Output: 5 (original variable remains unchanged)
+```
+
+2. **Passed by Reference:** When an object (including arrays and functions) is passed to a function, it is passed by reference. This means that a reference to the original object is passed to the function, rather than a copy of the object itself. Therefore, changes made to the object's properties or elements inside the function will affect the original object outside the function.
+
+```javascript
+function addName(person) {
+  person.name = "John";
+  return person;
+}
+
+let user = { name: "Alice" };
+console.log(addName(user)); // Output: { name: 'John' }
+console.log(user); // Output: { name: 'John' } (original object is modified)
+```
+
+<div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
+
+### Q 6. Explain call(), apply() and, bind() methods?
+
+`call()`, `apply()`, and `bind()` are methods in JavaScript, which is used to invoke a function.
+
+1. **call():** This method invokes a function with a given `this` value and takes arguments as comma separated.
+
+```javascript
+var employee1 = { firstName: "John", lastName: "Rodson" };
+var employee2 = { firstName: "Jimmy", lastName: "Baily" };
+
+function invite(greeting1, greeting2) {
+  console.log(
+    greeting1 + " " + this.firstName + " " + this.lastName + ", " + greeting2
+  );
+}
+
+invite.call(employee1, "Hello", "How are you?"); // Hello John Rodson, How are you?
+invite.call(employee2, "Hello", "How are you?"); // Hello Jimmy Baily, How are you?
+```
+
+2. **apply():** This method invokes a function with a given `this` value and takes arguments as an array.
+
+```javascript
+var employee1 = { firstName: "John", lastName: "Rodson" };
+var employee2 = { firstName: "Jimmy", lastName: "Baily" };
+
+function invite(greeting1, greeting2) {
+  console.log(
+    greeting1 + " " + this.firstName + " " + this.lastName + ", " + greeting2
+  );
+}
+
+invite.apply(employee1, ["Hello", "How are you?"]); // Hello John Rodson, How are you?
+invite.apply(employee2, ["Hello", "How are you?"]); // Hello Jimmy Baily, How are you?
+```
+
+3. **bind():** Returns a new function and takes arguments as comma separated.
+
+```javascript
+var employee1 = { firstName: "John", lastName: "Rodson" };
+var employee2 = { firstName: "Jimmy", lastName: "Baily" };
+
+function invite(greeting1, greeting2) {
+  console.log(
+    greeting1 + " " + this.firstName + " " + this.lastName + ", " + greeting2
+  );
+}
+
+var inviteEmployee1 = invite.bind(employee1);
+var inviteEmployee2 = invite.bind(employee2);
+inviteEmployee1("Hello", "How are you?"); // Hello John Rodson, How are you?
+inviteEmployee2("Hello", "How are you?"); // Hello Jimmy Baily, How are you?
+```
+
+<div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
+
+### Q 7. What is currying ?
+
+<div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
+
+### Q 4. What is closure?
+
+<div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
+
+### Q 4. What is closure?
+
+<div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
+
 <!-- ### Q. Array Methods
 
 | Method           | Description                                                            |
@@ -330,7 +499,7 @@ A module is a place where we can group components, directives, services, and pip
 - **Root Module:**
 - **Feature Module:**
 
-> _Every application can have only one root module whereas, it can have one or more feature modules._
+> _**NOTE:** Every application can have only one root module whereas, it can have one or more feature modules._
 
 ```typescript
 import { BrowserModule } from "@angular/platform-browser";
@@ -861,7 +1030,7 @@ export class AppRoutingModule {}
 
 _AOT compilation offers better performance, smaller bundle sizes, and improved error detection compared to JIT compilation. It is the recommended compilation mode for production deployments of Angular applications. JIT compilation, on the other hand, provides faster development cycles and is suitable for development and testing environments._
 
-> **NOTE:** **JIT** compilation was the default until **Angular 8**, now default is **AOT**
+> _**NOTE: JIT** compilation was the default until **Angular 8**, now default is **AOT**_
 
 <div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
 
@@ -1026,7 +1195,7 @@ Here's a brief overview of NGRX concepts with an example:
 
 **5. Selectors:** Functions used to derive or select specific pieces of state from the store. They help in composing and optimizing state access.
 
-> Here's a simple example of how NGRX can be used in an Angular application:
+_**Here's a simple example of how NGRX can be used in an Angular application:**_
 
 **1. Define Actions:**
 
