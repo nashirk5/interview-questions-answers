@@ -262,7 +262,7 @@ JavaScript is a dynamically typed (also called loosely typed) scripting language
 
 <div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
 
-### Q 2. What are difference between var, let and const?
+### Q 3. What are difference between var, let and const?
 
 | keyword    | var               | let              | const            |
 | ---------- | ----------------- | ---------------- | ---------------- |
@@ -271,14 +271,14 @@ JavaScript is a dynamically typed (also called loosely typed) scripting language
 | Redeclare  | Yes               | No               | No               |
 | Hoisted    | Yes               | No               | No               |
 
-### Q 3. What is hoisting?
+### Q 4. What is hoisting?
 
 Hoisting is the default behaviour of javascript where all the variable and function declarations are moved on top during the compilation.
 
 > _**NOTE:** It's important to understand that only the declarations are **hoisted**, not the initializations or assignments._\
 > To avoid hoisting, you can run javascript in strict mode by using `use strict` on top of the code:\_
 
-### Q 4. What is closure?
+### Q 5. What is closure?
 
 In JavaScript, returning a function from another function means returning function along with its scope. This allows the function to retain access to memory, which can store live data between executions. This combination of the function and its scope chain is called closure.
 
@@ -300,7 +300,7 @@ fn(); // 3
 
 <div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
 
-### Q 5. What is passed by value and passed by reference?
+### Q 6. What is passed by value and passed by reference?
 
 In JavaScript, primitive data types are passed by value and non-primitive data types are passed by reference.
 
@@ -332,7 +332,7 @@ console.log(user); // Output: { name: 'John' } (original object is modified)
 
 <div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
 
-### Q 6. Explain call(), apply() and, bind() methods?
+### Q 7. Explain call(), apply() and, bind() methods?
 
 `call()`, `apply()`, and `bind()` are methods in JavaScript, which is used to invoke a function.
 
@@ -388,15 +388,200 @@ inviteEmployee2("Hello", "How are you?"); // Hello Jimmy Baily, How are you?
 
 <div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
 
-### Q 7. What is currying ?
+### Q 8. What is currying ?
+
+Currying is the process of taking a function with multiple arguments and turning it into a sequence of functions each with only a single argument.
+
+In other words, when a function, instead of taking all arguments at one time, takes the first one and return a new function that takes the second one and returns a new function which takes the third one, and so forth, until all arguments have been fulfilled.
+
+```javascript
+// Normal function
+const add = (a, b, c) => {
+  return a + b + c;
+};
+console.log(add(10, 10, 10)); // 30
+
+// Currying function
+const addCurry = (a) => {
+  return (b) => {
+    return (c) => {
+      return a + b + c;
+    };
+  };
+};
+console.log(addCurry(20)(20)(20)); // 60
+```
 
 <div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
 
-### Q 4. What is closure?
+### Q 9. What are arrow(lambda) functions?
+
+An arrow function is a shorter/concise syntax for a function expression and does not have its own this, arguments, super, or new.target. These functions are best suited for non-method functions, and they cannot be used as constructors.
+
+_**Example:**_
+
+```javascript
+const arrowFunc1 = (a, b) => a + b; // Multiple parameters
+const arrowFunc2 = (a) => a * 10; // Single parameter
+const arrowFunc3 = () => {}; // no parameters
+```
 
 <div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
 
-### Q 4. What is closure?
+### Q 10. What is a first class function?
+
+In javaScript, functions can be stored as a variable or it can be passed as an argument or be returned by another function. That makes function first-class function in JavaScript.
+
+_**Example:**_
+
+```javascript
+// 01: Assign a function to a variable
+const message = function () {
+  console.log("Hello World!");
+};
+message(); // Invoke it using the variable
+
+// 02: Pass a function as an Argument
+function sayHello() {
+  return "Hello, ";
+}
+function greeting(helloMessage, name) {
+  console.log(helloMessage() + name);
+}
+// Pass `sayHello` as an argument to `greeting` function
+greeting(sayHello, "JavaScript!");
+
+// 03: Return a function
+function sayHello() {
+  return function () {
+    console.log("Hello!");
+  };
+}
+```
+
+<div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
+
+### Q 11. What is a higher order function?
+
+A Higher-Order function is a function that receives a function as an argument or returns the function as output.
+
+_**Example:**_, `Array.prototype.map()`, `Array.prototype.filter()`, `Array.prototype.forEach()` and `Array.prototype.reduce()` are some of the Higher-Order functions in javascript.
+
+<div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
+
+### Q 12. What are callbacks?
+
+A callback is a function that is passed as an argument to another function and that will be executed after another function gets executed.
+
+_**Example:**_
+
+```javascript
+function divideByHalf(sum) {
+  console.log(Math.floor(sum / 2));
+}
+
+function multiplyBy2(sum) {
+  console.log(sum * 2);
+}
+
+function operationOnSum(num1, num2, operation) {
+  var sum = num1 + num2;
+  operation(sum);
+}
+
+operationOnSum(3, 3, divideByHalf); // Outputs 3
+operationOnSum(5, 5, multiplyBy2); // Outputs 20
+```
+
+<div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
+
+### Q 13. What is a callback hell?
+
+Callback Hell is an anti-pattern with multiple nested callbacks which makes code hard to read and debug when dealing with asynchronous logic. The callback hell looks like below,
+
+_**Example:**_
+
+```javascript
+async1(function(){
+    async2(function(){
+        async3(function(){
+            async4(function(){
+                ....
+            });
+        });
+    });
+});
+```
+
+<div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
+
+### Q 14. What are the types of errors in javascript?
+
+Here are some common types of errors in JavaScript:
+
+1. **Syntax Errors:** These errors prevent the code from being executed and are typically detected during the parsing phase.
+
+```javascript
+let x = 10;
+console.log(x
+```
+
+2. **Reference Errors:** Reference errors occur when code tries to access a variable or function that does not exist or is not in scope. These errors are thrown at runtime when the JavaScript engine cannot find the referenced variable or function.
+
+```javascript
+console.log(y); // ReferenceError: y is not defined
+```
+
+3. **Type Errors:** These errors are thrown at runtime when the JavaScript engine encounters an unexpected data type or an incompatible operation.
+
+```javascript
+let x = "10";
+console.log(x.toUpperCase()); // TypeError: x.toUpperCase is not a function
+```
+
+<div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
+
+### Q 15. What is recursion in a programming language?
+
+Recursion is a method of performing an operation iterate by having a function call itself repeatedly until it reaches a result.
+
+_**Example:**_
+
+```javascript
+// Ex: 1
+function sumArray(arr, index = 0) {
+  // Base case: if the index reaches the end of the array, return 0
+  if (index === arr.length) {
+    return 0;
+  } else {
+    // Recursive case: add the current element to the sum of the remaining elements
+    return arr[index] + sumArray(arr, index + 1);
+  }
+}
+console.log(sumArray([1, 2, 3, 4, 5])); // Output: 15 (1 + 2 + 3 + 4 + 5)
+
+// Ex: 2
+function add(num) {
+  if (num === 0) {
+    return 0;
+  } else {
+    return num + calculateSum(num - 1);
+  }
+}
+console.log(calculateSum(5)); // Output: 15 (5 + 4 + 3 + 2 + 1)
+```
+
+<div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
+
+### Q 16. What is the rest parameter and spread operator?
+
+<div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
+
+### Q . What is closure?
+
+<div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
+
+### Q . What is closure?
 
 <div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
 
@@ -829,7 +1014,7 @@ View encapsulation specifies if the component's template and styles can impact t
 - **Native (Shadow DOM):** Shadow DOM provides true encapsulation by creating a separate DOM subtree for each component and encapsulating the styles within that subtree.
 - **None:** This is useful when you want to apply global styles or when you need to style elements outside of the component's view encapsulation boundary
 
-Example:
+_**Example:**_
 
 ```typescript
 @Component({
@@ -881,7 +1066,7 @@ export class AppModule {}
 
 If the URL doesn't match any predefined routes then it causes the router to throw an error and crash the app. In this case, you can use wildcard route. A wildcard route has a path consisting of two asterisks to match every URL.
 
-**Example**
+_**Example:**_
 
 ```typescript
   { path: '**', component: PageNotFoundComponent }
@@ -1420,7 +1605,7 @@ _Here's a brief overview of how async/await works:_
 
 **Await Operator:** Inside an async function, you can use the await keyword before an expression that returns a promise. The await keyword pauses the execution of the async function until the promise is resolved, and then it returns the resolved value.
 
-**Example:**
+_**Example:**_
 
 ```javascript
 // Example asynchronous function
