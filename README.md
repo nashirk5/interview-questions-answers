@@ -414,7 +414,181 @@ console.log(addCurry(20)(20)(20)); // 60
 
 <div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
 
-### Q 9. What are arrow/lambda functions?
+### Q 9. What is the rest parameter and spread operator?
+
+The rest parameter and spread operator are two features introduced in ECMAScript 6 (ES6) that enhance the functionality of JavaScript functions and arrays, respectively.
+
+> _**NOTE:** Rest parameter should always be used at the last parameter of a function._
+
+1. **Rest Parameter (`...`):** Rest parameter is an improved way to handle function parameters which allows us to represent an indefinite number of arguments as an array.\
+    _**Example:**_
+   ```javascript
+   function sum(...numbers) {
+     return numbers.reduce((total, num) => total + num, 0);
+   }
+   console.log(sum(1, 2, 3, 4, 5)); // Output: 15
+   ```
+2. **Spread Operator (...):** Spread operator allows iterables( arrays / objects / strings ) to be expanded into single arguments/elements.\
+   _**Example:**_
+
+   ```javascript
+   function sum(x, y, z) {
+     return x + y + z;
+   }
+   const numbers = [10, 20, 30];
+
+   // Using Apply (ES5)
+   console.log(sum.apply(null, numbers)); // 60
+
+   // Using Spread Operator
+   console.log(sum(...numbers)); // 60
+   ```
+
+   1. **Copying an array:**
+
+      ```javascript
+      let fruits = ["Apple", "Orange", "Banana"];
+      let newFruitArray = [...fruits];
+
+      console.log(newFruitArray); // Output: ['Apple', 'Orange', 'Banana']
+      ```
+
+   2. **Concatenating arrays:**
+
+      ```javascript
+      let arr1 = ["A", "B", "C"];
+      let arr2 = ["X", "Y", "Z"];
+
+      let result = [...arr1, ...arr2];
+
+      console.log(result); // Output: ['A', 'B', 'C', 'X', 'Y', 'Z']
+      ```
+
+   3. **Spread syntax for object literals**
+
+      ```javascript
+      const obj1 = { id: 101, name: 'Rajiv Sandal' }
+      const obj2 = { age: 35, country: 'INDIA' }
+
+      const employee = { ...obj1, ...obj2 }
+
+      console.log(employee);
+
+      // Output
+      {
+        "id": 101,
+        "name": "Rajiv Sandal",
+        "age": 35,
+        "country": "INDIA"
+      }
+      ```
+
+<div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
+
+### Q 10. What are Sets?
+
+Sets are a new object type with ES6 (ES2015) that allow to create collections of unique values. The values in a set can be either simple primitives like strings or integers, but more complex object types like object literals or arrays can also be part of a set.
+
+_**Example:**_
+
+```javascript
+let numbers = new Set([10, 20, 20, 30, 40, 50]);
+
+console.log(numbers); Set(5) { 10, 20, 30, 40, 50 }
+console.log(typeof numbers); // Object
+```
+
+<div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
+
+### Q 11. What is destructing?
+
+Destructuring in JavaScript is a convenient way to extract multiple values from arrays or objects and assign them to variables using a concise syntax. It allows you to "unpack" values from data structures like arrays and objects into separate variables, making it easier to work with complex data in a more expressive and succinct manner.
+
+_**Example:**_
+
+```javascript
+const person = { name: "John", age: 30 };
+const { name, age } = person;
+console.log(name); // Output: "John"
+console.log(age); // Output: 30
+```
+
+<div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
+
+### Q 12. What are generators?
+
+A generator is a function that can stop midway and then continue from where it stopped. In short, a generator appears to be a function but it behaves like an `iterator`.
+
+_**Example:**_
+
+```javascript
+function* generator(num) {
+  yield num + 10;
+  yield num + 20;
+  yield num + 30;
+}
+let gen = generator(10);
+
+console.log(gen.next().value); // 20
+console.log(gen.next().value); // 30
+console.log(gen.next().value); // 40
+```
+
+<div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
+
+### Q 13. What is the difference between == and === operators?
+
+In JavaScript, the `==` and `===` operators are used for comparison and `===` checks both the values and the types, and only returns true if both are the same.
+
+_**Example:**_
+
+```javascript
+0 == false // true
+0 === false // false
+1 == "1" // true
+1 === "1" // false
+null == undefined // true
+null === undefined // false
+"0" == false // true
+"0" === false // false
+[] === [] // false, refer different objects in memory
+{} === {} // false, refer different objects in memory
+```
+
+<div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
+
+### Q 14. What is ternary operator?
+
+The conditional (ternary) operator is the only JavaScript operator that takes three operands which acts as a shortcut for if statement.
+
+_**Example:**_
+
+```javascript
+const isAuthenticated = false;
+
+console.log(
+  isAuthenticated ? "Hello, welcome" : "Sorry, you are not authenticated"
+);
+```
+
+<div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
+
+### Q 15. What is isNaN?
+
+The isNaN() function determines whether a value is NaN ( Not a Number ) or not. This function returns true if the value equates to NaN. The isNaN() method converts the value to a number before testing it.
+
+_**Example:**_
+
+```javascript
+isNaN("Hello"); // true
+isNaN("100"); // false
+typeof NaN; // Number
+Number.isNaN("Hello"); // false
+```
+
+<div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
+
+### Q 16. What are arrow/lambda functions?
 
 An arrow function is a shorter/concise syntax for a function expression and does not have its own this, arguments, super, or new.target. These functions are best suited for non-method functions, and they cannot be used as constructors.
 
@@ -428,7 +602,7 @@ const arrowFunc3 = () => {}; // no parameters
 
 <div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
 
-### Q 10. What is a first class function?
+### Q 17. What is a first class function?
 
 In javaScript, functions can be stored as a variable or it can be passed as an argument or be returned by another function. That makes function first-class function in JavaScript.
 
@@ -461,7 +635,7 @@ function sayHello() {
 
 <div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
 
-### Q 11. What is a higher order function?
+### Q 18. What is a higher order function?
 
 A Higher-Order function is a function that receives a function as an argument or returns the function as output.
 
@@ -469,7 +643,7 @@ _**Example:**_, `Array.prototype.map()`, `Array.prototype.filter()`, `Array.prot
 
 <div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
 
-### Q 12. What are the types of errors in javascript?
+### Q 19. What are the types of errors in javascript?
 
 Here are some common types of errors in JavaScript:
 
@@ -495,7 +669,7 @@ console.log(x.toUpperCase()); // TypeError: x.toUpperCase is not a function
 
 <div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
 
-### Q 13. What is recursion in a programming language?
+### Q 20. What is recursion in a programming language?
 
 Recursion is a method of performing an operation iterate by having a function call itself repeatedly until it reaches a result.
 
@@ -527,36 +701,7 @@ console.log(calculateSum(5)); // Output: 15 (5 + 4 + 3 + 2 + 1)
 
 <div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
 
-### Q 14. What is the rest parameter and spread operator?
-
-The rest parameter and spread operator are two features introduced in ECMAScript 6 (ES6) that enhance the functionality of JavaScript functions and arrays, respectively.
-
-> _**NOTE:** Rest parameter should always be used at the last parameter of a function._
-
-1. **Rest Parameter (`...`):** Rest parameter is an improved way to handle function parameters which allows us to represent an indefinite number of arguments as an array.\
-    _**Example:**_
-   ```javascript
-   function sum(...numbers) {
-     return numbers.reduce((total, num) => total + num, 0);
-   }
-   console.log(sum(1, 2, 3, 4, 5)); // Output: 15
-   ```
-2. **Spread Operator (...):** Spread operator allows iterables( arrays / objects / strings ) to be expanded into single arguments/elements.\
-   _**Example:**_
-
-   ```javascript
-   function calculateSum(x, y, z) {
-     return x + y + z;
-   }
-
-   const numbers = [1, 2, 3];
-
-   console.log(calculateSum(...numbers)); // 6
-   ```
-
-<div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
-
-### Q 15. What are callbacks?
+### Q 21. What are callbacks?
 
 A callback is a function that is passed as an argument to another function and that will be executed after another function gets executed.
 
@@ -582,7 +727,7 @@ operationOnSum(5, 5, multiplyBy2); // Outputs 20
 
 <div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
 
-### Q 16. What is a callback hell?
+### Q 22. What is a callback hell?
 
 Callback Hell is an anti-pattern with multiple nested callbacks which makes code hard to read and debug when dealing with asynchronous logic. The callback hell looks like below,
 
@@ -602,7 +747,7 @@ async1(function(){
 
 <div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
 
-### Q 17. What is a promise?
+### Q 23. What is a promise?
 
 Promises are used to handle asynchronous operations. They provide an alternative approach for callbacks by reducing the callback hell and writing the cleaner code.
 
@@ -639,58 +784,447 @@ fetchData
 
 <div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
 
-### Q . What is closure?
+### Q 24. Explain arrays?
+
+JavaScript array is an object that represents a collection of similar type of elements. It can holds values (of any type) not particularly in named properties/keys, but rather in numerically indexed positions.
+
+_**Example:**_
+
+1. _Creating an array_
+
+   ```javascript
+   // array of numbers
+   const numbers = [10, 20, 30, 40, 50];
+
+   // using new keyword
+   const numbers = new Array(10, 20, 30, 40, 50);
+
+   // array of strings
+   let fruits = ["Apple", "Orange", "Plum", "Mango"];
+   ```
+
+2. _Accessing array elements_
+
+   ```javascript
+   let fruits = ["Apple", "Orange", "Plum", "Mango"];
+
+   fruits[0]; // Apple
+   fruits[fruits.length - 1]; // Mango
+
+   // Iterate array elements
+   for (let i = 0; i < fruits.length; i++) {
+     console.log(fruits[i]);
+   }
+   ```
+
+3. _Adding new array elements_
+
+   ```javascript
+   let fruits = ["Apple", "Orange", "Plum", "Mango"];
+
+   fruits.push("Grapes"); // Adds a new element (Grapes) to fruits
+   ```
 
 <div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
 
-### Q . What is closure?
+### Q 25. Write some array methods?
+
+1. **array.join():** The join() method creates and returns a new string by concatenating all of the elements in an array.
+
+```javascript
+var elements = ["Fire", "Air", "Water"];
+
+console.log(elements.join()); // Output: "Fire,Air,Water"
+console.log(elements.join("")); // Output: "FireAirWater"
+console.log(elements.join("-")); // Output: "Fire-Air-Water"
+```
+
+2. **array.pop():** The pop() method removes the last element from an array and returns that element.
+
+```javascript
+var plants = ["broccoli", "cauliflower", "kale"];
+
+console.log(plants.pop()); // Output: "kale"
+console.log(plants); // Output: Array ["broccoli", "cauliflower"]
+console.log(plants.pop()); // Output: "cauliflower"
+```
+
+3. **array.push():** The push() method adds one or more elements to the end of an array.
+
+```javascript
+const animals = ["pigs", "goats", "sheep"];
+
+const count = animals.push("cows");
+console.log(animals); // Output: Array ["pigs", "goats", "sheep", "cows"]
+```
+
+4. **array.shift():** The shift() method removes the first element from an array and returns that removed element.
+
+```javascript
+var fruits = ["Banana", "Orange", "Apple", "Mango"];
+fruits.shift();
+console.log(fruits); // Output: Array ["Orange", "Apple", "Mango"]
+```
+
+5. **array.unshift():** The unshift() method adds one or more elements to the beginning of an array.
+
+```javascript
+var fruits = ["Banana", "Orange", "Apple"];
+fruits.unshift("Mango", "Pineapple");
+console.log(fruits); // Output: Array ["Mango", "Pineapple", "Banana", "Orange", "Apple"]
+```
+
+6. **array.concat():** The concat() method is used to merge two or more arrays. This method does not change the existing arrays, but instead returns a new array.
+
+```javascript
+const array1 = ["a", "b", "c"];
+const array2 = ["d", "e", "f"];
+
+console.log(array1.concat(array2)); // Output: Array ["a", "b", "c", "d", "e", "f"]
+```
+
+7. **array.map():** The map() method creates a new array with the results of calling a provided function on every element in the calling array.
+
+```javascript
+var array1 = [1, 4, 9, 16];
+
+// pass a function to map
+const map1 = array1.map((x) => x * 2);
+
+console.log(map1); // Output: Array [2, 8, 18, 32]
+```
+
+8. **array.filter():** The filter() method creates a new array with all elements that pass the test implemented by the provided function.
+
+```javascript
+var words = ["spray", "limit", "elite", "exuberant", "destruction"];
+
+const result = words.filter((word) => word.length > 6);
+
+console.log(result); // Output: Array ["exuberant", "destruction"]
+```
+
+9. **array.reduce():** The reduce() method executes a reducer function (that you provide) on each element of the array, resulting in a single output value.
+
+```javascript
+const array1 = [1, 2, 3, 4];
+const reducer = (accumulator, currentValue) => accumulator + currentValue;
+
+console.log(array1.reduce(reducer)); // Output: 10
+console.log(array1.reduce(reducer, 5)); // Output: 15
+```
+
+10. **array.every():** The every() method tests whether all elements in the array pass the test implemented by the provided function. It returns a Boolean value.
+
+```javascript
+function isBelowThreshold(currentValue) {
+  return currentValue < 40;
+}
+
+var array1 = [1, 30, 39, 29, 10, 13];
+console.log(array1.every(isBelowThreshold)); // Output: true
+```
+
+11. **array.some():** The some() method tests whether at least one element in the array passes the test implemented by the provided function. It returns a Boolean value.
+
+```javascript
+var array = [1, 2, 3, 4, 5];
+
+var even = function (element) {
+  // checks whether an element is even
+  return element % 2 === 0;
+};
+
+console.log(array.some(even)); // Output: true
+```
+
+12. **array.find():** The find() method returns the value of the first element in the provided array that satisfies the provided testing function.
+
+```javascript
+var array1 = [5, 12, 8, 130, 44];
+
+var found = array1.find(function (element) {
+  return element > 100;
+});
+
+console.log(found); // Output: 130
+```
+
+13. **array.includes():** The includes() method determines whether an array includes a certain value among its entries, returning true or false as appropriate.
+
+```javascript
+var array1 = [1, 2, 3];
+console.log(array1.includes(2)); // Output: true
+
+var pets = ["cat", "dog", "bat"];
+console.log(pets.includes("at")); // Output: false
+```
 
 <div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
 
-### Q . What is closure?
+### Q 26. Write some string methods?
+
+1. **string.charAt():** Returns the character at the specified index in the string.
+
+```javascript
+const str = "Hello";
+console.log(str.charAt(0)); // Output: "H"
+```
+
+2. **string.concat():** Combines two or more strings and returns a new string.
+
+```javascript
+const str1 = "Hello";
+const str2 = "World";
+console.log(str1.concat(" ", str2)); // Output: "Hello World"
+```
+
+3. **string.includes():** Checks if the string contains the specified substring.
+
+```javascript
+const str = "Hello World";
+console.log(str.includes("World")); // Output: true
+```
+
+4. **string.indexOf():** Returns the index of the first occurrence of a specified value in a string, or -1 if not found.
+
+```javascript
+const str = "Hello World";
+console.log(str.indexOf("o")); // Output: 4
+```
+
+5. **string.replace():** Replaces a specified value with another value in a string.
+
+```javascript
+const str = "Hello World";
+console.log(str.replace("World", "Universe")); // Output: "Hello Universe"
+```
+
+6. **string.slice():** Extracts a section of a string and returns a new string.
+
+```javascript
+const str = "Hello World";
+console.log(str.slice(6)); // Output: "World"
+```
+
+7. **string.split():** Splits a string into an array of substrings based on a specified separator.
+
+```javascript
+const str = "Hello World";
+console.log(str.split(" ")); // Output: ["Hello", "World"]
+```
+
+8. **string.toLowerCase():** Converts the string to lowercase or uppercase, respectively.
+
+```javascript
+const str = "Hello World";
+console.log(str.toLowerCase()); // Output: "hello world"
+console.log(str.toUpperCase()); // Output: "HELLO WORLD"
+```
+
+9. **string.trim():** Removes whitespace from both ends of a string.
+
+```javascript
+const str = "   Hello World   ";
+console.log(str.trim()); // Output: "Hello World"
+```
 
 <div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
 
-### Q . What is closure?
+### Q 27. What is loop?
+
+A loop in JavaScript is a programming construct that allows you to repeatedly execute a block of code multiple times until a specified condition is met. Loops are fundamental for iterating over arrays, processing data, and performing repetitive tasks efficiently. JavaScript provides several types of loops to suit different use cases:
+
+1. **`for` Loop:** The for loop is used to execute a block of code a specified number of times.
+
+```javascript
+for (let i = 0; i < 5; i++) {
+  console.log(i); // Output: 0, 1, 2, 3, 4
+}
+```
+
+2. **`while` Loop:** The while loop is used to execute a block of code as long as a specified condition is true.
+
+```javascript
+let i = 0;
+while (i < 5) {
+  console.log(i); // Output: 0, 1, 2, 3, 4
+  i++;
+}
+```
+
+3. **`do...while` Loop:** The do...while loop is similar to the while loop, but it always executes the block of code at least once, even if the condition is false.
+
+```javascript
+let i = 0;
+do {
+  console.log(i); // Output: 0, 1, 2, 3, 4
+  i++;
+} while (i < 5);
+```
+
+4. **`for...in` Loop:** The for...in loop iterates over the enumerable properties of an object, including inherited properties from its prototype chain.
+
+```javascript
+const person = { name: "John", age: 30 };
+for (let key in person) {
+  console.log(key + ": " + person[key]); // Output: name: John, age: 30
+}
+```
+
+5. **`for...of` Loop:** The for...in loop iterates over the enumerable properties of an object, including inherited properties from its prototype chain.
+
+```javascript
+const person = { name: "John", age: 30 };
+for (let key in person) {
+  console.log(key + ": " + person[key]); // Output: name: John, age: 30
+}
+```
 
 <div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
 
-### Q . What is closure?
+### Q 28. What is Async/await?
+
+Async/await is a feature in JavaScript that allows you to write asynchronous code in a synchronous-looking manner. It provides a more readable and understandable way to work with asynchronous operations, such as fetching data from a server, reading files, or making network requests.
+
+_Here's a brief overview of how async/await works:_
+
+**Async Functions:** An async function is a function that operates asynchronously via the event loop, and it always returns a promise. You declare an async function using the async keyword before the function declaration.
+
+**Await Operator:** Inside an async function, you can use the await keyword before an expression that returns a promise. The await keyword pauses the execution of the async function until the promise is resolved, and then it returns the resolved value.
+
+_**Example:**_
+
+```javascript
+// Example asynchronous function
+function fetchData() {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      resolve("Data fetched successfully");
+    }, 2000);
+  });
+}
+
+// Async function using async/await
+async function getData() {
+  try {
+    console.log("--- Start ---");
+    const result = await fetchData();
+    console.log(result);
+    console.log("--- End ---");
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  }
+}
+
+// Calling the async function
+getData();
+```
 
 <div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
 
-### Q . What is closure?
+### Q 29. What are the possible ways to create objects in JavaScript?
+
+```javascript
+// Example 1:
+let object = new Object();
+
+// Example 2:
+let object = Object.create(null);
+
+// Example 3:
+let person = {};
+
+// Example 4:
+function Person(name) {
+  let object = {};
+  object.name = name;
+  object.age = 26;
+
+  return object;
+}
+
+let person = new Person("Alex");
+
+// Example 5:
+class Person {
+  constructor(name) {
+    this.name = name;
+  }
+}
+
+let person = new Person("Alex");
+```
+
+<div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
+
+### Q 30. What are the difference between mutable and immutable objects?
+
+A mutable object is an object whose state can be modified after it is created. An immutable object is an object whose state cannot be modified after it is created.
+
+> _**NOTE:** In JavaScript numbers, strings, null, undefined and Booleans are primitive types which are immutable. Objects, arrays, functions, classes, maps, and sets are mutable.._
+
+<div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
+
+### Q 31. What is shallow copy and deep copy?
+
+1. **Shallow Copy:** Shallow copy is a bit-wise copy of an object. A new object is created that has an exact copy of the values in the original object. If any of the fields of the object are references to other objects, just the reference addresses are copied i.e., only the memory address is copied.\
+   _A Shallow copy of the object can be done using `object.assign()`_
+
+```javascript
+// Shallow Copy
+
+let obj = {
+  a: 10,
+  b: 20,
+};
+
+let objCopy = Object.assign({}, obj);
+console.log(objCopy); // Result - { a: 1, b: 2 }
+```
+
+2. **Deep Copy:** A deep copy copies all fields, and makes copies of dynamically allocated memory pointed to by the fields. A deep copy occurs when an object is copied along with the objects to which it refers.\
+   _A Deep copy of the object can be done using `JSON.parse(JSON.stringify(object))`_
+
+```javascript
+// Deep Copy
+
+let obj2 = {
+  a: 10,
+  b: {
+    c: 20,
+  },
+};
+
+let newObj = JSON.parse(JSON.stringify(obj2));
+obj2.b.c = 30;
+
+console.log(obj2); // { a: 10, b: { c: 20 } }
+console.log(newObj); // { a: 10, b: { c: 20 } }
+```
 
 <div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
 
 <!-- ### Q. Array Methods
 
-| Method           | Description                                                            |
-| ---------------- | ---------------------------------------------------------------------- |
-| **. pop()**      | Removes the last element of an array, and returns that element         |
-| **. shift()**    | Removes the first element of an array, and returns that element        |
-| **. push()**     | Add new elements to the end of an array, and returns the new length    |
-| **. unshift()**  | Adds new elements to the start of an array, and returns the new length |
-| **. join()**     | Returns a new string by concatenating all of the elements in an array  |
-| **. sort()**     | Sorting the array elements based on some condition                     |
-| **. reverse()**  | Reversing the order of the elements in an array                        |
-| **. slice()**    | Pulling a copy of a part of an array into a new array                  |
-| **. toString()** | Converting the array elements into strings                             |
+How do you generate random integers?
 
-### Q. String Methods
+The Math.random() function returns a floating-point, pseudo-random number in the range 0 to less than 1 (inclusive of 0, but not 1). For example, if you want generate random integers between 1 to 100, the multiplication factor should be 100,
 
-> Ex: _Hello_
+// Example 01:
+Math.random(); // returns a random integer between 0 to 1
 
-| Method                 | Description                                                                         |
-| ---------------------- | ----------------------------------------------------------------------------------- |
-| **. toLowerCase()**    | _hello_ - Converting strings to lower case                                          |
-| **. toUpperCase()**    | _HELLO_ - Converting strings to upper case                                          |
-| **. length()**         | _5_ - Count the characters                                                          |
-| **. charAt(2)**        | _l_ - Returning the character at a particular index of a string                     |
-| **. concat(' world')** | _Hello world_ - Joining multiple strings into a single string                       |
-| **. indexOf('e)**      | _1_ - Providing the index of the first appearance of a given text inside the string | -->
+// Example 02:
+Math.floor(Math.random() * 100) + 1; // returns a random integer from 1 to 100
 
-<div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
+// Example 03:
+function getRandomNumber(max) {
+  return Math.floor(Math.random() * max) + 1;
+}
+
+console.log(getRandomNumber(10)); // returns a random integer from 1 to 10
+
+-->
 
 ##
 
