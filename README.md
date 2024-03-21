@@ -276,7 +276,7 @@ JavaScript is a dynamically typed (also called loosely typed) scripting language
 Hoisting is the default behaviour of javascript where all the variable and function declarations are moved on top during the compilation.
 
 > _**NOTE:** It's important to understand that only the declarations are **hoisted**, not the initializations or assignments._\
-> To avoid hoisting, you can run javascript in strict mode by using `use strict` on top of the code:\_
+> _To avoid hoisting, you can run javascript in strict mode by using `use strict` on top of the code_
 
 ### Q 5. What is closure?
 
@@ -414,7 +414,7 @@ console.log(addCurry(20)(20)(20)); // 60
 
 <div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
 
-### Q 9. What are arrow(lambda) functions?
+### Q 9. What are arrow/lambda functions?
 
 An arrow function is a shorter/concise syntax for a function expression and does not have its own this, arguments, super, or new.target. These functions are best suited for non-method functions, and they cannot be used as constructors.
 
@@ -469,53 +469,7 @@ _**Example:**_, `Array.prototype.map()`, `Array.prototype.filter()`, `Array.prot
 
 <div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
 
-### Q 12. What are callbacks?
-
-A callback is a function that is passed as an argument to another function and that will be executed after another function gets executed.
-
-_**Example:**_
-
-```javascript
-function divideByHalf(sum) {
-  console.log(Math.floor(sum / 2));
-}
-
-function multiplyBy2(sum) {
-  console.log(sum * 2);
-}
-
-function operationOnSum(num1, num2, operation) {
-  var sum = num1 + num2;
-  operation(sum);
-}
-
-operationOnSum(3, 3, divideByHalf); // Outputs 3
-operationOnSum(5, 5, multiplyBy2); // Outputs 20
-```
-
-<div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
-
-### Q 13. What is a callback hell?
-
-Callback Hell is an anti-pattern with multiple nested callbacks which makes code hard to read and debug when dealing with asynchronous logic. The callback hell looks like below,
-
-_**Example:**_
-
-```javascript
-async1(function(){
-    async2(function(){
-        async3(function(){
-            async4(function(){
-                ....
-            });
-        });
-    });
-});
-```
-
-<div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
-
-### Q 14. What are the types of errors in javascript?
+### Q 12. What are the types of errors in javascript?
 
 Here are some common types of errors in JavaScript:
 
@@ -541,7 +495,7 @@ console.log(x.toUpperCase()); // TypeError: x.toUpperCase is not a function
 
 <div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
 
-### Q 15. What is recursion in a programming language?
+### Q 13. What is recursion in a programming language?
 
 Recursion is a method of performing an operation iterate by having a function call itself repeatedly until it reaches a result.
 
@@ -573,7 +527,131 @@ console.log(calculateSum(5)); // Output: 15 (5 + 4 + 3 + 2 + 1)
 
 <div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
 
-### Q 16. What is the rest parameter and spread operator?
+### Q 14. What is the rest parameter and spread operator?
+
+The rest parameter and spread operator are two features introduced in ECMAScript 6 (ES6) that enhance the functionality of JavaScript functions and arrays, respectively.
+
+> _**NOTE:** Rest parameter should always be used at the last parameter of a function._
+
+1. **Rest Parameter (`...`):** Rest parameter is an improved way to handle function parameters which allows us to represent an indefinite number of arguments as an array.\
+    _**Example:**_
+   ```javascript
+   function sum(...numbers) {
+     return numbers.reduce((total, num) => total + num, 0);
+   }
+   console.log(sum(1, 2, 3, 4, 5)); // Output: 15
+   ```
+2. **Spread Operator (...):** Spread operator allows iterables( arrays / objects / strings ) to be expanded into single arguments/elements.\
+   _**Example:**_
+
+   ```javascript
+   function calculateSum(x, y, z) {
+     return x + y + z;
+   }
+
+   const numbers = [1, 2, 3];
+
+   console.log(calculateSum(...numbers)); // 6
+   ```
+
+<div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
+
+### Q 15. What are callbacks?
+
+A callback is a function that is passed as an argument to another function and that will be executed after another function gets executed.
+
+_**Example:**_
+
+```javascript
+function divideByHalf(sum) {
+  console.log(Math.floor(sum / 2));
+}
+
+function multiplyBy2(sum) {
+  console.log(sum * 2);
+}
+
+function operationOnSum(num1, num2, operation) {
+  var sum = num1 + num2;
+  operation(sum);
+}
+
+operationOnSum(3, 3, divideByHalf); // Outputs 3
+operationOnSum(5, 5, multiplyBy2); // Outputs 20
+```
+
+<div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
+
+### Q 16. What is a callback hell?
+
+Callback Hell is an anti-pattern with multiple nested callbacks which makes code hard to read and debug when dealing with asynchronous logic. The callback hell looks like below,
+
+_**Example:**_
+
+```javascript
+async1(function(){
+    async2(function(){
+        async3(function(){
+            async4(function(){
+                ....
+            });
+        });
+    });
+});
+```
+
+<div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
+
+### Q 17. What is a promise?
+
+Promises are used to handle asynchronous operations. They provide an alternative approach for callbacks by reducing the callback hell and writing the cleaner code.
+
+_There are 3 states in promises:_
+
+1.  **Pending:** Initial state, neither fulfilled nor rejected.
+2.  **Fulfilled:** The asynchronous operation has completed successfully, and the promise has a resolved value.
+3.  **Rejected:** The asynchronous operation has failed, and the promise has a reason for rejection (usually an error object).
+
+_**Example:**_
+
+```javascript
+// Creating a promise
+const fetchData = new Promise((resolve, reject) => {
+  // Simulating an asynchronous operation (e.g., fetching data from a server)
+  setTimeout(() => {
+    const data = { message: "Data fetched successfully" };
+    // Resolve the promise with the fetched data
+    resolve(data);
+    // Reject the promise with an error if something goes wrong
+    // reject(new Error('Failed to fetch data'));
+  }, 1000);
+});
+
+// Consuming the promise
+fetchData
+  .then((data) => {
+    console.log(data.message);
+  })
+  .catch((error) => {
+    console.error(error.message);
+  });
+```
+
+<div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
+
+### Q . What is closure?
+
+<div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
+
+### Q . What is closure?
+
+<div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
+
+### Q . What is closure?
+
+<div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
+
+### Q . What is closure?
 
 <div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
 
