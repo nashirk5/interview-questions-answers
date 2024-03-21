@@ -485,18 +485,77 @@ The rest parameter and spread operator are two features introduced in ECMAScript
 
 <div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
 
-### Q 10. What are Sets?
+### Q 10. What are Sets and WeakSet?
 
-Sets are a new object type with ES6 (ES2015) that allow to create collections of unique values. The values in a set can be either simple primitives like strings or integers, but more complex object types like object literals or arrays can also be part of a set.
+1.  **Sets:** Sets are a new object type with ES6 (ES2015) that allow to create collections of unique values. The values in a set can be either simple primitives like strings or integers, but more complex object types like object literals or arrays can also be part of a set.\
+    _**Example:**_
 
-_**Example:**_
+    ```javascript
+    let numbers = new Set([10, 20, 20, 30, 40, 50]);
 
-```javascript
-let numbers = new Set([10, 20, 20, 30, 40, 50]);
+        console.log(numbers); Set(5) { 10, 20, 30, 40, 50 }
+        console.log(typeof numbers); // Object
+    ```
 
-console.log(numbers); Set(5) { 10, 20, 30, 40, 50 }
-console.log(typeof numbers); // Object
-```
+2.  **WeakSet:** Just like Set, WeakSet is also a collection of unique and ordered elements with some key differences. Weakset contains only objects and no other type. Unlike Set, WeakSet only has three methods, add() , delete() and has().\
+    _**Example:**_
+
+    ```javascript
+    const newSet = new Set([4, 5, 6, 7]);
+    console.log(newSet); // Outputs Set {4,5,6,7}
+
+    const newSet2 = new WeakSet([3, 4, 5]); //Throws an error
+
+    let obj1 = { message: "Hello world" };
+    const newSet3 = new WeakSet([obj1]);
+    console.log(newSet3.has(obj1)); // true
+    ```
+
+<div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
+
+### Q 11. What are Map and WeakMap?
+
+1. **Map:** In javascript, Map is used to store key-value pairs. The key-value pairs can be of both primitive and non-primitive types. WeakMap is similar to Map with key differences.
+
+   - The keys and values in weakmap should always be an object.
+   - If there are no references to the object, the object will be garbage collected.
+
+     _**Example:**_
+
+     ```javascript
+     const map1 = new Map();
+     map1.set("Value", 1);
+
+     const map2 = new WeakMap();
+     map2.set("Value", 2.3); // Throws an error
+
+     let obj = { name: "Vivek" };
+     const map3 = new WeakMap();
+     map3.set(obj, { age: 23 });
+     ```
+
+2. **WeakMap:** The WeakMap object is a collection of key/value pairs in which the keys are weakly referenced. In this case, keys must be objects and the values can be arbitrary values. WeakMap accepts only objects but not any primitive values (strings, numbers).
+
+   _**Example:**_
+
+   ```javascript
+   // WeakMap()
+   function Obj() {
+     this.val = new Array(10).join("---");
+   }
+
+   window.obj = new Obj();
+   var map = new WeakMap();
+   console.log(window.obj); // {val: "-----------------", constructor: Object}
+   map.set(window.obj, 20); // WeakMap {Obj => 20}
+   console.log(map);
+   ```
+
+**Difference between Map and WeakMap:**
+
+1. A WeakMap accepts only objects as keys whereas a Map, in addition to objects, accepts primitive datatype such as strings, numbers etc.
+2. WeakMap objects doesn't avert garbage collection if there are no references to the object which is acting like a key. Therefore there is no method to retrieve keys in WeakMap, whereas in Map there are methods such as Map.prototype.keys() to get the keys.
+3. There is no size property exists in WeakMap.
 
 <div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
 
@@ -780,6 +839,32 @@ fetchData
   .catch((error) => {
     console.error(error.message);
   });
+```
+
+<div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
+
+### Q 23. What is promise.all()?
+
+Promise.all is a promise that takes an array of promises as an input (an iterable), and it gets resolved when all the promises get resolved or any one of them gets rejected.
+
+_**Example:**_
+
+```javascript
+// promise.all()
+const promise1 = new Promise((resolve, reject) => {
+  setTimeout(resolve, 10, "First");
+});
+
+const promise2 = new Promise((resolve, reject) => {
+  setTimeout(resolve, 20, "Second");
+});
+
+Promise.all([promise1, promise2])
+  .then((values) => {
+    console.log(values);
+  })
+  .catch((error) => console.log(`Error in promises ${error}`));
+// expected output: Array ["First", "Second"]
 ```
 
 <div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
