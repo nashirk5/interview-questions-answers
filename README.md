@@ -56,11 +56,11 @@ Semantic HTML elements are those that clearly describe their meaning in a human-
 
 ### Q 5. What is the difference between Cookie, Local storage and Session storage?
 
-|                | Cookie       | Local storage | Session storage        |
-| -------------- | ------------ | ------------- | ---------------------- |
-| **Capacity**   | 4KB          | 10MB          | 5MB                    |
-| **Expiration** | Manually set | Never         | On tab/browser close   |
-| **Read**       | Client       | Client        | Both Client and Server |
+|                | Cookie                 | Local storage | Session storage      |
+| -------------- | ---------------------- | ------------- | -------------------- |
+| **Capacity**   | 4KB                    | 10MB          | 5MB                  |
+| **Expiration** | Manually set           | Never         | On tab/browser close |
+| **Read**       | Both Client and Server | Client        | Client               |
 
 <div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
 
@@ -559,7 +559,7 @@ The rest parameter and spread operator are two features introduced in ECMAScript
 
 <div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
 
-### Q 11. What is destructing?
+### Q 12. What is destructing?
 
 Destructuring in JavaScript is a convenient way to extract multiple values from arrays or objects and assign them to variables using a concise syntax. It allows you to "unpack" values from data structures like arrays and objects into separate variables, making it easier to work with complex data in a more expressive and succinct manner.
 
@@ -574,7 +574,7 @@ console.log(age); // Output: 30
 
 <div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
 
-### Q 12. What are generators?
+### Q 13. What are generators?
 
 A generator is a function that can stop midway and then continue from where it stopped. In short, a generator appears to be a function but it behaves like an `iterator`.
 
@@ -595,7 +595,26 @@ console.log(gen.next().value); // 40
 
 <div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
 
-### Q 13. What is the difference between == and === operators?
+### Q 14. What is the difference between null and undefined?
+
+| Null                                                                                | Undefined                                                                                      |
+| ----------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| Type of null is object                                                              | Type of undefined is undefined                                                                 |
+| Undefined means a variable has been declared but has yet not been assigned a value. | Null is an assignment value. It can be assigned to a variable as a representation of no value. |
+| It is a global property.                                                            | It is not a global property.                                                                   |
+
+<div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
+
+### Q 15. What is the difference between window and document?
+
+| Window                                                                        | Document                                                                                      |
+| ----------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
+| It is the root level element in any web page                                  | It is the direct child of the window object. This is also known as Document Object Model(DOM) |
+| It has methods like alert(), confirm() and properties like document, location | It provides methods like getElementById, getElementsByTagName, createElement etc              |
+
+<div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
+
+### Q 16. What is the difference between == and === operators?
 
 In JavaScript, the `==` and `===` operators are used for comparison and `===` checks both the values and the types, and only returns true if both are the same.
 
@@ -616,23 +635,44 @@ null === undefined // false
 
 <div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
 
-### Q 14. What is ternary operator?
+### Q 17. What are typeOf, delete, void, and ternary operators?
 
-The conditional (ternary) operator is the only JavaScript operator that takes three operands which acts as a shortcut for if statement.
+1. **`typeof` Operator:** This is used to determine the type of a value or expression
+   _**Example:**_
 
-_**Example:**_
+   ```javascript
+   typeof 42; // Returns "number"
+   typeof "hello"; // Returns "string"
+   typeof true; // Returns "boolean"
+   ```
 
-```javascript
-const isAuthenticated = false;
+2. **`delete` Operator:** This operator is used to delete a property from an object.
+   _**Example:**_
 
-console.log(
-  isAuthenticated ? "Hello, welcome" : "Sorry, you are not authenticated"
-);
-```
+   ```javascript
+   const obj = { a: 1, b: 2 };
+   delete obj.a; // Deletes the property "a" from the object
+   ```
+
+3. **`void` Operator:** This operator evaluates an expression and returns undefined. It's often used to create a URL with a JavaScript "void" link, where clicking the link does nothing.
+   _**Example:**_
+
+   ```html
+   <a href="javascript:void(0)">Click me</a>
+   ```
+
+4. **Ternary (`? :`) Operator:** The ternary operator is a conditional operator that evaluates a condition and returns one of two expressions based on whether the condition is true or false.
+   _**Example:**_
+
+   ```javascript
+   const age = 20;
+   const status = age >= 18 ? "adult" : "minor";
+   console.log(status); // Output depends on the value of age
+   ```
 
 <div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
 
-### Q 15. What is isNaN?
+### Q 18. What is isNaN?
 
 The isNaN() function determines whether a value is NaN ( Not a Number ) or not. This function returns true if the value equates to NaN. The isNaN() method converts the value to a number before testing it.
 
@@ -647,7 +687,7 @@ Number.isNaN("Hello"); // false
 
 <div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
 
-### Q 16. What are arrow/lambda functions?
+### Q 19. What are arrow/lambda functions?
 
 An arrow function is a shorter/concise syntax for a function expression and does not have its own this, arguments, super, or new.target. These functions are best suited for non-method functions, and they cannot be used as constructors.
 
@@ -661,7 +701,7 @@ const arrowFunc3 = () => {}; // no parameters
 
 <div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
 
-### Q 17. What is a first class function?
+### Q 20. What is a first class function?
 
 In javaScript, functions can be stored as a variable or it can be passed as an argument or be returned by another function. That makes function first-class function in JavaScript.
 
@@ -694,7 +734,7 @@ function sayHello() {
 
 <div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
 
-### Q 18. What is a higher order function?
+### Q 21. What is a higher order function?
 
 A Higher-Order function is a function that receives a function as an argument or returns the function as output.
 
@@ -702,7 +742,7 @@ _**Example:**_, `Array.prototype.map()`, `Array.prototype.filter()`, `Array.prot
 
 <div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
 
-### Q 19. What are the types of errors in javascript?
+### Q 22. What are the types of errors in javascript?
 
 Here are some common types of errors in JavaScript:
 
@@ -728,7 +768,7 @@ console.log(x.toUpperCase()); // TypeError: x.toUpperCase is not a function
 
 <div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
 
-### Q 20. What is recursion in a programming language?
+### Q 23. What is recursion in a programming language?
 
 Recursion is a method of performing an operation iterate by having a function call itself repeatedly until it reaches a result.
 
@@ -760,7 +800,7 @@ console.log(calculateSum(5)); // Output: 15 (5 + 4 + 3 + 2 + 1)
 
 <div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
 
-### Q 21. What are callbacks?
+### Q 24. What are callbacks?
 
 A callback is a function that is passed as an argument to another function and that will be executed after another function gets executed.
 
@@ -786,7 +826,7 @@ operationOnSum(5, 5, multiplyBy2); // Outputs 20
 
 <div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
 
-### Q 22. What is a callback hell?
+### Q 25. What is a callback hell?
 
 Callback Hell is an anti-pattern with multiple nested callbacks which makes code hard to read and debug when dealing with asynchronous logic. The callback hell looks like below,
 
@@ -806,7 +846,7 @@ async1(function(){
 
 <div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
 
-### Q 23. What is a promise?
+### Q 26. What is a promise?
 
 Promises are used to handle asynchronous operations. They provide an alternative approach for callbacks by reducing the callback hell and writing the cleaner code.
 
@@ -841,9 +881,41 @@ fetchData
   });
 ```
 
+_These are the methods in promises:_
+
+1. **then(onFulfilled, onRejected):** This method is used to handle the resolved value (fulfillment) or the reason for rejection of the promise.
+   ```javascript
+   promise.then(
+     (value) => console.log("Fulfilled:", value),
+     (reason) => console.error("Rejected:", reason)
+   );
+   ```
+2. **catch(onRejected):** This method is used to handle the rejection reason of the promise.
+   ```javascript
+   promise.catch((reason) => console.error("Rejected:", reason));
+   ```
+3. **finally(onFinally):** This method is used to execute a callback function regardless of whether the promise is fulfilled or rejected. It is commonly used for cleanup operations such as closing resources.
+   ```javascript
+   promise.finally(() => console.log("Finally executed"));
+   ```
+4. **Promise.all(iterable):** This method returns a single promise that resolves when all of the promises in the iterable argument have resolved, or rejects with the reason of the first promise that rejects. It is commonly used to wait for multiple asynchronous tasks to complete simultaneously.
+   ```javascript
+   Promise.all([promise1, promise2, promise3])
+     .then((values) => console.log("All resolved:", values))
+     .catch((reason) =>
+       console.error("One or more promises rejected:", reason)
+     );
+   ```
+5. **Promise.race(iterable):** This method returns a promise that resolves or rejects as soon as one of the promises in the iterable resolves or rejects, with the value or reason from that promise. It is commonly used to race multiple asynchronous tasks and take the result of the fastest one.
+   ```javascript
+   Promise.race([promise1, promise2, promise3])
+     .then((value) => console.log("First resolved:", value))
+     .catch((reason) => console.error("First rejected:", reason));
+   ```
+
 <div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
 
-### Q 23. What is promise.all()?
+### Q 27. What is promise.all()?
 
 Promise.all is a promise that takes an array of promises as an input (an iterable), and it gets resolved when all the promises get resolved or any one of them gets rejected.
 
@@ -869,7 +941,7 @@ Promise.all([promise1, promise2])
 
 <div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
 
-### Q 24. Explain arrays?
+### Q 28. Explain arrays?
 
 JavaScript array is an object that represents a collection of similar type of elements. It can holds values (of any type) not particularly in named properties/keys, but rather in numerically indexed positions.
 
@@ -912,7 +984,7 @@ _**Example:**_
 
 <div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
 
-### Q 25. Write some array methods?
+### Q 29. Write some array methods?
 
 1. **array.join():** The join() method creates and returns a new string by concatenating all of the elements in an array.
 
@@ -1047,7 +1119,7 @@ console.log(pets.includes("at")); // Output: false
 
 <div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
 
-### Q 26. Write some string methods?
+### Q 30. Write some string methods?
 
 1. **string.charAt():** Returns the character at the specified index in the string.
 
@@ -1116,7 +1188,17 @@ console.log(str.trim()); // Output: "Hello World"
 
 <div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
 
-### Q 27. What is loop?
+### Q 31. What is the difference between slice and splice?
+
+| Slice                                        | Splice                                       |
+| -------------------------------------------- | -------------------------------------------- |
+| Doesn't modify the original array(immutable) | Modifies the original array(mutable)         |
+| Returns the subset of original array         | Returns the deleted elements as array        |
+| Used to pick the elements from array         | Used to insert/delete elements to/from array |
+
+<div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
+
+### Q 32. What is loop?
 
 A loop in JavaScript is a programming construct that allows you to repeatedly execute a block of code multiple times until a specified condition is met. Loops are fundamental for iterating over arrays, processing data, and performing repetitive tasks efficiently. JavaScript provides several types of loops to suit different use cases:
 
@@ -1168,7 +1250,37 @@ for (let key in person) {
 
 <div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
 
-### Q 28. What is Async/await?
+### Q 33. What is the difference between for..in and for..of??
+
+- Use for...in to iterate over the keys of an object, including inherited properties.
+
+  ```javascript
+  const obj = { a: 1, b: 2, c: 3 };
+
+  for (let key in obj) {
+    console.log(key); // Output: "a", "b", "c"
+  }
+  ```
+
+- Use for...of to iterate over the values of an iterable object, such as arrays, strings, maps, sets, etc.
+
+  ```javascript
+  const array = [1, 2, 3];
+
+  for (let value of array) {
+    console.log(value); // Output: 1, 2, 3
+  }
+
+  const str = "hello";
+
+  for (let value of str) {
+    console.log(value); // Output: h,e,l,l,o
+  }
+  ```
+
+<div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
+
+### Q 34. What is Async/await?
 
 Async/await is a feature in JavaScript that allows you to write asynchronous code in a synchronous-looking manner. It provides a more readable and understandable way to work with asynchronous operations, such as fetching data from a server, reading files, or making network requests.
 
@@ -1208,7 +1320,9 @@ getData();
 
 <div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
 
-### Q 29. What are the possible ways to create objects in JavaScript?
+### Q 35. What are the possible ways to create objects in JavaScript?
+
+_**Example:**_
 
 ```javascript
 // Example 1:
@@ -1243,7 +1357,7 @@ let person = new Person("Alex");
 
 <div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
 
-### Q 30. What are the difference between mutable and immutable objects?
+### Q 36. What are the difference between mutable and immutable objects?
 
 A mutable object is an object whose state can be modified after it is created. An immutable object is an object whose state cannot be modified after it is created.
 
@@ -1251,65 +1365,83 @@ A mutable object is an object whose state can be modified after it is created. A
 
 <div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
 
-### Q 31. What is shallow copy and deep copy?
+### Q 37. What is shallow copy and deep copy?
 
 1. **Shallow Copy:** Shallow copy is a bit-wise copy of an object. A new object is created that has an exact copy of the values in the original object. If any of the fields of the object are references to other objects, just the reference addresses are copied i.e., only the memory address is copied.\
    _A Shallow copy of the object can be done using `object.assign()`_
 
-```javascript
-// Shallow Copy
+   ```javascript
+   // Shallow Copy
+   let obj = {
+     a: 10,
+     b: 20,
+   };
 
-let obj = {
-  a: 10,
-  b: 20,
-};
-
-let objCopy = Object.assign({}, obj);
-console.log(objCopy); // Result - { a: 1, b: 2 }
-```
+   let objCopy = Object.assign({}, obj);
+   console.log(objCopy); // Result - { a: 1, b: 2 }
+   ```
 
 2. **Deep Copy:** A deep copy copies all fields, and makes copies of dynamically allocated memory pointed to by the fields. A deep copy occurs when an object is copied along with the objects to which it refers.\
    _A Deep copy of the object can be done using `JSON.parse(JSON.stringify(object))`_
 
+   ```javascript
+   // Deep Copy
+   let obj2 = {
+     a: 10,
+     b: {
+       c: 20,
+     },
+   };
+
+   let newObj = JSON.parse(JSON.stringify(obj2));
+   obj2.b.c = 30;
+
+   console.log(obj2); // { a: 10, b: { c: 20 } }
+   console.log(newObj); // { a: 10, b: { c: 20 } }
+   ```
+
+<div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
+
+### Q 38. What are classes in ES6?
+
+In JavaScript, classes are a syntactical sugar over the prototype-based inheritance model. Introduced in ECMAScript 2015 (ES6), classes provide a more familiar and structured way to define object blueprints and create instances of those objects.
+
 ```javascript
-// Deep Copy
+class Bike {
+  constructor(color, model) {
+    this.color = color;
+    this.model = model;
+  }
 
-let obj2 = {
-  a: 10,
-  b: {
-    c: 20,
-  },
-};
-
-let newObj = JSON.parse(JSON.stringify(obj2));
-obj2.b.c = 30;
-
-console.log(obj2); // { a: 10, b: { c: 20 } }
-console.log(newObj); // { a: 10, b: { c: 20 } }
+  getDetails() {
+    return this.model + " bike has" + this.color + " color";
+  }
+}
 ```
 
 <div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
 
-<!-- ### Q. Array Methods
+### Q 39. What is Module.
 
-How do you generate random integers?
+JavaScript modules are a way to organize and structure code into reusable units. They allow developers to separate code into individual files or modules, making it easier to manage, maintain, and scale large JavaScript applications. ES6 introduced native support for modules, providing a standardized syntax and mechanism for defining module dependencies and exports.
 
-The Math.random() function returns a floating-point, pseudo-random number in the range 0 to less than 1 (inclusive of 0, but not 1). For example, if you want generate random integers between 1 to 100, the multiplication factor should be 100,
+<div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
 
-// Example 01:
-Math.random(); // returns a random integer between 0 to 1
+### Q 40. List out JavaSCript ES6 features.
 
-// Example 02:
-Math.floor(Math.random() * 100) + 1; // returns a random integer from 1 to 100
+ES6 (ECMAScript 2015) is a significant update to the JavaScript language specification, introducing many new features and improvements to the language syntax and functionality. Some key features introduced in ES6 include:
 
-// Example 03:
-function getRandomNumber(max) {
-  return Math.floor(Math.random() * max) + 1;
-}
+1. Arrow Functions
+2. let and const Declarations
+3. Template Literals:
+4. Destructuring Assignment
+5. Spread Operator (...)
+6. Rest Parameter
+7. Classes
+8. Promises
+9. Modules
 
-console.log(getRandomNumber(10)); // returns a random integer from 1 to 10
-
--->
+<div align="right"><b><a href="#table-of-contents">↥ Back to top</a></b></div>
 
 ##
 
