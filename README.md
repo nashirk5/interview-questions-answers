@@ -8,7 +8,7 @@
 - [Angular](#angular)
 - [NodeJs](#nodejs)
 - [MySQL](#mysql)
-- [JavaScript basic programs](#javascript-basic-programs)
+- [JavaScript basic programs](https://github.com/nashirk5/js-challenges)
 
 <!-- Start HTML -->
 
