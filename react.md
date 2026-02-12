@@ -2,7 +2,7 @@
 
 ## React Interview question and answers
 
-<span align="right"><b><a href="README.md">↥ Back to home</a></b></span>
+<div align="right"><b><a href="README.md">↥ Back to home</a></b></div>
 
 ### Q 1. What is React?
 
@@ -12,7 +12,7 @@ React is an open-source JavaScript library used for building user interfaces, es
 
 **Disadvantages:** Handles only the UI layer, requires additional libraries, and can become complex in large applications.
 
-<span align="right"><b><a href="#react-interview-question-and-answers">↥ Back to top</a></b></span>
+<div align="right"><b><a href="#react-interview-question-and-answers">↥ Back to top</a></b></div>
 
 ### Q 5. What is JSX?
 
@@ -24,19 +24,26 @@ JSX stands for JavaScript XML. It is a syntax extension used in React that allow
 const element = <h1>Hello, World!</h1>;
 ```
 
+<div align="right"><b><a href="#react-interview-question-and-answers">↥ Back to top</a></b></div>
+
 ### Q 5. What is Fragment?
 
 A Fragment in React allows you to group multiple elements without adding extra nodes to the DOM.
 
+<div align="right"><b><a href="#react-interview-question-and-answers">↥ Back to top</a></b></div>
+
 ### Q 11. What are keys?
 
 Keys are unique identifiers used by React to track elements in a list when rendering dynamically. They help React efficiently update the DOM by identifying which items changed, were added, or removed.
+
+<div align="right"><b><a href="#react-interview-question-and-answers">↥ Back to top</a></b></div>
 
 **Important Notes:**
 
 - Keys must be unique among siblings, not globally.
 - Using index as key is not recommended if items can reorder.
 - Keys are used internally by React, they are not passed as props.
+<div align="right"><b><a href="#react-interview-question-and-answers">↥ Back to top</a></b></div>
 
 ### Q 11. What is lifting state up?
 
