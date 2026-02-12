@@ -2,7 +2,7 @@
 
 ## React Interview question and answers
 
-<div align="right"><b><a href="README.md">↥ Back to home</a></b></div>
+<div align="right"><b><a href="./README.md">↥ Back to home</a></b></div>
 
 ### Q 1. What is React?
 
