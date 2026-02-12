@@ -2,7 +2,7 @@
 
 ## **HTML**
 
-<div align="right"><b><a href="./README.md">↥ Back to home</a></b></div>
+<div align="right"><b><a href="../../README.md">↥ Back to home</a></b></div>
 
 ### Q 1. What is HTML?
 
