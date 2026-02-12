@@ -2,6 +2,8 @@
 
 ## React Interview question and answers
 
+<span align="right"><b><a href="README.md">↥ Back to home</a></b></span>
+
 ### Q 1. What is React?
 
 React is an open-source JavaScript library used for building user interfaces, especially for single-page applications (SPAs). It follows a component-based architecture, allowing developers to build reusable and independent UI pieces.
@@ -11,7 +13,6 @@ React is an open-source JavaScript library used for building user interfaces, es
 **Disadvantages:** Handles only the UI layer, requires additional libraries, and can become complex in large applications.
 
 <span align="right"><b><a href="#react-interview-question-and-answers">↥ Back to top</a></b></span>
-<span align="right"><b><a href="README.md">↥ Back to home</a></b></span>
 
 ### Q 5. What is JSX?
 
