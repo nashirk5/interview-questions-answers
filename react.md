@@ -10,7 +10,8 @@ React is an open-source JavaScript library used for building user interfaces, es
 
 **Disadvantages:** Handles only the UI layer, requires additional libraries, and can become complex in large applications.
 
-<div align="right"><b><a href="README.md">↥ Back to top</a></b></div>
+<div align="right"><b><a href="react-interview-question-and-answers">↥ Back to top</a></b></div>
+<div align="right"><b><a href="README.md">↥ Back to home</a></b></div>
 
 ### Q 5. What is JSX?
 
