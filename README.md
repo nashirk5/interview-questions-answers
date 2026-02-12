@@ -6,9 +6,10 @@
 - [CSS](#css)
 - [JavaScript](#javascript)
 - [Angular](#angular)
+- [React](#react)
 - [NodeJs](#nodejs)
 - [MySQL](#mysql)
-- [JavaScript basic programs](https://github.com/nashirk5/js-challenges)
+<!-- - [JavaScript basic programs](https://github.com/nashirk5/js-challenges) -->
 
 <!-- Start HTML -->
 
@@ -344,7 +345,7 @@ var employee2 = { firstName: "Jimmy", lastName: "Baily" };
 
 function invite(greeting1, greeting2) {
   console.log(
-    greeting1 + " " + this.firstName + " " + this.lastName + ", " + greeting2
+    greeting1 + " " + this.firstName + " " + this.lastName + ", " + greeting2,
   );
 }
 
@@ -360,7 +361,7 @@ var employee2 = { firstName: "Jimmy", lastName: "Baily" };
 
 function invite(greeting1, greeting2) {
   console.log(
-    greeting1 + " " + this.firstName + " " + this.lastName + ", " + greeting2
+    greeting1 + " " + this.firstName + " " + this.lastName + ", " + greeting2,
   );
 }
 
@@ -376,7 +377,7 @@ var employee2 = { firstName: "Jimmy", lastName: "Baily" };
 
 function invite(greeting1, greeting2) {
   console.log(
-    greeting1 + " " + this.firstName + " " + this.lastName + ", " + greeting2
+    greeting1 + " " + this.firstName + " " + this.lastName + ", " + greeting2,
   );
 }
 
@@ -516,7 +517,6 @@ The rest parameter and spread operator are two features introduced in ECMAScript
 ### Q 11. What are Map and WeakMap?
 
 1. **Map:** In javascript, Map is used to store key-value pairs. The key-value pairs can be of both primitive and non-primitive types. WeakMap is similar to Map with key differences.
-
    - The keys and values in weakmap should always be an object.
    - If there are no references to the object, the object will be garbage collected.
 
@@ -887,7 +887,7 @@ _These are the methods in promises:_
    ```javascript
    promise.then(
      (value) => console.log("Fulfilled:", value),
-     (reason) => console.error("Rejected:", reason)
+     (reason) => console.error("Rejected:", reason),
    );
    ```
 2. **catch(onRejected):** This method is used to handle the rejection reason of the promise.
@@ -903,7 +903,7 @@ _These are the methods in promises:_
    Promise.all([promise1, promise2, promise3])
      .then((values) => console.log("All resolved:", values))
      .catch((reason) =>
-       console.error("One or more promises rejected:", reason)
+       console.error("One or more promises rejected:", reason),
      );
    ```
 5. **Promise.race(iterable):** This method returns a promise that resolves or rejects as soon as one of the promises in the iterable resolves or rejects, with the value or reason from that promise. It is commonly used to race multiple asynchronous tasks and take the result of the fastest one.
@@ -1817,7 +1817,6 @@ export class AppComponent {
     <ng-container *ngIf="data">Your template content here</ng-container>
     ```
 - **`ng-content`**
-
   - It is used to content projection, allowing the parent component to inject content into a child component.
   - ```html
     <!-- Child component template -->
@@ -1882,7 +1881,7 @@ const appRoutes: Routes = [
   imports: [
     RouterModule.forRoot(
       appRoutes,
-      { enableTracing: true } // <-- debugging purposes only
+      { enableTracing: true }, // <-- debugging purposes only
     ),
   ],
 })
@@ -1923,7 +1922,7 @@ import { Observable } from "rxjs";
 export class AuthInterceptor implements HttpInterceptor {
   intercept(
     request: HttpRequest<any>,
-    next: HttpHandler
+    next: HttpHandler,
   ): Observable<HttpEvent<any>> {
     // Get the authentication token from wherever you store it (e.g., localStorage)
     const authToken = localStorage.getItem("authToken");
@@ -1987,7 +1986,7 @@ const user: User = {
 // Function that accepts a User object
 function printUserInfo(user: User) {
   console.log(
-    `ID: ${user.id}, Username: ${user.username}, Email: ${user.email}`
+    `ID: ${user.id}, Username: ${user.username}, Email: ${user.email}`,
   );
 }
 
@@ -2076,7 +2075,7 @@ const observable = new Observable<number>((observer: Observer<number>) => {
 observable.subscribe(
   (value: number) => console.log("Next:", value), // Handle emitted values
   (error: any) => console.error("Error:", error), // Handle errors
-  () => console.log("Completed") // Handle completion
+  () => console.log("Completed"), // Handle completion
 );
 ```
 
@@ -2223,17 +2222,17 @@ export const getPost = createAction(`${prefix} Get Post`);
 
 export const getPostSuccess = createAction(
   `${getPost.type}, Success`,
-  props<{ post: PostInterface[] }>()
+  props<{ post: PostInterface[] }>(),
 );
 
 export const createPost = createAction(
   `${prefix} Create Post`,
-  props<{ post: PostInterface }>()
+  props<{ post: PostInterface }>(),
 );
 
 export const createPostSuccess = createAction(
   `${createPost.type} Success`,
-  props<{ post: PostInterface }>()
+  props<{ post: PostInterface }>(),
 );
 ```
 
@@ -2295,23 +2294,23 @@ import { PostInterface } from "src/app/_interface/post.interface";
 export class PostEffects {
   constructor(
     private readonly actions$: Actions,
-    private readonly postSrv: PostService
+    private readonly postSrv: PostService,
   ) {}
 
   getPost$ = createEffect(() =>
     this.actions$.pipe(
       ofType(fromPost.getPost.type),
       switchMap(() => this.postSrv.getPost()),
-      map((post: PostInterface[]) => fromPost.getPostSuccess({ post }))
-    )
+      map((post: PostInterface[]) => fromPost.getPostSuccess({ post })),
+    ),
   );
 
   createPost$ = createEffect(() =>
     this.actions$.pipe(
       ofType(fromPost.createPost.type),
       switchMap(({ post }) => this.postSrv.createPost(post)),
-      map((post: PostInterface) => fromPost.createPostSuccess({ post }))
-    )
+      map((post: PostInterface) => fromPost.createPostSuccess({ post })),
+    ),
   );
 }
 ```
@@ -2325,11 +2324,11 @@ import { PostState } from "./post.model";
 export const selectPostState = createFeatureSelector<PostState>("post");
 export const selectPostList = createSelector(
   selectPostState,
-  (state) => state.post
+  (state) => state.post,
 );
 export const selectPostIsLoading = createSelector(
   selectPostState,
-  (state) => state.isLoading
+  (state) => state.isLoading,
 );
 ```
 
