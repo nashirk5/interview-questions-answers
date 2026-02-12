@@ -6,7 +6,7 @@
 - [CSS](#css)
 - [JavaScript](#javascript)
 - [Angular](#angular)
-- [React](#react)
+- [React](react.md)
 - [NodeJs](#nodejs)
 - [MySQL](#mysql)
 <!-- - [JavaScript basic programs](https://github.com/nashirk5/js-challenges) -->
