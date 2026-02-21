@@ -1,6 +1,6 @@
-<!-- Start NodeJS -->
+<!-- Start ChatGPT AI prompt -->
 
-## **🧠 How to Write an Effective Prompt (With JavaScript Examples)**
+## **ChatGPT AI prompt**
 
 <div align="right"><b><a href="../../README.md">↥ Back to home</a></b></div>
 
@@ -18,7 +18,7 @@ A good prompt is:
 
 > I define role, context, task, constraints, and expected output format. Clear, structured prompts produce precise and high-quality results.
 
-<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
+<div align="right"><b><a href="#ChatGPT AI prompt">↥ Back to top</a></b></div>
 
 ### Q 2. How to Write a Powerful Prompt (Senior-Level Thinking)?
 
@@ -35,7 +35,7 @@ Use this formula:
 - **Output Format:** Specify structure.
   - Provide: Question, Deep Explanation, Short Answer, Code Example
 
-<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
+<div align="right"><b><a href="#ChatGPT AI prompt">↥ Back to top</a></b></div>
 
 ### Q 3. Strong Prompt Example?
 
@@ -53,7 +53,7 @@ Act as a senior [JavaScript] interviewer. Explain [TOPIC] in depth including:
 Provide a short 3-line interview-ready answer at the end.
 ```
 
-<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
+<div align="right"><b><a href="#ChatGPT AI prompt">↥ Back to top</a></b></div>
 
 ### Q 4. Types of Prompts (Useful for Developers)?
 
@@ -68,7 +68,7 @@ Provide a short 3-line interview-ready answer at the end.
 - Optimization Prompt
   > “Refactor this code to improve performance and readability.”
 
-<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
+<div align="right"><b><a href="#ChatGPT AI prompt">↥ Back to top</a></b></div>
 
 ### Q 5. 🔥 Powerful Prompt Examples?
 
@@ -163,8 +163,8 @@ For each question, provide:
 Format the output as a numbered list.
 ```
 
-<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
+<div align="right"><b><a href="#ChatGPT AI prompt">↥ Back to top</a></b></div>
 
 <!-- ### Q 4. Types?
 
-<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div> -->
+<div align="right"><b><a href="#ChatGPT AI prompt">↥ Back to top</a></b></div> -->
