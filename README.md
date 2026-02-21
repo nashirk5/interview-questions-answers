@@ -15,5 +15,4 @@ This collection covers frontend, backend, database, and core web technologies.
 | 4   | NodeJs     | JavaScript runtime for backend development. Covers event loop, APIs, middleware, authentication, and performance.             | [Open](./src/pages/nodejs.md)     |
 | 5   | MySQL      | Relational database management system. Covers queries, joins, indexing, normalization, and optimization.                      | [Open](./src/pages/mysql.md)      |
 | 6   | HTML & CSS | Core web technologies for structure and styling. Covers layouts, flexbox, grid, responsiveness, and accessibility.            | [Open](./src/pages/htmlandcss.md) |
-
----
+| 6   | AI Prompt  | How to write a best prompt with best prompt                                                                                   | [Open](./src/pages/ai-prompt.md)  |
