@@ -6,7 +6,9 @@
 
 ### Q 1. What is Javascript?
 
-JavaScript, created by **Brendan Eich** in **1995**. JavaScript is the most popular scripting language for the Web. It is easy to learn, lightweight, cross-platform, single-threaded, and interpreted compiled language. It is widely used for web development, both on the client side and server side.
+JavaScript, created by **Brendan Eich** in **1995**.
+
+JavaScript is a programming language primarily used for web development. It can run on both the client-side and server-side using Node.js, enabling dynamic and interactive web applications. It also supports asynchronous operations and multiple programming styles like object-oriented and functional programming
 
 <div align="right"><b><a href="#javascript">↥ Back to top</a></b></div>
 
@@ -46,14 +48,14 @@ JavaScript is a dynamically typed (also called loosely typed) scripting language
 
 ### Q 4. What is hoisting?
 
-Hoisting is the default behaviour of javascript where all the variable and function declarations are moved on top during the compilation.
+Hoisting is JavaScript’s behavior of moving variable and function declarations to the top of their scope during compilation. Function declarations are fully hoisted, while variables declared with var are hoisted with an initial value of undefined. Using let and const avoids some hoisting pitfalls due to the temporal dead zone.
 
 > _**NOTE:** It's important to understand that only the declarations are **hoisted**, not the initializations or assignments._\
 > _To avoid hoisting, you can run javascript in strict mode by using `use strict` on top of the code_
 
 ### Q 5. What is closure?
 
-In JavaScript, returning a function from another function means returning function along with its scope. This allows the function to retain access to memory, which can store live data between executions. This combination of the function and its scope chain is called closure.
+A closure is a function that “remembers” the variables from its outer scope, even after that outer function has finished executing. This allows the inner function to access and manipulate those variables whenever it’s called.
 
 ```javascript
 function outer() {
@@ -75,7 +77,7 @@ fn(); // 3
 
 ### Q 6. What is passed by value and passed by reference?
 
-In JavaScript, primitive data types are passed by value and non-primitive data types are passed by reference.
+In JavaScript, primitives are passed by value, meaning a copy is passed to functions. Objects are passed by reference value, meaning the reference is copied and both variables point to the same object, so changes can affect the original.
 
 1. **Passed by Value:** When a primitive data type (such as numbers, strings, booleans, null, or undefined) is passed to a function, it is passed by value. This means that a copy of the value is passed to the function, and any changes made to the parameter inside the function do not affect the original variable outside the function.
 
@@ -163,9 +165,7 @@ inviteEmployee2("Hello", "How are you?"); // Hello Jimmy Baily, How are you?
 
 ### Q 8. What is currying ?
 
-Currying is the process of taking a function with multiple arguments and turning it into a sequence of functions each with only a single argument.
-
-In other words, when a function, instead of taking all arguments at one time, takes the first one and return a new function that takes the second one and returns a new function which takes the third one, and so forth, until all arguments have been fulfilled.
+Currying is a technique where a function with multiple arguments is transformed into a sequence of functions, each taking one argument at a time.
 
 ```javascript
 // Normal function
@@ -189,7 +189,7 @@ console.log(addCurry(20)(20)(20)); // 60
 
 ### Q 9. What is the rest parameter and spread operator?
 
-The rest parameter and spread operator are two features introduced in ECMAScript 6 (ES6) that enhance the functionality of JavaScript functions and arrays, respectively.
+The rest parameter collects multiple arguments into an array inside a function, while the spread operator expands arrays or objects into individual elements. Both use the `...` syntax but serve opposite purposes.
 
 > _**NOTE:** Rest parameter should always be used at the last parameter of a function._
 
@@ -260,7 +260,8 @@ The rest parameter and spread operator are two features introduced in ECMAScript
 
 ### Q 10. What are Sets and WeakSet?
 
-1.  **Sets:** Sets are a new object type with ES6 (ES2015) that allow to create collections of unique values. The values in a set can be either simple primitives like strings or integers, but more complex object types like object literals or arrays can also be part of a set.\
+1.  **Sets:** Sets are a new object type with ES6 (ES2015) that allow to create collections of unique values and It automatically removes duplicates. The values in a set can be either simple primitives like strings or integers, but more complex object types like object literals or arrays can also be part of a set.
+
     _**Example:**_
 
     ```javascript
@@ -548,26 +549,18 @@ _**Example:**_
 
 ```javascript
 // Ex: 1
-function sumArray(arr, index = 0) {
-  // Base case: if the index reaches the end of the array, return 0
-  if (index === arr.length) {
-    return 0;
-  } else {
-    // Recursive case: add the current element to the sum of the remaining elements
-    return arr[index] + sumArray(arr, index + 1);
-  }
+function sumArray(arr) {
+  if (arr.length === 0) return 0;
+  return arr[0] + sumArray(arr.slice(1));
 }
 console.log(sumArray([1, 2, 3, 4, 5])); // Output: 15 (1 + 2 + 3 + 4 + 5)
 
 // Ex: 2
-function add(num) {
-  if (num === 0) {
-    return 0;
-  } else {
-    return num + calculateSum(num - 1);
-  }
+function sum(n) {
+  if (n === 0) return 0; // base case
+  return n + sum(n - 1);
 }
-console.log(calculateSum(5)); // Output: 15 (5 + 4 + 3 + 2 + 1)
+console.log(sum(5)); // 15
 ```
 
 <div align="right"><b><a href="#javascript">↥ Back to top</a></b></div>
