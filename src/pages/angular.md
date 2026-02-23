@@ -6,11 +6,11 @@
 
 ### Q 1. What is Angular?
 
-Angular is an open-source single-page web application framework built on TypeScript, which makes it easy to build web, and mobile applications.
+Angular is a popular open-source front-end web framework developed and maintained by Google. It is used to build dynamic, single-page web applications (SPAs). Angular utilizes TypeScript, a superset of JavaScript, and offers a comprehensive set of tools and capabilities like two-way data binding, dependency injection, routing, and component-based architecture..
 
 <div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
 
-### Q 2. What are the Angular lifecycle hooks?1
+### Q 2. What are the Angular lifecycle hooks?
 
 1. **ngOnChanges():** This hook is called whenever one or more input properties of the component change. This method/hook receives a SimpleChanges object that contains the previous and current values of the property.
 2. **ngOnInit():** It initializes the component and sets the input properties of the component.
@@ -663,7 +663,28 @@ myPromise.catch();
 
 ### Q 28. What are RXJS and list some operators?
 
-RxJS(Reactive Extensions for JavaScript) is a library for composing asynchronous and callback-based code in a functional, reactive style using Observables. Many APIs such as HttpClient produce and consume RxJS Observables and also uses operators for processing observables.
+RxJS (Reactive Extensions for JavaScript) is a library for handling asynchronous programming using observables. It makes it easier to compose asynchronous or event-based programs by using operators to transform, filter, and combine streams of data.
+
+At its core, RxJS provides a way to work with asynchronous data streams (like HTTP requests, events, or user inputs) as collections. You can subscribe to these streams and then use operators (like .map(), .filter(), .merge(), etc.) to manipulate and process the data in a declarative manner.
+
+**Key Concepts in RxJS:**
+
+**1. Observable:** Represents a stream of data or events. You can think of it as a producer that emits values over time.
+
+**2. Observer:** The consumer of the observable stream. An observer subscribes to an observable to receive its values.
+
+**3. Subscription:** The process of linking an observer to an observable. When you subscribe, you start receiving the data from the observable.
+
+**4. Operators:** Functions that enable transformation, combination, or manipulation of data from observables. Some examples include:
+
+- **map:** Transforms the data.
+- **filter:** Filters out certain items based on a condition.
+- **merge:** Combines multiple observables into one.
+- **debounceTime:** Introduces a delay between events.
+
+**5. Subject:** A special type of observable that can also act as an observer. It allows multicasting to multiple subscribers.
+
+**6. Scheduler:** Manages the timing of when certain operations (like emitting values) should occur.
 
 | Area           | Operators                                                     |
 | -------------- | ------------------------------------------------------------- |
@@ -673,6 +694,25 @@ RxJS(Reactive Extensions for JavaScript) is a library for composing asynchronous
 | Transformation | bufferTime, concatMap, map, mergeMap, scan, switchMap         |
 | Utility        | tap                                                           |
 | Multicasting   | share                                                         |
+
+**_Example:_**
+
+```js
+import { of } from "rxjs";
+import { map } from "rxjs/operators";
+
+// Create an observable that emits numbers
+const observable = of(1, 2, 3, 4);
+
+// Subscribe to the observable and use operators to transform the emitted values
+observable
+  .pipe(
+    map((value) => value * 2), // Double each value
+  )
+  .subscribe((result) => console.log(result));
+
+// Output: 2, 4, 6, 8
+```
 
 <div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
 
