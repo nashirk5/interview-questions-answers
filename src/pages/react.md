@@ -32,7 +32,7 @@ A Fragment in React allows you to group multiple elements without adding extra n
 
 <div align="right"><b><a href="#react-interview-question-and-answers">↥ Back to top</a></b></div>
 
-### Q 11. What are keys?
+### Q 4. What are keys?
 
 Keys are unique identifiers used by React to track elements in a list when rendering dynamically. They help React efficiently update the DOM by identifying which items changed, were added, or removed.
 
@@ -44,7 +44,7 @@ Keys are unique identifiers used by React to track elements in a list when rende
 
 <div align="right"><b><a href="#react-interview-question-and-answers">↥ Back to top</a></b></div>
 
-### Q 11. What is lifting state up?
+### Q 5. What is lifting state up?
 
 Lifting state up means moving the state from a child component to the nearest common parent so that multiple child components can share and modify the same state.
 
@@ -71,7 +71,7 @@ function ChildB({ count }) {
 
 <div align="right"><b><a href="#react-interview-question-and-answers">↥ Back to top</a></b></div>
 
-### Q 2. What is a component?
+### Q 6. What is a component?
 
 A component is a reusable piece of code that returns UI elements and can manage its own state(data) and behavior.
 
@@ -79,7 +79,7 @@ There are two types of components: **Functional Components** and **Class Compone
 
 <div align="right"><b><a href="#react-interview-question-and-answers">↥ Back to top</a></b></div>
 
-### Q 3. What is Functional components?
+### Q 7. What is Functional components?
 
 A functional component is a JavaScript function that returns JSX and can use React Hooks to manage state and lifecycle features.
 
@@ -102,7 +102,7 @@ function Counter() {
 
 <div align="right"><b><a href="#react-interview-question-and-answers">↥ Back to top</a></b></div>
 
-### Q 4. What is Class components?
+### Q 8. What is Class components?
 
 A class component is a React component defined using an ES6 class that extends `React.Component` and uses lifecycle methods and `this.state` to manage data.
 
@@ -145,7 +145,7 @@ class Counter extends Component {
 
 <div align="right"><b><a href="#react-interview-question-and-answers">↥ Back to top</a></b></div>
 
-### Q 11. What is Controlled Components?
+### Q 9. What is Controlled Components?
 
 A controlled component is a form element (input, textarea, select) whose value is controlled by React state.
 
@@ -168,7 +168,7 @@ function ControlledInput() {
 
 <div align="right"><b><a href="#react-interview-question-and-answers">↥ Back to top</a></b></div>
 
-### Q 11. What is Uncontrolled Components?
+### Q 10. What is Uncontrolled Components?
 
 An uncontrolled component is a form element that manages its own internal state, and React uses refs to access its value.
 An uncontrolled component is a form element whose value is managed by the DOM, not by React state. React accesses its value by using refs.
@@ -203,7 +203,7 @@ function UncontrolledInput() {
 
 <div align="right"><b><a href="#react-interview-question-and-answers">↥ Back to top</a></b></div>
 
-### Q 6. What is State?
+### Q 11. What is State?
 
 State is a React object that stores dynamic data in a component. When the state changes, the component re-renders to reflect the updated data.
 
@@ -233,7 +233,7 @@ function Counter() {
 
 <div align="right"><b><a href="#react-interview-question-and-answers">↥ Back to top</a></b></div>
 
-### Q 7. What is Props?
+### Q 12. What is Props?
 
 Props(short for properties) are read-only inputs passed from a parent component to a child component, allowing data to flow and making components reusable.
 
@@ -257,13 +257,13 @@ function Welcome(props) {
 
 <div align="right"><b><a href="#react-interview-question-and-answers">↥ Back to top</a></b></div>
 
-### Q 7. What is Prop Drilling?
+### Q 713. What is Prop Drilling?
 
 Prop drilling happens when props are passed through multiple component levels just to reach a deeply nested child.
 
 <div align="right"><b><a href="#react-interview-question-and-answers">↥ Back to top</a></b></div>
 
-### Q 8. Differences Between State and Props?
+### Q 814. Differences Between State and Props?
 
 | Feature                 | **State**                                          | **Props**                                        |
 | ----------------------- | -------------------------------------------------- | ------------------------------------------------ |
@@ -277,7 +277,7 @@ Prop drilling happens when props are passed through multiple component levels ju
 
 <div align="right"><b><a href="#react-interview-question-and-answers">↥ Back to top</a></b></div>
 
-### Q 11. What is hooks and how many types are there?
+### Q 15. What is hooks and how many types are there?
 
 Hooks are special functions in React that let functional components use state, lifecycle methods, and other features.
 
@@ -293,7 +293,7 @@ Hooks are special functions in React that let functional components use state, l
 
 <div align="right"><b><a href="#react-interview-question-and-answers">↥ Back to top</a></b></div>
 
-### Q 8. What are the Rules of Hooks?
+### Q 16. What are the Rules of Hooks?
 
 - Only call hooks at the top level.
 - Only call hooks inside React functions.
@@ -301,20 +301,20 @@ Hooks are special functions in React that let functional components use state, l
 
 <div align="right"><b><a href="#react-interview-question-and-answers">↥ Back to top</a></b></div>
 
-### Q 8. Can we call hooks inside loops or conditions?
+### Q 17. Can we call hooks inside loops or conditions?
 
 No. That breaks hook order consistency.
 
 <div align="right"><b><a href="#react-interview-question-and-answers">↥ Back to top</a></b></div>
 
-### Q 8. Why does `useEffect` run twice in development?
+### Q 18. Why does `useEffect` run twice in development?
 
 Because React Strict Mode intentionally runs effects twice in development to detect side-effect bugs.
 It does not happen in production.
 
 <div align="right"><b><a href="#react-interview-question-and-answers">↥ Back to top</a></b></div>
 
-### Q 8. Why does an object in dependency array cause re-renders?
+### Q 19. Why does an object in dependency array cause re-renders?
 
 Because objects are compared by reference, not value.
 New object = new reference = effect runs again.
@@ -323,13 +323,13 @@ Fix using `useMemo`.
 
 <div align="right"><b><a href="#react-interview-question-and-answers">↥ Back to top</a></b></div>
 
-### Q 8. Why is hook order important internally?
+### Q 20. Why is hook order important internally?
 
 React keeps hooks in an internal array. Changing order breaks state mapping.
 
 <div align="right"><b><a href="#react-interview-question-and-answers">↥ Back to top</a></b></div>
 
-### Q 8. Does updating state immediately change the value?
+### Q 21. Does updating state immediately change the value?
 
 No. State updates are asynchronous and batched.
 
@@ -340,7 +340,7 @@ console.log(count); // old value
 
 <div align="right"><b><a href="#react-interview-question-and-answers">↥ Back to top</a></b></div>
 
-### Q 8. What are common mistakes in `useEffect`?
+### Q 22. What are common mistakes in `useEffect`?
 
 - Missing dependency array
 - Wrong dependencies
@@ -355,7 +355,7 @@ useEffect(() => {
 
 <div align="right"><b><a href="#react-interview-question-and-answers">↥ Back to top</a></b></div>
 
-### Q 12. What is `useState`?
+### Q 23. What is `useState`?
 
 `useState` is a hook that allows functional components to have state and it returns the current state and a function to update it.
 
@@ -377,7 +377,7 @@ function Counter() {
 
 <div align="right"><b><a href="#react-interview-question-and-answers">↥ Back to top</a></b></div>
 
-### Q 13. What is `useEffect`?
+### Q 24. What is `useEffect`?
 
 `useEffect` allows functional components to perform side effects, like data fetching, subscriptions, or manually updating the DOM.
 
@@ -400,7 +400,7 @@ function Timer() {
 
 <div align="right"><b><a href="#react-interview-question-and-answers">↥ Back to top</a></b></div>
 
-### Q 14. What is `useContext`?
+### Q 25. What is `useContext`?
 
 `useContext` allows a functional component to consume context values without prop drilling.
 
@@ -419,7 +419,7 @@ function ThemedText() {
 
 <div align="right"><b><a href="#react-interview-question-and-answers">↥ Back to top</a></b></div>
 
-### Q 15. What is `useReducer`?
+### Q 26. What is `useReducer`?
 
 `useReducer` manages complex state logic using a reducer function (like Redux but local to a component).
 
@@ -451,7 +451,7 @@ function Counter() {
 
 <div align="right"><b><a href="#react-interview-question-and-answers">↥ Back to top</a></b></div>
 
-### Q 16. What is `useRef`?
+### Q 27. What is `useRef`?
 
 `useRef` Can be used to access DOM nodes or store values without re-rendering and returns a mutable object whose `.current` property persists across renders.
 
@@ -474,7 +474,7 @@ function InputFocus() {
 
 <div align="right"><b><a href="#react-interview-question-and-answers">↥ Back to top</a></b></div>
 
-### Q 17. What is `useMemo`?
+### Q 28. What is `useMemo`?
 
 `useMemo` memoizes expensive calculations and returns a cached value to optimize performance.
 
@@ -495,7 +495,7 @@ function ExpensiveCalculation({ number }) {
 
 <div align="right"><b><a href="#react-interview-question-and-answers">↥ Back to top</a></b></div>
 
-### Q 18. What is `useCallback`?
+### Q 29. What is `useCallback`?
 
 `useCallback` memoizes functions to prevent unnecessary re-creations, which can improve performance when passing functions to child components.
 
@@ -523,7 +523,7 @@ function App() {
 
 <div align="right"><b><a href="#react-interview-question-and-answers">↥ Back to top</a></b></div>
 
-### Q 19. What is `useLayoutEffect`?
+### Q 30. What is `useLayoutEffect`?
 
 `useLayoutEffect` is similar to useEffect but runs synchronously after DOM mutations and before the browser paints.
 
@@ -545,7 +545,7 @@ function Box() {
 
 <div align="right"><b><a href="#react-interview-question-and-answers">↥ Back to top</a></b></div>
 
-### Q 20. What is `useImperativeHandle`?
+### Q 31. What is `useImperativeHandle`?
 
 `useImperativeHandle` customizes the instance value exposed to parent components when using `ref`.
 
@@ -570,7 +570,7 @@ function App() {
 
 <div align="right"><b><a href="#react-interview-question-and-answers">↥ Back to top</a></b></div>
 
-### Q 21. What is `useId`?
+### Q 32. What is `useId`?
 
 `useId` generates a unique ID that is stable across server and client renders, preventing collisions.
 
@@ -592,7 +592,7 @@ function TextInput() {
 
 <div align="right"><b><a href="#react-interview-question-and-answers">↥ Back to top</a></b></div>
 
-### Q 21. What are custom hooks?
+### Q 33. What are custom hooks?
 
 Custom hooks are reusable functions that use other hooks. They start with use.
 
@@ -610,7 +610,7 @@ function useFetch(url) {
 
 <div align="right"><b><a href="#react-interview-question-and-answers">↥ Back to top</a></b></div>
 
-### Q 22. What is the difference between `useState` vs `useReducer`?
+### Q 34. What is the difference between `useState` vs `useReducer`?
 
 `useState` is used for simple state management, while `useReducer` is preferred for complex state logic involving multiple related state variables or actions.
 
@@ -623,7 +623,7 @@ function useFetch(url) {
 
 <div align="right"><b><a href="#react-interview-question-and-answers">↥ Back to top</a></b></div>
 
-### Q 23. What is the difference between `useEffect` vs `useLayoutEffect`?
+### Q 35. What is the difference between `useEffect` vs `useLayoutEffect`?
 
 `useEffect` runs after the screen updates, while `useLayoutEffect` runs synchronously before the browser paints. `useLayoutEffect` is used when we need to measure or modify the DOM before the user sees it.
 
@@ -635,7 +635,7 @@ function useFetch(url) {
 
 <div align="right"><b><a href="#react-interview-question-and-answers">↥ Back to top</a></b></div>
 
-### Q 24. What is the difference between `useMemo` vs `useCallback`?
+### Q 36. What is the difference between `useMemo` vs `useCallback`?
 
 `useMemo` memoizes a calculated value, whereas `useCallback` memoizes a function to prevent unnecessary re-renders.
 
@@ -647,7 +647,7 @@ function useFetch(url) {
 
 <div align="right"><b><a href="#react-interview-question-and-answers">↥ Back to top</a></b></div>
 
-### Q 25. What is the difference between `useRef` vs `useState`?
+### Q 37. What is the difference between `useRef` vs `useState`?
 
 `useState` triggers a re-render when updated, but `useRef` does not. `useRef` is mainly used for DOM access or storing values that shouldn't cause re-renders.
 
@@ -659,7 +659,7 @@ function useFetch(url) {
 
 <div align="right"><b><a href="#react-interview-question-and-answers">↥ Back to top</a></b></div>
 
-### Q 26. Why dependency array in `useEffect`?
+### Q 38. Why dependency array in `useEffect`?
 
 The dependency array in `useEffect` determines when the effect should run. If it is empty, the effect runs only once. If it contains values, the effect runs whenever those values change. Without it, the effect runs after every render, which may cause performance issues or infinite loops.
 
@@ -703,13 +703,13 @@ The dependency array in `useEffect` determines when the effect should run. If it
 
 <div align="right"><b><a href="#react-interview-question-and-answers">↥ Back to top</a></b></div>
 
-### Q 27. What is React Fiber?
+### Q 39. What is React Fiber?
 
 React Fiber is the internal reconciliation engine introduced in React 16. It breaks rendering work into small units called fibers, allowing React to pause, prioritize, and resume work. This enables concurrent rendering and improves performance by preventing UI blocking.
 
 <div align="right"><b><a href="#react-interview-question-and-answers">↥ Back to top</a></b></div>
 
-### Q 10. What is Virtual DOM?
+### Q 40. What is Virtual DOM?
 
 The Virtual DOM is a lightweight copy of the real DOM. React updates the virtual DOM first, compares it with the previous version, and then updates only the changed parts in the real DOM for better performance.
 
@@ -727,7 +727,7 @@ This process is called **Reconciliation**.
 
 <div align="right"><b><a href="#react-interview-question-and-answers">↥ Back to top</a></b></div>
 
-### Q 28. What is Unidirectional Data Flow?
+### Q 41. What is Unidirectional Data Flow?
 
 Unidirectional data flow in React is a design pattern where data flows in one direction only, from parent to child via props. Children cannot directly modify props; they can request changes by calling functions passed from the parent.
 
@@ -754,7 +754,7 @@ function ChildButton({ onIncrement }) {
 
 <div align="right"><b><a href="#react-interview-question-and-answers">↥ Back to top</a></b></div>
 
-### Q 28. What is Suspense?
+### Q 42. What is Suspense?
 
 Suspense is a React feature that lets you delay rendering a component until some asynchronous operation (like code or data loading) is complete. You provide a fallback UI, such as a spinner, that displays while waiting, improving the user experience..
 
@@ -779,7 +779,7 @@ export default App;
 
 <div align="right"><b><a href="#react-interview-question-and-answers">↥ Back to top</a></b></div>
 
-### Q 28. What is Lazy Loading?
+### Q 43. What is Lazy Loading?
 
 Lazy loading is a technique to load components only when they are needed, instead of loading everything upfront.
 
@@ -801,7 +801,7 @@ function App() {
 
 <div align="right"><b><a href="#react-interview-question-and-answers">↥ Back to top</a></b></div>
 
-### Q 28. What are Error Boundaries?
+### Q 44. What are Error Boundaries?
 
 An Error Boundary is a React component that catches errors in its child components, logs them, and displays a fallback UI instead of crashing the entire app. It helps make applications more resilient and improves user experience.
 
@@ -842,7 +842,7 @@ export default App;
 
 <div align="right"><b><a href="#react-interview-question-and-answers">↥ Back to top</a></b></div>
 
-### Q 28. How to pass data between react components?
+### Q 45. How to pass data between react components?
 
 **1. Parent → Child (Using Props)**
 
@@ -955,7 +955,7 @@ function UserPage({ params }) {
 
 <div align="right"><b><a href="#react-interview-question-and-answers">↥ Back to top</a></b></div>
 
-### Q 28. How do you optimize performance?
+### Q 46. How do you optimize performance?
 
 - Use `React.memo` and `PureComponent` to avoid unnecessary re-renders
 - Use `useCallback` and `useMemo` for functions and expensive calculations
@@ -984,7 +984,7 @@ function UserPage({ params }) {
 
 <div align="right"><b><a href="#react-interview-question-and-answers">↥ Back to top</a></b></div>
 
-### Q 28. How do you structure a React app?
+### Q 47. How do you structure a React app?
 
 ```javaScript
 my-app/
@@ -1037,7 +1037,7 @@ my-app/
 
 <div align="right"><b><a href="#react-interview-question-and-answers">↥ Back to top</a></b></div>
 
-### Q 28. How do you handle authentication?
+### Q 48. How do you handle authentication?
 
 I handle authentication by storing JWT in a secure place (localStorage or cookies), maintaining auth state in context, protecting routes with a wrapper component, and attaching tokens in API headers. I also handle unauthorized responses globally.
 
@@ -1159,7 +1159,7 @@ export default api;
 
 <div align="right"><b><a href="#react-interview-question-and-answers">↥ Back to top</a></b></div>
 
-### Q 28. What is Redux?
+### Q 49. What is Redux?
 
 Redux is a state management library that stores all app state in a single store, updates it via actions and reducers, and provides predictable and debuggable state for large or complex applications.
 
@@ -1229,7 +1229,7 @@ export default App;
 
 <div align="right"><b><a href="#react-interview-question-and-answers">↥ Back to top</a></b></div>
 
-### Q 28. What is tanstack query?
+### Q 50. What is tanstack query?
 
 TanStack Query is a library for managing server state in React apps. It handles fetching, caching, syncing, and updating data automatically, reducing boilerplate and improving performance.
 
@@ -1268,7 +1268,7 @@ function TodoList() {
 
 <div align="right"><b><a href="#react-interview-question-and-answers">↥ Back to top</a></b></div>
 
-### Q 28. What is Form Hook?
+### Q 51. What is Form Hook?
 
 React Hook Form simplifies form handling by using hooks, reduces unnecessary re-renders, and provides built-in validation. It’s preferred for large or dynamic forms over traditional controlled components.
 
@@ -1377,7 +1377,7 @@ export default SignupForm;
 
 <div align="right"><b><a href="#react-interview-question-and-answers">↥ Back to top</a></b></div>
 
-### Q 28. Question?
+### Q 50. Question?
 
 ```javaScript
 
