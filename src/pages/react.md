@@ -381,7 +381,7 @@ function Counter() {
 
 `useEffect` allows functional components to perform side effects, like data fetching, subscriptions, or manually updating the DOM.
 
-**When to use:** To store dynamic data in a functional component (form inputs, toggles, counters).
+**When to use:** To run side effects like data fetching, subscriptions, or DOM updates in functional components.
 
 ```javaScript
 import { useEffect, useState } from "react";
@@ -404,7 +404,7 @@ function Timer() {
 
 `useContext` allows a functional component to consume context values without prop drilling.
 
-**When to use:** When multiple components need access to shared data (theme, user info, settings)..
+**When to use:** When multiple components need access to shared data (theme, user info, settings).
 
 ```javaScript
 import { createContext, useContext } from "react";
@@ -423,7 +423,7 @@ function ThemedText() {
 
 `useReducer` manages complex state logic using a reducer function (like Redux but local to a component).
 
-**When to use:** Managing complex state logic or multiple related state variables..
+**When to use:** Managing complex state logic or multiple related state variables.
 
 ```javaScript
 import { useReducer } from "react";
@@ -478,7 +478,7 @@ function InputFocus() {
 
 `useMemo` memoizes expensive calculations and returns a cached value to optimize performance.
 
-**When to use:** To avoid recalculating expensive operations on every render..
+**When to use:** To avoid recalculating expensive operations on every render.
 
 ```javaScript
 import { useMemo, useState } from "react";
@@ -499,7 +499,7 @@ function ExpensiveCalculation({ number }) {
 
 `useCallback` memoizes functions to prevent unnecessary re-creations, which can improve performance when passing functions to child components.
 
-**When to use:** When passing functions as props to prevent unnecessary re-renders of child components..
+**When to use:** When passing functions as props to prevent unnecessary re-renders of child components.
 
 ```javaScript
 import { useCallback, useState } from "react";
@@ -549,7 +549,7 @@ function Box() {
 
 `useImperativeHandle` customizes the instance value exposed to parent components when using `ref`.
 
-**When to use:** When the parent needs controlled access to a child component’s methods or DOM..
+**When to use:** When the parent needs controlled access to a child component’s methods or DOM.
 
 ```javaScript
 import { forwardRef, useImperativeHandle, useRef } from "react";
@@ -574,7 +574,7 @@ function App() {
 
 `useId` generates a unique ID that is stable across server and client renders, preventing collisions.
 
-**When to use:** When you need unique IDs for forms, accessibility, or SSR..
+**When to use:** When you need unique IDs for forms, accessibility, or SSR.
 
 ```javaScript
 import { useId } from "react";
@@ -756,7 +756,7 @@ function ChildButton({ onIncrement }) {
 
 ### Q 42. What is Suspense?
 
-Suspense is a React feature that lets you delay rendering a component until some asynchronous operation (like code or data loading) is complete. You provide a fallback UI, such as a spinner, that displays while waiting, improving the user experience..
+Suspense in React lets you show a fallback UI (like a spinner) while waiting for asynchronous code or data to load, improving user experience.
 
 ```javaScript
 import React, { Suspense } from "react";
@@ -783,7 +783,7 @@ export default App;
 
 Lazy loading is a technique to load components only when they are needed, instead of loading everything upfront.
 
-Lazy loading is a technique to load components only when they are needed. It reduces the initial bundle size, improves performance, and is usually implemented using `React.lazy` and `Suspense` with a fallback UI.
+It reduces the initial bundle size, improves performance, and is usually implemented using `React.lazy` and `Suspense` with a fallback UI.
 
 ```javaScript
 import React, { Suspense } from "react";
@@ -945,14 +945,6 @@ function UserPage({ params }) {
 }
 ```
 
-```javaScript
-
-```
-
-```javaScript
-
-```
-
 <div align="right"><b><a href="#react-interview-question-and-answers">↥ Back to top</a></b></div>
 
 ### Q 46. How do you optimize performance?
@@ -977,10 +969,9 @@ function UserPage({ params }) {
       import("./HeavyComponent").then(module => { ... });
     ```
 - Virtualize long lists and profile with React DevTools
-
-```javaScript
-{items.map(item => <li key={item.id}>{item.name}</li>)}
-```
+  - ```javaScript
+    {items.map(item => <li key={item.id}>{item.name}</li>)}
+    ```
 
 <div align="right"><b><a href="#react-interview-question-and-answers">↥ Back to top</a></b></div>
 
