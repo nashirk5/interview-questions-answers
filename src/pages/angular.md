@@ -1086,4 +1086,19 @@ ChangeDetectorRef.detectChanges(): It detects only the components and it's child
 
 <div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
 
+### Q 35. What are switchMap, mergeMap()?
+
+<!-- Your content -->
+<div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
+
+### Q 36. What are forkJoin, combineLatest, zip and diff?
+
+<!-- Your content -->
+<div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
+
+<!-- ### Q 32. What are Template and Reactive forms?
+
+Your content
+<div align="right"><b><a href="#angular">↥ Back to top</a></b></div> -->
+
 ##
