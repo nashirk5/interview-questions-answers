@@ -6,9 +6,9 @@
 
 ### Q 1. What is Javascript?
 
-JavaScript, created by **Brendan Eich** in **1995**.
+JavaScript is a dynamically typed, single-threaded programming language primarily used for web development. It can run on both the client side and the server side. It also supports asynchronous operations, as well as object-oriented and functional programming.
 
-JavaScript is a programming language primarily used for web development. It can run on both the client-side and server-side using Node.js, enabling dynamic and interactive web applications. It also supports asynchronous operations and multiple programming styles like object-oriented and functional programming
+> JavaScript, created by **Brendan Eich** in **1995**.
 
 <div align="right"><b><a href="#javascript">↥ Back to top</a></b></div>
 
@@ -593,11 +593,12 @@ operationOnSum(5, 5, multiplyBy2); // Outputs 20
 
 ### Q 25. What is a callback hell?
 
-Callback Hell is an anti-pattern with multiple nested callbacks which makes code hard to read and debug when dealing with asynchronous logic. The callback hell looks like below,
+Callback Hell happens when you have multiple nested callbacks which makes code hard to read and debug when dealing with asynchronous logic. The callback hell usually looks like a pyramid of doom.
 
 _**Example:**_
 
 ```javascript
+// Example 1:
 async1(function(){
     async2(function(){
         async3(function(){
@@ -607,7 +608,58 @@ async1(function(){
         });
     });
 });
+
+// Example 2:
+doSomething(function(err, result1) {
+    if (err) throw err;
+    doSomethingElse(result1, function(err, result2) {
+        if (err) throw err;
+        doAnotherThing(result2, function(err, result3) {
+            if (err) throw err;
+            finalTask(result3, function(err, result4) {
+                if (err) throw err;
+                console.log('All tasks completed:', result4);
+            });
+        });
+    });
+});
 ```
+
+**Ways to Avoid Callback Hell:**
+
+- **Using Promises**.
+
+  ```js
+  doSomething()
+    .then((result1) => doSomethingElse(result1))
+    .then((result2) => doAnotherThing(result2))
+    .then((result3) => finalTask(result3))
+    .then((result4) => {
+      console.log("All tasks completed:", result4);
+    })
+    .catch((err) => {
+      console.error("Error:", err);
+    });
+  ```
+
+- **Using async/await**
+
+  ```js
+  async function main() {
+    try {
+      const result1 = await doSomething();
+      const result2 = await doSomethingElse(result1);
+      const result3 = await doAnotherThing(result2);
+      const result4 = await finalTask(result3);
+
+      console.log("All tasks completed:", result4);
+    } catch (err) {
+      console.error("Error:", err);
+    }
+  }
+
+  main();
+  ```
 
 <div align="right"><b><a href="#javascript">↥ Back to top</a></b></div>
 
