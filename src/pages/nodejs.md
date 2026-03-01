@@ -202,7 +202,7 @@ chat.emit("logout", "Bob");
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 8. What is the event loop in Node.js, and how is it handled in depth?
+### Q 7. What is the event loop in Node.js, and how is it handled in depth?
 
 Event-loop is a mechanism that handles asynchronous operations by contenous checking in the call stack and the task queue. When the call stack is empty, it pushes the tasks from the task queue to the call stack, enabling non-blocking, asynchronous execution.
 
@@ -219,6 +219,34 @@ Now we’ll explain the Node.js event loop strictly phase-by-phase, exactly in t
 7. Close Queue
 
 **1️⃣ Synchronous Code (Before Event Loop Starts)**
+
+The event loop first runs all normal JavaScript, including console.log, variable declarations, function calls, and blocking operations like fs.readFileSync() or JSON.parse(). During this stage, async APIs are registered, timers are scheduled, and Promises are created, but nothing asynchronous executes yet.
+
+**2️⃣ Microtasks (Runs Between Phases)**
+
+After each phase, Node executes microtasks, which include process.nextTick() callbacks and Promise .then() callbacks. These run immediately before moving to the next phase, ensuring high-priority tasks complete first. Overusing nextTick() can delay I/O operations.
+
+**3️⃣ Timer Queue (Timers Phase)**
+
+In the timers phase, callbacks scheduled by setTimeout() and setInterval() run if their delay has expired. A 0ms delay does not run immediately; it only executes in this phase when the event loop reaches it. Precise timing is not guaranteed.
+
+**4️⃣ I/O Queue (Pending Callbacks Phase)**
+
+This phase handles some TCP errors, deferred system-level I/O, and certain network error callbacks. Normal file or database callbacks do not run here — they go to the poll phase. The order can be unpredictable.
+
+**5️⃣ I/O Polling (Poll Phase)**
+
+The poll phase is the main phase for executing most asynchronous I/O, including fs.readFile(), database queries, network responses, and HTTP request handlers. It waits for I/O to complete and executes callbacks. If no timers are ready, it can block until an event occurs.
+
+**6️⃣ Check Phase**
+
+The check phase runs callbacks scheduled with setImmediate(). If called inside an I/O callback, setImmediate() executes before setTimeout(). Overusing setImmediate() unnecessarily can reduce performance and confuse timing.
+
+**7️⃣ Close Queue (Close Callbacks Phase)**
+
+The close phase executes callbacks for resources that are fully closed, such as socket.on("close"), stream.on("close"), or server.on("close"). Forgetting cleanup here can cause memory leaks or dangling resources, as the close callbacks do not run immediately.
+
+<!-- **1️⃣ Synchronous Code (Before Event Loop Starts)**
 
 **✅ What Runs Here**
 
@@ -316,7 +344,7 @@ _Runs when resource is fully closed._
 
 - Forgetting cleanup logic
 - Memory leaks if resources not properly closed
-- Assuming close runs immediately
+- Assuming close runs immediately -->
 
 **🎯 Interview-Ready 3-Line Answer**
 
@@ -325,15 +353,6 @@ After that, event loop phases execute in order: Timers → I/O pending → Poll 
 Blocking code in any phase can delay the entire loop and hurt performance.
 
 _Repeat until empty._
-
-<details>
-<summary>Click to view the images</summary>
-
-![css_box_model](../assets/images/nodejs_async.png)
-![css_box_model](../assets/images/nodejs_async_code.png)
-![css_box_model](../assets/images/nodejs_async_code_execution_flow.png)
-
-</details><br>
 
 <details>
 <summary>🔥 Tricky Interview Question with deep explanation</summary>
@@ -489,13 +508,13 @@ If you have any block level code then the event loop cannot move while the call 
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 9. What libuv?
+### Q 8. What libuv?
 
 libuv is a C library used by Node.js to handle asynchronous I/O operations and implement the event loop. It interacts with the OS (operating system) and manages a thread pool for tasks like file system access and networking. It plays a role similar to Web APIs in the browser, but it’s a lower-level system library used in server-side environments.
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 1. What is a Callback Function?
+### Q 9. What is a Callback Function?
 
 A callback function is a function passed as an argument to another function and is executed later after a task is completed.
 
@@ -541,7 +560,7 @@ fs.readFile("example.txt", "utf8", (err, data) => {
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 1. What is an error-first callback?
+### Q 10. What is an error-first callback?
 
 An error-first callback is a standard pattern in Node.js for handling `asynchronous` operations.
 
@@ -594,7 +613,7 @@ Error: Division by zero
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 1. What is a callback hell and how to avoid it?
+### Q 11. What is a callback hell and how to avoid it?
 
 Callback Hell happens when you have multiple nested callbacks which makes code hard to read and debug when dealing with asynchronous logic. The callback hell usually looks like a pyramid of doom.
 
@@ -666,7 +685,7 @@ doSomething(function(err, result1) {
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 1. What is streams and how many types are there?
+### Q 12. What is streams and how many types are there?
 
 Streams are objects that let you read or write data piece by piece. There are four types of streams
 
@@ -739,7 +758,7 @@ writeStream.on("finish", () => {
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 1. What is `spawn()` and `fork()` and difference?
+### Q 13. What is `spawn()` and `fork()` and difference?
 
 **`spawn()`:** It is a method in Node.js’s child_process module. It is used to creates a child process to run any OS command and streams output via `stdout`/`stderr`
 
@@ -799,7 +818,7 @@ child.send("Hello from parent!");
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 1. What is load balancer and how it works?
+### Q 14. What is load balancer and how it works?
 
 A load balancer distributes incoming client requests across multiple servers to improve: Performance, Availability & Scalability.
 
@@ -875,7 +894,7 @@ For balancing across multiple servers, you need tools like Nginx or cloud load b
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 1. Difference Between Cluster and PM2?
+### Q 15. Difference Between Cluster and PM2?
 
 | Feature          | Cluster                 | PM2                       |
 | ---------------- | ----------------------- | ------------------------- |
@@ -887,7 +906,7 @@ For balancing across multiple servers, you need tools like Nginx or cloud load b
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 1. What is middleware?
+### Q 16. What is middleware?
 
 Middleware is a function that runs between the request and response cycle. It can modify the request/response, execute logic, or end the request. It uses the next() function to pass control to the next middleware.
 
@@ -923,7 +942,7 @@ app.listen(3000);
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 1. What are the security mechanisms available in Node.js?
+### Q 17. What are the security mechanisms available in Node.js?
 
 **1️⃣ Authentication & Authorization**
 
@@ -1048,7 +1067,7 @@ const dbPassword = process.env.DB_PASSWORD;
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 1. Explain the terms body-parser, cookie-parser, morgan, nodemon, pm2, serve-favicon, cors, dotenv, fs-extra, moment in Express.js??
+### Q 18. Explain the terms body-parser, cookie-parser, morgan, nodemon, pm2, serve-favicon, cors, dotenv, fs-extra, moment in Express.js??
 
 **1️⃣ body-parser:** Parses incoming request bodies so you can access req.body.
 
@@ -1194,7 +1213,7 @@ console.log(moment().format("YYYY-MM-DD"));
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 1. What are RESTful Web Services?
+### Q 19. What are RESTful Web Services?
 
 RESTful web services in Node.js are APIs that follow REST principles using resource-based URLs and standard HTTP methods like GET, POST, PUT, and DELETE. They are stateless and typically return JSON responses with proper HTTP status codes.
 
@@ -1296,7 +1315,7 @@ If you send the same request multiple times and the result remains the same → 
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 1. Difference Between PUT and PATCH?
+### Q 20. Difference Between PUT and PATCH?
 
 PUT replaces the entire resource on the server and requires the full payload. PATCH updates only specified fields and requires a partial payload. Use PUT for complete replacement and PATCH for partial modifications.
 
@@ -1309,7 +1328,7 @@ PUT replaces the entire resource on the server and requires the full payload. PA
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 1. How many types of API functions are there?
+### Q 21. How many types of API functions are there?
 
 There are two types of API functions in Node.js:
 
@@ -1322,7 +1341,7 @@ There are two types of API functions in Node.js:
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 1. What is the difference between req.params and req.query?
+### Q 22. What is the difference between req.params and req.query?
 
 - `req.params` is used to get route parameters defined in the URL path, like `/users/:id`.
 - `req.query` is used to get query string values after the `?`, like `/users?age=25`.
@@ -1363,7 +1382,7 @@ app.get("/users", (req, res) => {
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 1. What is the difference between Asynchronous and Non-blocking?
+### Q 23. What is the difference between Asynchronous and Non-blocking?
 
 Asynchronous means a task executes separately and completes later using callbacks or promises.
 Non-blocking means the system does not stop execution while waiting for a task, especially I/O operations.
@@ -1393,31 +1412,71 @@ console.log("Reading file...");
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 1. What?
+### Q 24. What buffers?
+
+<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
+
+### Q 25. What Control Flow?
+
+<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
+
+### Q 26. What is REPL?
+
+<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
+
+### Q 27. What is a stub?
+
+<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
+
+### Q 28. What is a test pyramid?
+
+<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
+
+### Q 29. What is crypto in Node.js?
+
+<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
+
+### Q 30. How to debug an application in Node.js??
+
+<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
+
+### Q 31. What is Garbage collection and how it works?
+
+<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
+
+### Q 32. What memory leaks and its types?
+
+<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
+
+### Q 33. Explain Error Handling approaches in Node.js??
+
+<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
+
+### Q 34. Redis?
+
+<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
+
+### Q 35. RabbitMQ and Kafka in Node.js?
+
+<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
+
+### Q 36. How to improve Node.js performance?
+
+<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
+
+### Q 37. How to use JSON Web Token (JWT) for authentication?
+
+<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
+
+### Q 38. How to build a microservices architecture with Node.js?
+
+<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
+
+### Q 39. How microservices communicate with each other?
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
 ### Q 1. What?
-
-<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
-
-### Q 1. Redis, RabbitMQ and Kafka in Node.js?
-
-<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
-
-### Q 1. How to improve Node.js performance?
-
-<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
-
-### Q 1. How to use JSON Web Token (JWT) for authentication?
-
-<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
-
-### Q 1. How to build a microservices architecture with Node.js?
-
-<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
-
-### Q 1. How microservices communicate with each other?
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
