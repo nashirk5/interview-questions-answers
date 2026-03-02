@@ -202,7 +202,309 @@ chat.emit("logout", "Bob");
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 7. What is the event loop in Node.js, and how is it handled in depth?
+### Q 7. What is streams and how many types are there?
+
+Streams are objects that let you read or write data piece by piece. There are four types of streams
+
+**Types of Streams**
+
+| Type          | Description                                                            | Example                            |
+| ------------- | ---------------------------------------------------------------------- | ---------------------------------- |
+| **Readable**  | Used to **read data** from a source                                    | `fs.createReadStream('file.txt')`  |
+| **Writable**  | Used to **write data** to a destination                                | `fs.createWriteStream('file.txt')` |
+| **Duplex**    | Can **read and write** data                                            | `net.Socket`                       |
+| **Transform** | A special duplex stream that can **modify data while reading/writing** | `zlib.createGzip()`                |
+
+**Common Event Methods for All Streams**
+
+| Event    | Description                                                   |
+| -------- | ------------------------------------------------------------- |
+| `data`   | Emitted when a chunk of data is available (readable streams). |
+| `end`    | Emitted when there is no more data to read.                   |
+| `finish` | Emitted when all data has been flushed (writable streams).    |
+| `error`  | Emitted when an error occurs.                                 |
+| `close`  | Emitted when the stream is fully closed.                      |
+
+**Example 1: Readable Stream**
+
+```js
+const fs = require("fs");
+
+const readStream = fs.createReadStream("input.txt", "utf8");
+
+readStream.on("data", (chunk) => {
+  console.log("Received chunk:", chunk);
+});
+
+readStream.on("end", () => {
+  console.log("Finished reading file");
+});
+```
+
+**Example 2: Writable Stream**
+
+```js
+const fs = require("fs");
+
+const writeStream = fs.createWriteStream("output.txt");
+
+writeStream.write("Hello ");
+writeStream.write("World!");
+writeStream.end(() => {
+  console.log("Finished writing file");
+});
+```
+
+**Example 3: Duplex / Transform Stream (Pipe Example)**
+
+```js
+const fs = require("fs");
+const zlib = require("zlib");
+
+// Read file -> Compress -> Write file
+const readStream = fs.createReadStream("input.txt");
+const writeStream = fs.createWriteStream("input.txt.gz");
+const gzip = zlib.createGzip();
+
+readStream.pipe(gzip).pipe(writeStream);
+
+writeStream.on("finish", () => {
+  console.log("File compressed successfully");
+});
+```
+
+<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
+
+### Q 8. What buffers?
+
+A Buffer is a temporary memory allocation used to store raw binary data. It is mainly used when handling files, streams, or network data. Buffers allow Node.js to efficiently process binary data outside the JavaScript engine.
+
+**Example 1: Creating a Buffer from a String**
+
+```js
+const buf = Buffer.from("Hello Node.js");
+console.log(buf);
+console.log(buf.toString());
+
+// Output
+<Buffer 48 65 6c 6c 6f 20 4e 6f 64 65 2e 6a 73>
+Hello Node.js
+```
+
+**Example 2: Reading from a File Using Buffers**
+
+```js
+const data = fs.readFileSync("example.txt");
+console.log(data);           // Shows binary buffer
+console.log(data.toString()); // Converts to readable string
+
+// Output
+<Buffer 54 68 69 73 20 69 73 20 61 20 62 75 66 66 65 72 20 65 78 61 6d 70 6c 65 21>
+This is a buffer example!
+```
+
+Buffer.from() converts a string to binary data, and toString() converts it back to a readable string.
+
+<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
+
+### Q 9. What is REPL?
+
+**REPL stands for Read–Eval–Print–Loop**
+
+It is an interactive Node.js shell that reads user input, evaluates the JavaScript code, prints the result, and then loops back to wait for the next command. It is mainly used for quick testing, debugging.
+
+**Example:**
+
+**Step 1: Start REPL**
+
+```js
+// Open terminal and type:
+node;
+
+// You will see:
+>
+
+> 5 + 5
+10
+```
+
+- Read → 5 + 5
+- Evaluate → Calculates result
+- Print → 10
+- Loop → Waits for next input
+
+<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
+
+### Q 10. What is a stub?
+
+A stub is a fake implementation used in testing to replace a real function. It is mainly used in unit testing to avoid calling real databases, APIs, or external services. Using sinon, we replace the HTTP method with a fake response.
+
+**🔹 Example: Actual Function Without Stub (api.js)**
+
+```js
+// api.js
+const axios = require("axios");
+
+const getUser = async (id) => {
+  const response = await axios.get(`https://api.example.com/users/${id}`);
+  return response.data;
+};
+
+module.exports = getUser;
+```
+
+**Unit Test With Stub (api.test.js)**
+
+```js
+const sinon = require("sinon");
+const axios = require("axios");
+const { expect } = require("chai");
+const getUser = require("./api");
+
+describe("getUser - with Stub", () => {
+  before(() => {
+    sinon.stub(axios, "get").resolves({
+      data: {
+        id: 1,
+        name: "John Doe",
+        email: "john@example.com",
+      },
+    });
+  });
+
+  after(() => {
+    axios.get.restore();
+  });
+
+  it("should return user data", async () => {
+    const user = await getUser(1);
+
+    expect(user).to.have.property("id");
+    expect(user.name).to.equal("John Doe");
+    expect(user.email).to.equal("john@example.com");
+  });
+});
+```
+
+Here, we replace the real DB function with a fake one.
+
+<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
+
+### Q 11. What is a test pyramid?
+
+The Test Pyramid is a testing strategy that recommends having many unit tests, fewer integration tests, and very few end-to-end tests. It ensures fast, reliable, and maintainable testing.
+
+<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
+
+### Q 12. What Control Flow?
+
+Control flow is the order in which statements, functions, or instructions are executed in a program. In Node.js, it includes handling both synchronous and asynchronous operations.
+
+**🔹 Examples of Control Flow in Node.js**
+
+**Sequential Execution (Synchronous)**
+
+```js
+console.log("Start");
+console.log("Middle");
+console.log("End");
+
+Output: Start;
+Middle;
+End;
+```
+
+**Conditional Execution**
+
+```js
+const x = 10;
+if (x > 5) {
+  console.log("x is greater than 5");
+} else {
+  console.log("x is 5 or less");
+}
+```
+
+**Asynchronous Control Flow**
+
+```js
+setTimeout(() => {
+  console.log("Async operation done");
+}, 1000);
+
+console.log("This runs first");
+
+Output:
+
+This runs first
+Async operation done
+```
+
+Here, the event loop handles the asynchronous control flow.
+
+<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
+
+### Q 13. What is `spawn()` and `fork()` and difference?
+
+**`spawn()`:** It is a method in Node.js’s child_process module. It is used to creates a child process to run any OS command and streams output via `stdout`/`stderr`
+
+**Example:**
+
+```js
+const { spawn } = require("child_process");
+
+// Run the 'ls' command (list files in current directory)
+const ls = spawn("ls", ["-l"]);
+
+ls.stdout.on("data", (data) => {
+  console.log(`Output:\n${data}`);
+});
+
+ls.stderr.on("data", (err) => {
+  console.error(`Error: ${err}`);
+});
+
+ls.on("close", (code) => {
+  console.log(`Child process exited with code ${code}`);
+});
+```
+
+**`fork()`:** It is a special case of `spawn()` used only to create Node.js child processes with a built-in IPC channel for parent-child communication. Used when you want multiple Node.js scripts to run in parallel and communicate.
+
+**Example:**
+
+```js
+//child.js
+
+process.on("message", (msg) => {
+  console.log("Child received:", msg);
+  process.send(`Hello from child!`);
+});
+
+//parent.js
+
+const { fork } = require("child_process");
+const child = fork("child.js");
+
+child.on("message", (msg) => {
+  console.log("Parent received:", msg);
+});
+
+child.send("Hello from parent!");
+```
+
+**Key Differences Between spawn() and fork()**
+| Feature | `spawn()` | `fork()` |
+| ------------- | -------------------------------------- | ------------------------------------------------- |
+| Purpose | Run **any command** as child process | Run **Node.js scripts** as child process |
+| Communication | Uses **stdout/stderr streams** | Built-in **IPC channel** (`send` / `message`) |
+| Usage | `spawn(command, args, options)` | `fork(modulePath, args, options)` |
+| Return Type | ChildProcess object | ChildProcess object with **IPC support** |
+| Suitable for | Long-running processes, shell commands | Parallel Node.js scripts that need to communicate |
+
+<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
+
+### Q 14. What is the event loop in Node.js, and how is it handled in depth?
 
 Event-loop is a mechanism that handles asynchronous operations by contenous checking in the call stack and the task queue. When the call stack is empty, it pushes the tasks from the task queue to the call stack, enabling non-blocking, asynchronous execution.
 
@@ -508,13 +810,13 @@ If you have any block level code then the event loop cannot move while the call 
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 8. What libuv?
+### Q 15. What libuv?
 
 libuv is a C library used by Node.js to handle asynchronous I/O operations and implement the event loop. It interacts with the OS (operating system) and manages a thread pool for tasks like file system access and networking. It plays a role similar to Web APIs in the browser, but it’s a lower-level system library used in server-side environments.
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 9. What is a Callback Function?
+### Q 16. What is a Callback Function?
 
 A callback function is a function passed as an argument to another function and is executed later after a task is completed.
 
@@ -560,7 +862,7 @@ fs.readFile("example.txt", "utf8", (err, data) => {
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 10. What is an error-first callback?
+### Q 117. What is an error-first callback?
 
 An error-first callback is a standard pattern in Node.js for handling `asynchronous` operations.
 
@@ -613,7 +915,7 @@ Error: Division by zero
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 11. What is a callback hell and how to avoid it?
+### Q 18. What is a callback hell and how to avoid it?
 
 Callback Hell happens when you have multiple nested callbacks which makes code hard to read and debug when dealing with asynchronous logic. The callback hell usually looks like a pyramid of doom.
 
@@ -685,140 +987,7 @@ doSomething(function(err, result1) {
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 12. What is streams and how many types are there?
-
-Streams are objects that let you read or write data piece by piece. There are four types of streams
-
-**Types of Streams**
-
-| Type          | Description                                                            | Example                            |
-| ------------- | ---------------------------------------------------------------------- | ---------------------------------- |
-| **Readable**  | Used to **read data** from a source                                    | `fs.createReadStream('file.txt')`  |
-| **Writable**  | Used to **write data** to a destination                                | `fs.createWriteStream('file.txt')` |
-| **Duplex**    | Can **read and write** data                                            | `net.Socket`                       |
-| **Transform** | A special duplex stream that can **modify data while reading/writing** | `zlib.createGzip()`                |
-
-**Common Event Methods for All Streams**
-
-| Event    | Description                                                   |
-| -------- | ------------------------------------------------------------- |
-| `data`   | Emitted when a chunk of data is available (readable streams). |
-| `end`    | Emitted when there is no more data to read.                   |
-| `finish` | Emitted when all data has been flushed (writable streams).    |
-| `error`  | Emitted when an error occurs.                                 |
-| `close`  | Emitted when the stream is fully closed.                      |
-
-**Example 1: Readable Stream**
-
-```js
-const fs = require("fs");
-
-const readStream = fs.createReadStream("input.txt", "utf8");
-
-readStream.on("data", (chunk) => {
-  console.log("Received chunk:", chunk);
-});
-
-readStream.on("end", () => {
-  console.log("Finished reading file");
-});
-```
-
-**Example 2: Writable Stream**
-
-```js
-const fs = require("fs");
-
-const writeStream = fs.createWriteStream("output.txt");
-
-writeStream.write("Hello ");
-writeStream.write("World!");
-writeStream.end(() => {
-  console.log("Finished writing file");
-});
-```
-
-**Example 3: Duplex / Transform Stream (Pipe Example)**
-
-```js
-const fs = require("fs");
-const zlib = require("zlib");
-
-// Read file -> Compress -> Write file
-const readStream = fs.createReadStream("input.txt");
-const writeStream = fs.createWriteStream("input.txt.gz");
-const gzip = zlib.createGzip();
-
-readStream.pipe(gzip).pipe(writeStream);
-
-writeStream.on("finish", () => {
-  console.log("File compressed successfully");
-});
-```
-
-<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
-
-### Q 13. What is `spawn()` and `fork()` and difference?
-
-**`spawn()`:** It is a method in Node.js’s child_process module. It is used to creates a child process to run any OS command and streams output via `stdout`/`stderr`
-
-**Example:**
-
-```js
-const { spawn } = require("child_process");
-
-// Run the 'ls' command (list files in current directory)
-const ls = spawn("ls", ["-l"]);
-
-ls.stdout.on("data", (data) => {
-  console.log(`Output:\n${data}`);
-});
-
-ls.stderr.on("data", (err) => {
-  console.error(`Error: ${err}`);
-});
-
-ls.on("close", (code) => {
-  console.log(`Child process exited with code ${code}`);
-});
-```
-
-**`fork()`:** It is a special case of `spawn()` used only to create Node.js child processes with a built-in IPC channel for parent-child communication. Used when you want multiple Node.js scripts to run in parallel and communicate.
-
-**Example:**
-
-```js
-//child.js
-
-process.on("message", (msg) => {
-  console.log("Child received:", msg);
-  process.send(`Hello from child!`);
-});
-
-//parent.js
-
-const { fork } = require("child_process");
-const child = fork("child.js");
-
-child.on("message", (msg) => {
-  console.log("Parent received:", msg);
-});
-
-child.send("Hello from parent!");
-```
-
-**Key Differences Between spawn() and fork()**
-| Feature | `spawn()` | `fork()` |
-| ------------- | -------------------------------------- | ------------------------------------------------- |
-| Purpose | Run **any command** as child process | Run **Node.js scripts** as child process |
-| Communication | Uses **stdout/stderr streams** | Built-in **IPC channel** (`send` / `message`) |
-| Usage | `spawn(command, args, options)` | `fork(modulePath, args, options)` |
-| Return Type | ChildProcess object | ChildProcess object with **IPC support** |
-| Suitable for | Long-running processes, shell commands | Parallel Node.js scripts that need to communicate |
-
-<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
-
-### Q 14. What is load balancer and how it works?
+### Q 19. What is load balancer and how it works?
 
 A load balancer distributes incoming client requests across multiple servers to improve: Performance, Availability & Scalability.
 
@@ -894,7 +1063,7 @@ For balancing across multiple servers, you need tools like Nginx or cloud load b
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 15. Difference Between Cluster and PM2?
+### Q 20. Difference Between Cluster and PM2?
 
 | Feature          | Cluster                 | PM2                       |
 | ---------------- | ----------------------- | ------------------------- |
@@ -906,7 +1075,7 @@ For balancing across multiple servers, you need tools like Nginx or cloud load b
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 16. What is middleware?
+### Q 21. What is middleware?
 
 Middleware is a function that runs between the request and response cycle. It can modify the request/response, execute logic, or end the request. It uses the next() function to pass control to the next middleware.
 
@@ -942,7 +1111,7 @@ app.listen(3000);
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 17. What are the security mechanisms available in Node.js?
+### Q 22. What are the security mechanisms available in Node.js?
 
 **1️⃣ Authentication & Authorization**
 
@@ -1067,7 +1236,7 @@ const dbPassword = process.env.DB_PASSWORD;
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 18. Explain the terms body-parser, cookie-parser, morgan, nodemon, pm2, serve-favicon, cors, dotenv, fs-extra, moment in Express.js??
+### Q 23. Explain the terms body-parser, cookie-parser, morgan, nodemon, pm2, serve-favicon, cors, dotenv, fs-extra, moment in Express.js??
 
 **1️⃣ body-parser:** Parses incoming request bodies so you can access req.body.
 
@@ -1213,7 +1382,7 @@ console.log(moment().format("YYYY-MM-DD"));
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 19. What are RESTful Web Services?
+### Q 24. What are RESTful Web Services?
 
 RESTful web services in Node.js are APIs that follow REST principles using resource-based URLs and standard HTTP methods like GET, POST, PUT, and DELETE. They are stateless and typically return JSON responses with proper HTTP status codes.
 
@@ -1315,7 +1484,7 @@ If you send the same request multiple times and the result remains the same → 
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 20. Difference Between PUT and PATCH?
+### Q 25. Difference Between PUT and PATCH?
 
 PUT replaces the entire resource on the server and requires the full payload. PATCH updates only specified fields and requires a partial payload. Use PUT for complete replacement and PATCH for partial modifications.
 
@@ -1328,7 +1497,7 @@ PUT replaces the entire resource on the server and requires the full payload. PA
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 21. How many types of API functions are there?
+### Q 26. How many types of API functions are there?
 
 There are two types of API functions in Node.js:
 
@@ -1341,7 +1510,7 @@ There are two types of API functions in Node.js:
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 22. What is the difference between req.params and req.query?
+### Q 27. What is the difference between req.params and req.query?
 
 - `req.params` is used to get route parameters defined in the URL path, like `/users/:id`.
 - `req.query` is used to get query string values after the `?`, like `/users?age=25`.
@@ -1382,7 +1551,7 @@ app.get("/users", (req, res) => {
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 23. What is the difference between Asynchronous and Non-blocking?
+### Q 28. What is the difference between Asynchronous and Non-blocking?
 
 Asynchronous means a task executes separately and completes later using callbacks or promises.
 Non-blocking means the system does not stop execution while waiting for a task, especially I/O operations.
@@ -1412,67 +1581,125 @@ console.log("Reading file...");
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 24. What buffers?
+### Q 29. What are REST, GraphQl and SOAP, and its difference?
+
+**REST**
+REST is an architectural style for building APIs that use standard HTTP methods to access and manage resources, usually returning data in JSON format in a simple and scalable way.
+
+```js
+// Request:
+GET /users/1
+
+// Response:
+{
+  "id": 1,
+  "name": "John",
+  "email": "john@example.com"
+}
+```
+
+**REST**
+GraphQL is a query language for APIs that allows the client to request exactly the data it needs from a single endpoint, making data fetching more flexible and efficient.
+
+```js
+// Request:
+query {
+  user(id: 1) {
+    name
+    email
+  }
+}
+
+// Response:
+{
+  "data": {
+    "user": {
+      "name": "John",
+      "email": "john@example.com"
+    }
+  }
+}
+```
+
+**REST**
+SOAP is a protocol for exchanging structured information using XML, mainly used in enterprise systems where strict standards, security, and reliability are required.
+
+```js
+// Request:
+<soap:Envelope>
+  <soap:Body>
+    <GetUser>
+      <UserId>1</UserId>
+    </GetUser>
+  </soap:Body>
+</soap:Envelope>
+
+// Response:
+<soap:Envelope>
+  <soap:Body>
+    <GetUserResponse>
+      <User>
+        <Id>1</Id>
+        <Name>John</Name>
+        <Email>john@example.com</Email>
+      </User>
+    </GetUserResponse>
+  </soap:Body>
+</soap:Envelope>
+```
+
+**🔎 Comparison**
+
+| Feature     | REST                | GraphQL                 | SOAP             |
+| ----------- | ------------------- | ----------------------- | ---------------- |
+| Type        | Architectural style | Query language          | Protocol         |
+| Data Format | JSON (mostly)       | JSON                    | XML only         |
+| Endpoints   | Multiple endpoints  | Single endpoint         | Single endpoint  |
+| Flexibility | Fixed response      | Client-defined response | Strict structure |
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 25. What Control Flow?
+### Q 30. What is crypto in Node.js?
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 26. What is REPL?
+### Q 31. How to debug an application in Node.js??
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 27. What is a stub?
+### Q 32. What is Garbage collection and how it works?
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 28. What is a test pyramid?
+### Q 33. What memory leaks and its types?
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 29. What is crypto in Node.js?
+### Q 34. Explain Error Handling approaches in Node.js??
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 30. How to debug an application in Node.js??
+### Q 35. Redis?
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 31. What is Garbage collection and how it works?
+### Q 36. RabbitMQ and Kafka in Node.js?
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 32. What memory leaks and its types?
+### Q 37. How to improve Node.js performance?
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 33. Explain Error Handling approaches in Node.js??
+### Q 38. How to use JSON Web Token (JWT) for authentication?
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 34. Redis?
+### Q 39. How to build a microservices architecture with Node.js?
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 35. RabbitMQ and Kafka in Node.js?
-
-<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
-
-### Q 36. How to improve Node.js performance?
-
-<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
-
-### Q 37. How to use JSON Web Token (JWT) for authentication?
-
-<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
-
-### Q 38. How to build a microservices architecture with Node.js?
-
-<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
-
-### Q 39. How microservices communicate with each other?
+### Q 40. How microservices communicate with each other?
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
