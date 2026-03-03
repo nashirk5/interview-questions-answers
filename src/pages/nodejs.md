@@ -1661,49 +1661,537 @@ SOAP is a protocol for exchanging structured information using XML, mainly used 
 
 ### Q 30. What is crypto in Node.js?
 
+The crypto module in Node.js is a built-in module used for cryptographic operations like hashing, encryption, decryption, and generating secure random data. It is commonly used for password hashing, tokens, and data security.
+
+**🔹 Example 1: Hashing a Password**
+
+```js
+const crypto = require("crypto");
+
+const hash = crypto.createHash("sha256").update("mypassword").digest("hex");
+
+console.log(hash);
+```
+
+This converts a password into a secure hash.
+
+```js
+🔹 Example 2: Generate Random Token
+const crypto = require("crypto");
+
+const token = crypto.randomBytes(16).toString("hex");
+console.log(token);
+```
+
+Used for: Password reset tokens, API keys & Session IDs
+
+**🔹 Common Methods**
+
+- `createHash()` → Create hash (SHA256, MD5, etc.)
+- `createCipheriv()` → Encrypt data
+- `createDecipheriv()` → Decrypt data
+- `randomBytes()` → Generate secure random values
+
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 31. How to debug an application in Node.js??
+### Q 31. How to debug an application in Node.js?
+
+Node.js applications can be debugged using console logs, the built-in Node inspector, or IDE debuggers like VS Code.
+
+In production, tools like PM2 logs and debugging libraries help track errors and performance issues.
+
+**🔹 1️⃣ Using console.log() (Basic Debugging)**
+
+The simplest way:
+
+```js
+console.log("Value of x:", x);
+```
+
+Used to: Check variable values, Verify execution flow.
+
+**🔹 2️⃣ Using Node.js Built-in Debugger**
+
+Run your app with:
+
+```js
+node inspect app.js
+
+// Or:
+
+node --inspect app.js
+
+// Then open:
+
+chrome://inspect
+```
+
+**🔹 3️⃣ Using VS Code Debugger (Most Common)**
+
+- Steps:
+  - Open project in VS Code
+  - Go to Run & Debug
+  - Click Add Configuration
+  - Select Node.js
+  - Set breakpoints
+  - Press ▶️ Run
+- You can:
+  - Pause execution
+  - Step over / into functions
+  - Inspect variables
+  - Watch expressions
+
+**🔹 4️⃣ Using debug Module (Advanced Logging)**
+
+Install:
+
+```js
+npm install debug
+
+// Example:
+
+const debug = require("debug")("app");
+
+debug("Server started");
+
+// Run with:
+
+DEBUG=app node app.js
+```
+
+Used for controlled logging in production.
+
+**🔹 5️⃣ Using PM2 Logs (Production Debugging)**
+
+If running with PM2:
+
+```js
+pm2 logs
+```
+
+Used to monitor: Errors, Crashes & Performance
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
 ### Q 32. What is Garbage collection and how it works?
 
+Garbage collection is the automatic process of freeing unused memory in Node.js. Node.js memory is divided into code segment, stack, and heap. Garbage collection only works on heap memory where objects are stored. The V8 engine uses a mark-and-sweep algorithm to remove unreachable objects from memory.
+
+- **Code Segment:** Stores the program’s instructions and function definitions. This memory is static and does not change during execution.
+- **Stack:** Holds function calls, local variables, and execution contexts in LIFO order. It is automatically cleared when functions finish executing.
+- **Heap:** Stores objects, arrays, and dynamic data. Garbage collection works here to remove unreachable objects and free memory.
+
+**🔹 How Garbage Collection Works in Node.js**
+
+Node.js uses the V8 engine’s garbage collector, which mainly follows a Mark-and-Sweep algorithm.
+
+- **Memory Allocation:** When you create variables, objects, or functions. Memory is allocated in the heap.
+- **Mark Phase:** The garbage collector starts from the root object (global scope) and marks all objects that are still reachable (in use). If an object can be accessed, it is marked as active.
+- **Sweep Phase:** After marking, V8 removes all unmarked (unreachable) objects from memory. Now the original object is unreachable → GC will remove it.
+
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
 ### Q 33. What memory leaks and its types?
 
+A memory leak occurs when unused memory is not released and heap usage keeps increasing.
+
+It usually happens due to global variables, unremoved listeners, timers, or retained references. It can be prevented by proper cleanup, limiting cache, and monitoring memory usage.
+
+**🔹 How to Prevent Memory Leaks**
+
+- Avoid Global Variables
+- Remove Event Listeners
+- Clear Timers
+- Limit Cache Size
+- Close Database Connections
+- Use WeakMap / WeakSet for temporary references
+- Monitor Memory Usage (`process.memoryUsage()`)
+
+**🔹 Types of Memory Leaks in Node.js**
+
+**1️⃣ Global Variables:** Objects stored in global scope are never garbage collected. Since it’s globally referenced, GC cannot remove it.
+
+**2️⃣ Unused References (Forgot to Nullify):** If references are not removed, memory stays allocated. If not set to null or removed, GC won’t clean it.
+
+```js
+let data = { name: "John" };
+data = null; // Proper cleanup
+```
+
+**3️⃣ Closures Holding Memory:** Closures can unintentionally retain large objects. `largeData` remains in memory due to closure reference.
+
+```js
+function outer() {
+  const largeData = new Array(1000000);
+  return function inner() {
+    console.log("Using closure");
+  };
+}
+```
+
+**4️⃣ Unremoved Event Listeners:** If listeners are not removed, they keep references alive.
+
+```js
+emitter.on("data", handler);
+
+// Remove
+emitter.removeListener("data", handler);
+```
+
+**5️⃣ Timers Not Cleared:** Uncleared intervals keep running and holding memory.
+
+```js
+const interval = setInterval(() => {
+  console.log("Running");
+}, 1000);
+
+// clearInterval(interval);
+```
+
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 34. Explain Error Handling approaches in Node.js??
+### Q 34. Explain Error Handling approaches in Node.js?
+
+**1. Using try-catch block:**
+
+```js
+function square(num) {
+  if (typeof num !== "number")
+    throw new TypeError(`Expected number but got: ${typeof num}`);
+
+  return num * num;
+}
+
+try {
+  square("10");
+} catch (err) {
+  console.log(err.message); // Expected number but got: string
+}
+```
+
+**2. Error-First Callbacks (Classic Node.js):** The traditional Node.js pattern passes error as the first argument to a callback.
+
+```js
+fs.readFile("file.txt", (err, data) => {
+  if (err) {
+    console.error("Error reading file:", err);
+    return;
+  }
+  console.log("File data:", data.toString());
+});
+```
+
+**3. Promises:** Promises allow handling errors using .catch() while keeping code readable.
+
+```js
+const fs = require("fs").promises;
+
+fs.readFile("file.txt")
+  .then((data) => console.log("File data:", data.toString()))
+  .catch((err) => console.error("Error reading file:", err));
+```
+
+**4. Async / Await:** With async/await, errors can be handled using try/catch blocks, making asynchronous code look synchronous.
+
+```js
+const fs = require("fs").promises;
+
+async function readFile() {
+  try {
+    const data = await fs.readFile("file.txt");
+    console.log("File data:", data.toString());
+  } catch (err) {
+    console.error("Error reading file:", err);
+  }
+}
+
+readFile();
+```
+
+**5. Using Error Middleware (Express.js):** In Express.js apps, use a middleware to catch errors:
+
+```js
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send("Something broke!");
+});
+```
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 35. Redis?
+### Q 35. What is Redis and how to implement it?
+
+Redis is an open-source, in-memory data store used as a database, cache, and message broker. It follows a key-value storage model, allowing data to be stored and retrieved directly from RAM using commands like `SET` and `GET`. It supports data types like strings, lists, sets, sorted sets, and hashes.
+
+| Data Type      | Description                                                   |
+| -------------- | ------------------------------------------------------------- |
+| **String**     | Simple key-value, can store text, numbers, or JSON as string. |
+| **List**       | Ordered collection of strings (like an array).                |
+| **Set**        | Unordered collection of unique strings.                       |
+| **Sorted Set** | Set of strings with scores for ordering.                      |
+| **Hash**       | Map of fields and values (like an object).                    |
+
+**🔹 How to Implement Redis in Node.js**
+
+**🔹 Example: Basic Key-Value Operations**
+
+```js
+const redis = require("redis");
+
+// Create Redis client
+const client = redis.createClient();
+
+client.on("error", (err) => console.error("Redis Error:", err));
+
+async function run() {
+  await client.connect(); // Connect to Redis server
+
+  // Set a key-value
+  await client.set("username", "JohnDoe");
+
+  // Get the value
+  const username = await client.get("username");
+  console.log("Username from Redis:", username);
+
+  // Delete the key
+  await client.del("username");
+
+  await client.quit(); // Disconnect
+}
+
+run();
+```
+
+**🔹 Example: Using a Hash**
+
+```js
+async function hashExample() {
+  await client.connect();
+
+  // Set multiple fields in a hash
+  await client.hSet("user:1", {
+    name: "Alice",
+    age: "25",
+    email: "alice@example.com",
+  });
+
+  // Get all fields
+  const user = await client.hGetAll("user:1");
+  console.log("User Hash:", user);
+
+  await client.quit();
+}
+
+hashExample();
+```
+
+**Example: Database + Redis Cache**
+
+```js
+const express = require("express");
+const mongoose = require("mongoose");
+const redis = require("redis");
+
+const app = express();
+app.use(express.json());
+const PORT = 3000;
+
+// Redis client
+const client = redis.createClient();
+client.on("error", (err) => console.error("Redis Error:", err));
+
+// MongoDB connection
+mongoose.connect("mongodb://localhost:27017/usersdb", {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
+
+// User schema
+const userSchema = new mongoose.Schema({
+  name: String,
+  email: String,
+});
+const User = mongoose.model("User", userSchema);
+
+// GET user with Redis caching
+app.get("/user/:id", async (req, res) => {
+  const userId = req.params.id;
+
+  try {
+    // 1️⃣ Check Redis first
+    const cachedUser = await client.get(`user:${userId}`);
+    if (cachedUser) {
+      console.log("Serving from Redis cache");
+      return res.json(JSON.parse(cachedUser));
+    }
+
+    // 2️⃣ If not in cache, fetch from MongoDB
+    const user = await User.findById(userId);
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    // 3️⃣ Store result in Redis for 1 hour (3600 seconds)
+    await client.setEx(`user:${userId}`, 3600, JSON.stringify(user));
+
+    console.log("Serving from MongoDB");
+    res.json(user);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+app.listen(PORT, async () => {
+  await client.connect();
+  console.log(`Server running on http://localhost:${PORT}`);
+});
+```
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 36. RabbitMQ and Kafka in Node.js?
+### Q 36. How to improve Node.js performance?
+
+**1. Use Asynchronous & Non-Blocking Code**
+
+- Avoid blocking the event loop with synchronous operations like fs.readFileSync or heavy loops.
+- Use async APIs, Promises, or async/await for I/O and database calls.
+
+  ```js
+  // Bad: blocking
+  const data = fs.readFileSync("file.txt");
+
+  // Good: non-blocking
+  fs.readFile("file.txt", (err, data) => { ... });
+  ```
+
+**2. Query Optimization**
+
+Basic tips to improve your database performance/optimization overview
+
+- Indexing - Indexing is an approach to optimize the performance of a database by minimizing the number of disk accesses required when a query is processed.
+- Avoid SELECT - Use the SELECT statement to query only the data you need and avoid extra fetching loads to your database.
+
+  ```js
+  -- query1
+  SELECT * FROM Customers
+
+  -- query2 (optimized)
+  SELECT FirstName, LastName, Address, City, State, Zip FROM Customers
+  ```
+
+- Use LIMIT - LIMIT will return only the specified number of records.
+
+  ```js
+  SELECT FirstName, LastName, Address, City, State, Zip FROM Customers LIMIT 100
+  ```
+
+- Wildcard (%) - Use wildcard (%) character appropriately
+
+  ```js
+  -- SELECT customers whose first names start with "Avi"
+
+  -- query1
+  SELECT FirstName from Customers where FirstName like '%avi%'
+
+  -- query2 (optimized)
+  SELECT FirstName from Customers where FirstName like 'avi%'
+  ```
+
+**3. Implement Caching**
+
+- Use Redis or in-memory caches for frequently accessed data to reduce database calls.
+- Cache API responses, computed values, or session data.
+
+**4. Load Balancing:**
+
+The cluster module to allow load balancing and distribute incoming connections across all workers in an environment's numerous CPU cores using a round-robin technique.
+
+Using the PM2 process manager to keep applications alive indefinitely is another option. PM2 includes a cluster feature that allows you to run numerous processes over all cores without having to worry about changing the code to use the native cluster module.
+
+**5. Gzip Compression**
+
+Gzip compresses HTTP requests and responses.
+Gzip compresses responses before sending them to the browser, thus, the browser takes a shorter time to fetch them. Gzip also compresses the request to the remote server, which significantly increases web performance.
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 37. How to improve Node.js performance?
+### Q 37. How to use JSON Web Token (JWT) for authentication?
+
+JWT is a secure token-based authentication mechanism.
+Users log in and receive a signed JWT, which they send in request headers to access protected routes.
+The server verifies the token on each request, allowing stateless, scalable authentication without storing sessions.
+
+**🔹 How It Works**
+
+- Login: User sends credentials → Server verifies → Generates JWT → Returns token.
+- Access protected route: Client sends token in Authorization: Bearer <token> → Server verifies token → Grants access if valid.
+  -Token expires automatically based on the expiresIn setting.
+
+**Example**
+
+```js
+const express = require("express");
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
+
+const app = express();
+app.use(express.json());
+
+const SECRET_KEY = "mysecretkey"; // In production, store securely
+
+// Mock user database
+const users = [
+  { id: 1, username: "john", password: "$2b$10$k4mN..." }, // hashed password
+];
+
+// Login route
+app.post("/login", async (req, res) => {
+  const { username, password } = req.body;
+  const user = users.find((u) => u.username === username);
+  if (!user) return res.status(401).json({ message: "Invalid credentials" });
+
+  const valid = await bcrypt.compare(password, user.password);
+  if (!valid) return res.status(401).json({ message: "Invalid credentials" });
+
+  // Generate JWT token
+  const token = jwt.sign({ id: user.id, username: user.username }, SECRET_KEY, {
+    expiresIn: "1h",
+  });
+  res.json({ token });
+});
+
+// Protected route
+app.get("/profile", (req, res) => {
+  const authHeader = req.headers["authorization"];
+  if (!authHeader)
+    return res.status(401).json({ message: "No token provided" });
+
+  const token = authHeader.split(" ")[1];
+  try {
+    const user = jwt.verify(token, SECRET_KEY);
+    res.json({ message: "Profile data", user });
+  } catch (err) {
+    res.status(403).json({ message: "Invalid token" });
+  }
+});
+
+app.listen(3000, () => console.log("Server running on http://localhost:3000"));
+```
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 38. How to use JSON Web Token (JWT) for authentication?
+### Q 38. How to build a microservices architecture with Node.js?
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 39. How to build a microservices architecture with Node.js?
+### Q 39. How microservices communicate with each other?
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 40. How microservices communicate with each other?
+### Q 40. RabbitMQ and Kafka in Node.js?
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 1. What?
+### Q 36. ?
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
