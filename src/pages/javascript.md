@@ -1260,4 +1260,428 @@ ES6 (ECMAScript 2015) is a significant update to the JavaScript language specifi
 
 <div align="right"><b><a href="#javascript">↥ Back to top</a></b></div>
 
+### Q 41. How JavaSCript works?
+
+JavaScript is a single-threaded, interpreted language that runs in a browser or Node.js using a JIT compiler. It handles asynchronous tasks via the event loop and Web APIs, keeping the main thread non-blocking. Understanding execution context, call stack, and async behavior is key to writing efficient, bug-free code.
+
+![css_box_model](../assets/images/JS_execution.png)
+
+1. Parsing – The JavaScript engine (like V8 in Chrome, SpiderMonkey in Firefox) reads your JS code and turns it into an Abstract Syntax Tree (AST). This is essentially a structured representation of your code.
+   > TDZ Note: Variables declared with let or const are hoisted but cannot be accessed before their declaration. Accessing them earlier triggers a ReferenceError. This phase creates the Temporal Dead Zone (TDZ) for such variables.
+2. Compilation / Just-In-Time (JIT) Compilation – Modern engines don’t just interpret code line by line. They use JIT compilation: they compile code into optimized machine code just before execution, so it runs faster.
+3. Execution Context & Call Stack – JS maintains an execution context, which keeps track of variables, scope, and the current function. The call stack manages function execution in a LIFO (last-in-first-out) order.
+4. Event Loop & Asynchronous Handling – JavaScript is single-threaded, meaning only one thing happens at a time. To handle async operations (like network requests, timers), it uses an event loop:
+   - Tasks like network requests go to the Web APIs.
+   - When completed, their callbacks are queued in the callback queue.
+   - The event loop picks tasks from this queue and pushes them to the call stack when it’s empty.
+5. Memory Management – JS engines automatically handle memory via garbage collection, freeing memory for objects that are no longer referenced.
+
+<div align="right"><b><a href="#javascript">↥ Back to top</a></b></div>
+
+### Q 42. What is the Event Loop?
+
+Event-loop is a mechanism that handles asynchronous operations by continuos checking in the call stack and the task queue. When the call stack is empty, it pushes the tasks from the task queue to the call stack, enabling non-blocking, asynchronous execution.
+
+![css_box_model](../assets/images/event-loop-dark.png)
+
+**Core Components of the Event Loop**
+
+**1. Call Stack**
+
+The Call Stack is where JavaScript executes synchronous code.
+Functions are pushed onto the stack when called and removed when finished (LIFO – Last In First Out).
+
+**2. Web APIs (Browser APIs / Node APIs)**
+
+Web APIs handle asynchronous operations outside the JavaScript engine, such as timers, HTTP requests, and DOM events.
+
+Examples of Web APIs: setTimeout, fetch and DOM events.
+
+**3. Callback Queue (Macrotask Queue)**
+
+The Callback Queue stores callbacks from asynchronous operations like setTimeout, setInterval, and DOM events.
+
+The Event Loop moves callbacks from this queue to the Call Stack when the stack becomes empty. Even with 0ms, the callback waits in the queue until the stack is empty.
+
+**4. Microtask Queue**
+
+The Microtask Queue stores high-priority async tasks, mainly from Promises. Microtasks are executed before the Macrotask Queue. Because Microtask Queue has higher priority than the Callback Queue.
+
+**5. Event Loop**
+
+The Event Loop is the process that continuously checks if the Call Stack is empty and then pushes tasks from the Microtask Queue or Callback Queue into the stack.
+
+<div align="right"><b><a href="#javascript">↥ Back to top</a></b></div>
+
+### Q 44. What is this in JavaSCript?
+
+`this` in JavaScript refers to the execution context of a function, determined by how the function is called. In objects and classes, it points to the owning object; in global functions it’s the global object (or undefined in strict mode). Arrow functions inherit this lexically from the surrounding scope.
+
+- Inside objects → refers to the object
+- In functions → depends on how the function is called
+- In classes → refers to the class instance
+- In arrow functions → lexically inherited from the surrounding scope
+
+<div align="right"><b><a href="#javascript">↥ Back to top</a></b></div>
+
+### Q 45. What is Debouncing and Throttling?.
+
+**Debouncing:** Debouncing ensures that a function is invoked only after a certain period of inactivity.
+
+- If the event keeps firing, the timer resets, and the function execution is delayed until the events stop.
+- Useful to limit excessive function calls for events that trigger rapidly (like scroll, resize, input).
+
+```js
+const searchInput = document.getElementById("search");
+
+function fetchResults() {
+  console.log("Fetching API results...");
+}
+
+const debouncedFetch = debounce(fetchResults, 300);
+
+searchInput.addEventListener("input", debouncedFetch);
+
+function debounce(fn, delay) {
+  let timer;
+  return function (...args) {
+    clearTimeout(timer);
+    timer = setTimeout(() => fn.apply(this, args), delay);
+  };
+}
+```
+
+**Throttling:** Throttling ensures that a function is invoked at most once in a specified time interval, regardless of how many times the event fires.
+
+- It guarantees regular, periodic execution instead of waiting for inactivity.
+- Useful when you want continuous but controlled updates, like scrolling or mouse move events.
+
+```js
+window.addEventListener(
+  "scroll",
+  throttle(() => {
+    console.log("Scroll event handled!");
+  }, 200),
+);
+
+function throttle(fn, limit) {
+  let lastCall = 0;
+  return function (...args) {
+    const now = Date.now();
+    if (now - lastCall >= limit) {
+      lastCall = now;
+      fn.apply(this, args);
+    }
+  };
+}
+```
+
+| Use Case        | Debounce                               | Throttle                               |
+| --------------- | -------------------------------------- | -------------------------------------- |
+| API calls       | Wait until user stops typing           | Limit API calls to one per X ms        |
+| UI rendering    | Expensive operations after input stops | Smooth updates during scrolling / drag |
+| Event listeners | `keyup`, `resize`, `input`             | `scroll`, `mousemove`, `wheel`         |
+
+**Interview-Ready Answer**
+
+Debouncing delays function execution until events stop firing, ideal for limiting rapid triggers like input typing. Throttling limits function execution to at most once per interval, useful for periodic updates like scrolling. Both optimize performance and prevent excessive computations in high-frequency events.
+
+<div align="right"><b><a href="#javascript">↥ Back to top</a></b></div>
+
+### Q 46. What is Garbage collection and how it works?.
+
+Garbage Collection automatically frees memory used by objects that are no longer reachable from the root. It uses mark-and-sweep, cleaning up even circular references. You never manually free memory in JS; the engine handles it.
+
+### How It Works
+
+**Reachability:** An object is reachable if you can access it directly or indirectly from a root.
+
+```js
+let user = { name: "Alice" }; // reachable via 'user'
+let temp = user; // another reference
+
+user = null; // object still reachable via 'temp'
+temp = null; // now object is unreachable → eligible for GC
+```
+
+**Mark-and-Sweep Algorithm:**
+
+Most JS engines use this:
+
+- Mark Phase – Start from roots → mark all reachable objects.
+- Sweep Phase – All unmarked objects → removed from memory.
+
+```js
+let obj1 = { foo: "bar" };
+let obj2 = { obj1 }; // obj2 references obj1
+
+obj1 = null; // obj1 itself is unreachable from root
+// But obj2 still references the original object, so it is not collected
+
+obj2 = null; // now object has no references → GC collects it
+```
+
+**Circular References:** JavaScript GC handles them correctly if the objects are unreachable from roots:
+
+```js
+let objA = {};
+let objB = {};
+
+objA.ref = objB;
+objB.ref = objA;
+
+objA = null;
+objB = null; // Both objects collected despite circular reference
+```
+
+**Temporal Dead Zone (TDZ) and GC:** Variables declared with let or const are hoisted but uninitialized, so they are in TDZ. GC ignores them until initialized:
+
+```js
+{
+  console.log(a); // ReferenceError, TDZ
+  let a = { foo: "bar" };
+} // after block ends, object is unreachable → GC collects it
+```
+
+<div align="right"><b><a href="#javascript">↥ Back to top</a></b></div>
+
+### Q 47. What is Temporal Dead Zone for let/const?
+
+The Temporal Dead Zone (TDZ) is the period between entering a scope and declaring a let or const variable, during which accessing it causes a ReferenceError.It ensures variables aren’t used before initialization, unlike var which is hoisted and initialized with undefined.
+
+**Example:**
+
+```js
+{
+  console.log(a); // ReferenceError: Cannot access 'a' before initialization
+  let a = 10;
+
+  console.log(b); // ReferenceError: Cannot access 'b' before initialization
+  const b = 20;
+
+  console.log(a, b); // 10 20 → works after declaration
+}
+```
+
+<div align="right"><b><a href="#javascript">↥ Back to top</a></b></div>
+
+### Q 48. What is Functions and its types?
+
+A function in JavaScript is a reusable block of code that can take parameters and return values. Types include function declarations, function expressions, arrow functions, generator functions, and async functions. Functions are first-class citizens and can be used as callbacks, returned from other functions, or assigned to variables.
+
+**Types of Functions**
+
+**1. Function Declaration:** A named function defined using the function keyword. Hoisted, so can be called before declaration.
+
+```js
+function greet(name) {
+  console.log(`Hello, ${name}`);
+}
+greet("Alice"); // Hello, Alice
+```
+
+**2. Function Expression:** A function assigned to a variable. Not hoisted, so can only be called after declaration.
+
+```js
+const greet = function (name) {
+  console.log(`Hi, ${name}`);
+};
+greet("Bob"); // Hi, Bob
+```
+
+**3. Arrow Function:** Introduced in ES6. Shorter syntax, does not have its own this; inherits this from surrounding scope.
+
+```js
+const greet = (name) => console.log(`Hey, ${name}`);
+greet("Charlie"); // Hey, Charlie
+```
+
+**4. Anonymous Function:** A function without a name, usually used as a callback or IIFE.
+
+```js
+// Callback
+setTimeout(function () {
+  console.log("Delayed execution");
+}, 1000);
+
+// IIFE
+(function () {
+  console.log("Immediately invoked");
+})();
+```
+
+**5. Named Function Expression:** A function expression with a name. Useful for recursion or debugging.
+
+```js
+const factorial = function fact(n) {
+  return n <= 1 ? 1 : n * fact(n - 1);
+};
+console.log(factorial(5)); // 120
+```
+
+**6. Generator Function:** Declared with function\*. Can pause and resume execution using yield.
+
+```js
+function* gen() {
+  yield 1;
+  yield 2;
+  yield 3;
+}
+const g = gen();
+console.log(g.next().value); // 1
+console.log(g.next().value); // 2
+```
+
+**7. Async Function:** Declared with async. Returns a Promise and allows use of await.
+
+```js
+async function fetchData() {
+  const response = await fetch("/api/data");
+  return response.json();
+}
+```
+
+<div align="right"><b><a href="#javascript">↥ Back to top</a></b></div>
+
+### Q 49. What is Objects & Prototypes?
+
+Objects in JavaScript are key-value stores that can hold data and methods. Every object has a prototype, which is another object from which it can inherit properties and methods, enabling code reuse and inheritance. The prototype chain allows JavaScript to look up properties dynamically across linked prototypes.
+
+**Objects:** In JavaScript, an object is a collection of key-value pairs used to store related data and functionality.
+
+- Keys are called properties; values can be primitives, objects, or functions.
+- Functions inside objects are called methods.
+- Objects are dynamic, meaning you can add, update, or delete properties at runtime.
+
+```js
+const person = {
+  name: "Alice",
+  age: 25,
+  greet() {
+    console.log(`Hello, I'm ${this.name}`);
+  },
+};
+person.greet(); // Hello, I'm Alice
+```
+
+**Prototypes:** In JavaScript, every object has a prototype (except objects created with Object.create(null)).
+
+- A prototype is another object from which properties and methods are inherited.
+- This allows shared behavior, memory efficiency, and inheritance without classes.
+- The **proto** or Object.getPrototypeOf(obj) shows the prototype of an object.
+
+```js
+const animal = {
+  eat() {
+    console.log("Eating");
+  },
+};
+
+const dog = Object.create(animal);
+dog.bark = function () {
+  console.log("Barking");
+};
+
+dog.eat(); // Eating → inherited from prototype
+dog.bark(); // Barking
+```
+
+**Prototype Chain Example**
+
+```js
+function Person(name) {
+  this.name = name;
+}
+Person.prototype.greet = function () {
+  console.log(`Hi, I'm ${this.name}`);
+};
+
+const bob = new Person("Bob");
+bob.greet(); // Hi, I'm Bob
+
+console.log(bob.__proto__ === Person.prototype); // true
+console.log(Person.prototype.__proto__ === Object.prototype); // true
+```
+
+<div align="right"><b><a href="#javascript">↥ Back to top</a></b></div>
+
+### Q 50. What is DOM & Events?
+
+The DOM (Document Object Model) represents an HTML document as a tree of objects, allowing JavaScript to dynamically manipulate content, structure, and style. Events are actions like clicks, key presses, or scrolls that JS can respond to via event listeners. Together, they make web pages interactive, and concepts like bubbling, capturing, and delegation are key for efficient event handling.
+
+**DOM (Document Object Model)**
+
+- The DOM is a programming interface that represents an HTML or XML document as a tree of objects.
+- Each element, attribute, and text node becomes an object you can manipulate via JavaScript.
+- The DOM allows dynamic changes to content, structure, and style of a webpage without reloading.
+
+```js
+const heading = document.getElementById("title");
+heading.textContent = "Hello, DOM!"; // Updates the text of the element
+```
+
+**Events**
+
+- An event is an action or occurrence in the browser that the JS code can respond to.
+- Examples: click, mouseover, keydown, submit, scroll.
+- Event listeners attach functions (callbacks) to respond to these events.
+
+```js
+const btn = document.querySelector("button");
+
+btn.addEventListener("click", function () {
+  console.log("Button clicked!");
+});
+```
+
+<div align="right"><b><a href="#javascript">↥ Back to top</a></b></div>
+
+### Q 52. What is Lexical scope?
+
+Lexical scope in JavaScript means a function can access variables from the scope in which it was defined, not where it is called. This allows inner functions to “remember” outer variables, forming the basis for closures. Lexical scoping is static and applies to var, let, and const.
+
+**Example 1:**
+
+```js
+function outer() {
+  let outerVar = "I am outside!";
+
+  function inner() {
+    console.log(outerVar); // inner has access to outerVar
+  }
+
+  inner();
+}
+
+outer(); // Output: I am outside!
+```
+
+- inner function can access outerVar because of lexical scope.
+- The variable is looked up in the scope where the function was defined, not where it’s called.
+
+**Closure Example with Lexical Scope**
+
+```js
+function counter() {
+  let count = 0;
+
+  return function () {
+    count++;
+    return count;
+  };
+}
+
+const increment = counter();
+console.log(increment()); // 1
+console.log(increment()); // 2
+```
+
+- The inner function remembers the count variable from its defining scope → lexical scope + closure.
+
+<div align="right"><b><a href="#javascript">↥ Back to top</a></b></div>
+
+### Q 53. JavaSCript.
+
+<div align="right"><b><a href="#javascript">↥ Back to top</a></b></div>
+
 ##

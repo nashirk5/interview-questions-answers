@@ -2052,12 +2052,8 @@ main.ts bootstraps the application.
 
 <div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
 
-### Q . Angular
+### Q . Error Handling
 
 <div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
-
-<!-- ### Q . What?
-
-<div align="right"><b><a href="#angular">↥ Back to top</a></b></div> -->
 
 ##

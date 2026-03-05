@@ -506,7 +506,7 @@ child.send("Hello from parent!");
 
 ### Q 14. What is the event loop in Node.js, and how is it handled in depth?
 
-Event-loop is a mechanism that handles asynchronous operations by contenous checking in the call stack and the task queue. When the call stack is empty, it pushes the tasks from the task queue to the call stack, enabling non-blocking, asynchronous execution.
+Event-loop is a mechanism that handles asynchronous operations by continuos checking in the call stack and the task queue. When the call stack is empty, it pushes the tasks from the task queue to the call stack, enabling non-blocking, asynchronous execution.
 
 ![css_box_model](../assets/images/nodejs_async_code_execution_flow.png)
 
