@@ -6,95 +6,110 @@
 
 ### Q 1. What is Javascript?
 
-JavaScript is a dynamically typed, single-threaded programming language primarily used for web development. It can run on both the client side and the server side. It also supports asynchronous operations, as well as object-oriented and functional programming.
+JavaScript is a dynamically typed, single-threaded language used for building web and server side applications. It runs in browsers and on the server using environments like Node.js. It follows an event-driven, non-blocking and asynchronous programming.
 
-> JavaScript, created by **Brendan Eich** in **1995**.
+> _**JavaScript, created by Brendan Eich in 1995.**_
 
 <div align="right"><b><a href="#javascript">↥ Back to top</a></b></div>
 
 ### Q 2. What are the data types in JavaScript?
 
-JavaScript is a dynamically typed (also called loosely typed) scripting language. In JavaScript, variables can receive different data types over time.
+In JavaScript, data types are divided into primitive and non-primitive data type.
 
-**1. Primitive Data Type:**
+**1. Primitive:**
 
-1. **Number:** Represents numeric values, including integers and floating-point numbers.
-2. **String:** Represents textual data enclosed in single quotes ('') or double quotes ("").
+1. **Number:** Represents integers & floating-point numbers.
+2. **String:** Represents text values.
 3. **Boolean:** Represents a logical value, either true or false.
 4. **Undefined:** Represents a variable that has been declared but not assigned a value.
-5. **Null:** Represents the intentional absence of any value.
-6. **Symbol (ES6):** Represents a unique and immutable value that may be used as the key of an object property.
-7. **BigInt:** BigInt is a built-in object in JavaScript that provides a way to represent whole numbers larger than 253-1.
+5. **Null:** Represents the intentional empty value.
+6. **Symbol (ES6):** Represents a unique and immutable value and used for object keys.
+7. **BigInt:** Represents large integers beyond Number limit.
 
-**2. Non Primitive Data Type:**
+**2. Non Primitive:**
 
 1. **Object:** Represents a collection of key-value pairs where keys are strings (or symbols) and values can be of any data type, including other objects.
 2. **Array:** Represents a collection of elements, usually of the same data type, indexed by non-negative integers.
 
-**3. Special Data Type:**
-
-1. **Function:** Functions are treated as first-class citizens, meaning they can be assigned to variables, passed as arguments to other functions, and returned from other functions.
+> _**👉 Note:** Primitive types are copied by value, while objects are copied by reference._
 
 <div align="right"><b><a href="#javascript">↥ Back to top</a></b></div>
 
 ### Q 3. What are difference between var, let and const?
 
-| keyword    | var               | let              | const            |
-| ---------- | ----------------- | ---------------- | ---------------- |
-| Scope      | Global & Function | Function & Block | Function & Block |
-| Reassigned | Yes               | Yes              | No               |
-| Redeclare  | Yes               | No               | No               |
-| Hoisted    | Yes               | No               | No               |
+| Feature        | `var`                               | `let`                                | `const`                              |
+| -------------- | ----------------------------------- | ------------------------------------ | ------------------------------------ |
+| Scope          | Function-scoped                     | Block-scoped                         | Block-scoped                         |
+| Re-declaration | ✅ Allowed                          | ❌ Not allowed                       | ❌ Not allowed                       |
+| Reassignment   | ✅ Allowed                          | ✅ Allowed                           | ❌ Not allowed                       |
+| Hoisting       | ✅ Yes (initialized as `undefined`) | ✅ Yes (TDZ, not usable before init) | ✅ Yes (TDZ, not usable before init) |
+
+> _**👉 Note:** let and const are hoisted, but due to the Temporal Dead Zone (TDZ) and cannot be accessed before declaration._
 
 ### Q 4. What is hoisting?
 
-Hoisting is JavaScript’s behavior of moving variable and function declarations to the top of their scope during compilation. Function declarations are fully hoisted, while variables declared with var are hoisted with an initial value of undefined. Using let and const avoids some hoisting pitfalls due to the temporal dead zone.
+Hoisting is JavaScript’s behavior of moving variable and function declarations to the top of their scope during compilation. Function declarations are fully hoisted, while variables declared with var are hoisted with an initial value of undefined. let and const are hoisting but due to the temporal dead zone, gives reference error.
 
-> _**NOTE:** It's important to understand that only the declarations are **hoisted**, not the initializations or assignments._\
-> _To avoid hoisting, you can run javascript in strict mode by using `use strict` on top of the code_
+> _**👉 NOTE:** Only declarations are hoisted, not initializations_
+
+```js
+console.log(a); // undefined
+var a = 10;
+
+console.log(b); // ❌ ReferenceError (TDZ)
+let b = 20;
+
+sayHi(); // ✅ works
+function sayHi() {
+  console.log("Hi");
+}
+```
 
 ### Q 5. What is closure?
 
-A closure is a function that “remembers” the variables from its outer scope, even after that outer function has finished executing. This allows the inner function to access and manipulate those variables whenever it’s called.
+A closure is a function that remembers the variables from its outer scope, even after the outer function has finished executing. This allows the inner function to access and manipulate those variables whenever it’s called.
+
+**Common Use Cases**
+
+- Data privacy (like private variables)
+- Function factories
+- Maintaining state (e.g., counters, caching)
 
 ```javascript
 function outer() {
-  let counter = 0;
+  let count = 0;
 
   return function inner() {
-    counter++;
-    console.log(counter);
+    count++;
+    return count;
   };
 }
 
-const fn = outer();
-fn(); // 1
-fn(); // 2
-fn(); // 3
+const counter = outer();
+
+console.log(counter()); // 1
+console.log(counter()); // 2
+console.log(counter()); // 3
 ```
 
 <div align="right"><b><a href="#javascript">↥ Back to top</a></b></div>
 
 ### Q 6. What is passed by value and passed by reference?
 
-In JavaScript, primitives are passed by value, meaning a copy is passed to functions. Objects are passed by reference value, meaning the reference is copied and both variables point to the same object, so changes can affect the original.
-
-1. **Passed by Value:** When a primitive data type (such as numbers, strings, booleans, null, or undefined) is passed to a function, it is passed by value. This means that a copy of the value is passed to the function, and any changes made to the parameter inside the function do not affect the original variable outside the function.
+In JavaScript, primitives are passed by value, while objects are pass-by-reference.
+Pass by value means a copy of the value is passed, so changes don’t affect the original. Pass by reference means a reference is passed, so changes affect the original object.
 
 ```javascript
-function increment(x) {
-  x++;
-  return x;
+// Passed by Value:
+function update(x) {
+  return (x = 10);
 }
 
 let num = 5;
-console.log(increment(num)); // Output: 6
+console.log(update(num)); // Output: 10
 console.log(num); // Output: 5 (original variable remains unchanged)
-```
 
-2. **Passed by Reference:** When an object (including arrays and functions) is passed to a function, it is passed by reference. This means that a reference to the original object is passed to the function, rather than a copy of the object itself. Therefore, changes made to the object's properties or elements inside the function will affect the original object outside the function.
-
-```javascript
+// Passed by Reference:
 function addName(person) {
   person.name = "John";
   return person;
@@ -163,9 +178,10 @@ inviteEmployee2("Hello", "How are you?"); // Hello Jimmy Baily, How are you?
 
 <div align="right"><b><a href="#javascript">↥ Back to top</a></b></div>
 
-### Q 8. What is currying ?
+### Q 8. What is currying?
 
 Currying is a technique where a function with multiple arguments is transformed into a sequence of functions, each taking one argument at a time.
+Currying is mainly used to break down a function into reusable pieces and allow partial application.
 
 ```javascript
 // Normal function
@@ -191,7 +207,9 @@ console.log(addCurry(20)(20)(20)); // 60
 
 The rest parameter collects multiple arguments into an array inside a function, while the spread operator expands arrays or objects into individual elements. Both use the `...` syntax but serve opposite purposes.
 
-> _**NOTE:** Rest parameter should always be used at the last parameter of a function._
+The rest parameter collects multiple arguments into an array in function. The spread operator expands arrays or objects into individual elements. Both use the `...` syntax.
+
+> _**👉 NOTE:** Rest parameter should always be used at the last parameter of a function._
 
 1. **Rest Parameter (`...`):** Rest parameter is an improved way to handle function parameters which allows us to represent an indefinite number of arguments as an array.\
     _**Example:**_
@@ -260,19 +278,31 @@ The rest parameter collects multiple arguments into an array inside a function, 
 
 ### Q 10. What are Sets and WeakSet?
 
-1.  **Sets:** Sets are a new object type with ES6 (ES2015) that allow to create collections of unique values and It automatically removes duplicates. The values in a set can be either simple primitives like strings or integers, but more complex object types like object literals or arrays can also be part of a set.
-
-    _**Example:**_
+1.  **Sets:** Sets are a new object type in ES6, that allow to create collections of unique values and it automatically removes duplicates. It can hold any data type, including primitives and objects.
 
     ```javascript
     let numbers = new Set([10, 20, 20, 30, 40, 50]);
 
-        console.log(numbers); Set(5) { 10, 20, 30, 40, 50 }
-        console.log(typeof numbers); // Object
+    console.log(numbers); Set(5) { 10, 20, 30, 40, 50 }
+    console.log(typeof numbers); // Object
+
+
+    const set = new Set();
+
+    set.add(1);
+    set.add(2);
+    set.add(2); // duplicate ignored
+    set.add("hello");
+
+    console.log(set); // {1, 2, "hello"}
+    console.log(set.has(2)); // true
+
+    for (let value of set) {
+      console.log(value); // iterable
+    }
     ```
 
-2.  **WeakSet:** Just like Set, WeakSet is also a collection of unique and ordered elements with some key differences. Weakset contains only objects and no other type. Unlike Set, WeakSet only has three methods, add() , delete() and has().\
-    _**Example:**_
+2.  **WeakSet:** WeakSet is a collection of unique objects and only allows object values. It is not iterable and does not maintain order. Objects are weakly referenced, so they can be garbage collected automatically.
 
     ```javascript
     const newSet = new Set([4, 5, 6, 7]);
@@ -285,31 +315,32 @@ The rest parameter collects multiple arguments into an array inside a function, 
     console.log(newSet3.has(obj1)); // true
     ```
 
+**🔥 Key Differences**
+
+- Set → any values, iterable, strong reference
+- WeakSet → only objects, not iterable, weak reference (GC-friendly)
+
 <div align="right"><b><a href="#javascript">↥ Back to top</a></b></div>
 
 ### Q 11. What are Map and WeakMap?
 
-1. **Map:** In javascript, Map is used to store key-value pairs. The key-value pairs can be of both primitive and non-primitive types. WeakMap is similar to Map with key differences.
-   - The keys and values in weakmap should always be an object.
-   - If there are no references to the object, the object will be garbage collected.
+1. **Map:** Map is a collection of key-value pairs where keys can be of any data type, including primitives and objects. It supports iteration
 
-     _**Example:**_
+   ```javascript
+   const map = new Map();
 
-     ```javascript
-     const map1 = new Map();
-     map1.set("Value", 1);
+   map.set("name", "Nashir");
+   map.set(1, "number key");
 
-     const map2 = new WeakMap();
-     map2.set("Value", 2.3); // Throws an error
+   console.log(map.get("name")); // Nashir
+   console.log(map.has(1)); // true
 
-     let obj = { name: "Vivek" };
-     const map3 = new WeakMap();
-     map3.set(obj, { age: 23 });
-     ```
+   for (let [key, value] of map) {
+     console.log(key, value); // key: name, value: Nashir; key: 1, value: number key
+   }
+   ```
 
-2. **WeakMap:** The WeakMap object is a collection of key/value pairs in which the keys are weakly referenced. In this case, keys must be objects and the values can be arbitrary values. WeakMap accepts only objects but not any primitive values (strings, numbers).
-
-   _**Example:**_
+2. **WeakMap:** WeakMap is similar to Map but only allows objects as keys and it is not iterable and has no size property. Keys are weakly referenced, so they can be garbage collected.
 
    ```javascript
    // WeakMap()
@@ -324,25 +355,30 @@ The rest parameter collects multiple arguments into an array inside a function, 
    console.log(map);
    ```
 
-**Difference between Map and WeakMap:**
+**🔥 Key Differences**
 
-1. A WeakMap accepts only objects as keys whereas a Map, in addition to objects, accepts primitive datatype such as strings, numbers etc.
-2. WeakMap objects doesn't avert garbage collection if there are no references to the object which is acting like a key. Therefore there is no method to retrieve keys in WeakMap, whereas in Map there are methods such as Map.prototype.keys() to get the keys.
-3. There is no size property exists in WeakMap.
+- Map → any key type, iterable, strong reference
+- WeakMap → only object keys, not iterable, weak reference
 
 <div align="right"><b><a href="#javascript">↥ Back to top</a></b></div>
 
 ### Q 12. What is destructing?
 
-Destructuring in JavaScript is a convenient way to extract multiple values from arrays or objects and assign them to variables using a concise syntax. It allows you to "unpack" values from data structures like arrays and objects into separate variables, making it easier to work with complex data in a more expressive and succinct manner.
-
-_**Example:**_
+Destructuring is a convenient way to extract multiple values from arrays or objects into variables. It makes code cleaner and more readable.
 
 ```javascript
-const person = { name: "John", age: 30 };
-const { name, age } = person;
-console.log(name); // Output: "John"
-console.log(age); // Output: 30
+// Arrays
+const arr = [1, 2, 3];
+const [a, b] = arr;
+
+console.log(a, b); // 1 2
+
+// Objects
+const user = { name: "Nashir", age: 30 };
+const { name, age } = user;
+
+console.log(name); // Nashir
+console.log(age); // 30
 ```
 
 <div align="right"><b><a href="#javascript">↥ Back to top</a></b></div>
@@ -462,7 +498,8 @@ Number.isNaN("Hello"); // false
 
 ### Q 19. What are arrow/lambda functions?
 
-An arrow function is a shorter/concise syntax for a function expression and does not have its own this, arguments, super, or new.target. These functions are best suited for non-method functions, and they cannot be used as constructors.
+An arrow function is a concise syntax for writing function expressions. It does not have its own `this`, `arguments`, or `super`, and instead inherits `this` from the surrounding scope. It also cannot be used as a constructor.
+.
 
 _**Example:**_
 
@@ -519,11 +556,10 @@ _**Example:**_, `Array.prototype.map()`, `Array.prototype.filter()`, `Array.prot
 
 Here are some common types of errors in JavaScript:
 
-1. **Syntax Errors:** These errors prevent the code from being executed and are typically detected during the parsing phase.
+1. **Syntax Errors:** Occur when code breaks JavaScript grammar rules, detected before execution.
 
 ```javascript
-let x = 10;
-console.log(x
+console.log("Hello" // Missing closing parenthesis
 ```
 
 2. **Reference Errors:** Reference errors occur when code tries to access a variable or function that does not exist or is not in scope. These errors are thrown at runtime when the JavaScript engine cannot find the referenced variable or function.
@@ -1184,38 +1220,46 @@ A mutable object is an object whose state can be modified after it is created. A
 
 ### Q 37. What is shallow copy and deep copy?
 
-1. **Shallow Copy:** Shallow copy is a bit-wise copy of an object. A new object is created that has an exact copy of the values in the original object. If any of the fields of the object are references to other objects, just the reference addresses are copied i.e., only the memory address is copied.\
-   _A Shallow copy of the object can be done using `object.assign()`_
+Shallow copy copies only the first level of an object, while nested objects are still referenced. Deep copy creates a completely independent copy including all nested objects. Shallow copy can be done using spread operator, while deep copy requires techniques like JSON methods.
+
+1. **Shallow Copy:** A shallow copy creates a new object, but only copies the top-level properties. Nested objects are still referenced, not copied.
 
    ```javascript
-   // Shallow Copy
-   let obj = {
-     a: 10,
-     b: 20,
+   const obj1 = {
+     name: "John",
+     address: { city: "Delhi" },
    };
 
-   let objCopy = Object.assign({}, obj);
-   console.log(objCopy); // Result - { a: 1, b: 2 }
+   const obj2 = { ...obj1 };
+
+   obj2.name = "Nashir";
+   obj2.address.city = "Mumbai";
+
+   console.log(obj1); // { name: 'John', address: { city: 'Mumbai' } }
+   console.log(obj2); // { name: 'Nashir', address: { city: 'Mumbai' } }
    ```
 
-2. **Deep Copy:** A deep copy copies all fields, and makes copies of dynamically allocated memory pointed to by the fields. A deep copy occurs when an object is copied along with the objects to which it refers.\
-   _A Deep copy of the object can be done using `JSON.parse(JSON.stringify(object))`_
+2. **Deep Copy:** A deep copy creates a completely new object, including all nested objects. No references are shared.
 
    ```javascript
-   // Deep Copy
-   let obj2 = {
-     a: 10,
-     b: {
-       c: 20,
-     },
+   const obj1 = {
+     name: "John",
+     address: { city: "Delhi" },
    };
 
-   let newObj = JSON.parse(JSON.stringify(obj2));
-   obj2.b.c = 30;
+   const obj2 = JSON.parse(JSON.stringify(obj1));
 
-   console.log(obj2); // { a: 10, b: { c: 20 } }
-   console.log(newObj); // { a: 10, b: { c: 20 } }
+   obj2.name = "Nashir";
+   obj2.address.city = "Mumbai";
+
+   console.log(obj1); // { name: 'John', address: { city: 'Delhi' } }
+   console.log(obj2); // { name: 'Nashir', address: { city: 'Mumbai' } }
    ```
+
+**🔥 Key Points**
+
+- Spread operator `{...obj}` → shallow copy
+- `JSON.parse(JSON.stringify(obj))` → simple deep copy (but has limitations)
 
 <div align="right"><b><a href="#javascript">↥ Back to top</a></b></div>
 
@@ -1313,18 +1357,18 @@ The Event Loop is the process that continuously checks if the Call Stack is empt
 
 <div align="right"><b><a href="#javascript">↥ Back to top</a></b></div>
 
-### Q 44. What is this in JavaSCript?
+### Q 43. What is this in JavaScript?
 
-`this` in JavaScript refers to the execution context of a function, determined by how the function is called. In objects and classes, it points to the owning object; in global functions it’s the global object (or undefined in strict mode). Arrow functions inherit this lexically from the surrounding scope.
+`this` in JavaScript refers to the execution context of a function, and its value depends on how the function is called.
 
 - Inside objects → refers to the object
 - In functions → depends on how the function is called
 - In classes → refers to the class instance
-- In arrow functions → lexically inherited from the surrounding scope
+- In arrow functions → inherited from outer scope
 
 <div align="right"><b><a href="#javascript">↥ Back to top</a></b></div>
 
-### Q 45. What is Debouncing and Throttling?.
+### Q 44. What is Debouncing and Throttling?.
 
 **Debouncing:** Debouncing ensures that a function is invoked only after a certain period of inactivity.
 
@@ -1388,9 +1432,9 @@ Debouncing delays function execution until events stop firing, ideal for limitin
 
 <div align="right"><b><a href="#javascript">↥ Back to top</a></b></div>
 
-### Q 46. What is Garbage collection and how it works?.
+### Q 45. What is Garbage collection and how it works?.
 
-Garbage Collection automatically frees memory used by objects that are no longer reachable from the root. It uses mark-and-sweep, cleaning up even circular references. You never manually free memory in JS; the engine handles it.
+Garbage collection is an automatic process that frees up memory by removing unreachable objects. JavaScript identifies unused objects based on reachability from the root scope. It mainly uses the mark-and-sweep algorithm to clean up memory automatically.
 
 ### How It Works
 
@@ -1445,7 +1489,7 @@ objB = null; // Both objects collected despite circular reference
 
 <div align="right"><b><a href="#javascript">↥ Back to top</a></b></div>
 
-### Q 47. What is Temporal Dead Zone for let/const?
+### Q 46. What is Temporal Dead Zone for let/const?
 
 The Temporal Dead Zone (TDZ) is the period between entering a scope and declaring a let or const variable, during which accessing it causes a ReferenceError.It ensures variables aren’t used before initialization, unlike var which is hoisted and initialized with undefined.
 
@@ -1465,7 +1509,7 @@ The Temporal Dead Zone (TDZ) is the period between entering a scope and declarin
 
 <div align="right"><b><a href="#javascript">↥ Back to top</a></b></div>
 
-### Q 48. What is Functions and its types?
+### Q 47. What is Functions and its types?
 
 A function in JavaScript is a reusable block of code that can take parameters and return values. Types include function declarations, function expressions, arrow functions, generator functions, and async functions. Functions are first-class citizens and can be used as callbacks, returned from other functions, or assigned to variables.
 
@@ -1543,7 +1587,7 @@ async function fetchData() {
 
 <div align="right"><b><a href="#javascript">↥ Back to top</a></b></div>
 
-### Q 49. What is Objects & Prototypes?
+### Q 48. What is Objects & Prototypes?
 
 Objects in JavaScript are key-value stores that can hold data and methods. Every object has a prototype, which is another object from which it can inherit properties and methods, enabling code reuse and inheritance. The prototype chain allows JavaScript to look up properties dynamically across linked prototypes.
 
@@ -1605,7 +1649,7 @@ console.log(Person.prototype.__proto__ === Object.prototype); // true
 
 <div align="right"><b><a href="#javascript">↥ Back to top</a></b></div>
 
-### Q 50. What is DOM & Events?
+### Q 49. What is DOM & Events?
 
 The DOM (Document Object Model) represents an HTML document as a tree of objects, allowing JavaScript to dynamically manipulate content, structure, and style. Events are actions like clicks, key presses, or scrolls that JS can respond to via event listeners. Together, they make web pages interactive, and concepts like bubbling, capturing, and delegation are key for efficient event handling.
 
@@ -1636,7 +1680,7 @@ btn.addEventListener("click", function () {
 
 <div align="right"><b><a href="#javascript">↥ Back to top</a></b></div>
 
-### Q 52. What is Lexical scope?
+### Q 50. What is Lexical scope?
 
 Lexical scope in JavaScript means a function can access variables from the scope in which it was defined, not where it is called. This allows inner functions to “remember” outer variables, forming the basis for closures. Lexical scoping is static and applies to var, let, and const.
 
@@ -1680,8 +1724,8 @@ console.log(increment()); // 2
 
 <div align="right"><b><a href="#javascript">↥ Back to top</a></b></div>
 
-### Q 53. JavaSCript.
+<!-- ### Q 53. JavaSCript.
 
-<div align="right"><b><a href="#javascript">↥ Back to top</a></b></div>
+<div align="right"><b><a href="#javascript">↥ Back to top</a></b></div> -->
 
 ##
