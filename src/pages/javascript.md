@@ -1976,7 +1976,7 @@ var greet = function () {
 
 # JavaScript Tricky Interview Questions
 
-## 1. Hoisting
+### 1. Hoisting
 
 ```javascript id="zpq2w1"
 console.log(a);
@@ -2000,7 +2000,7 @@ ReferenceError;
 - `let` is hoisted but stays in TDZ
 </details>
 
-# 2. Closures
+### 2. Closures
 
 ```javascript id="i4mm16"
 function outer() {
@@ -2037,7 +2037,7 @@ Each function gets its own closure memory.
 
 </details>
 
-# 3. setTimeout with var
+### 3. setTimeout with var
 
 ```javascript id="sl2wws"
 for (var i = 0; i < 3; i++) {
@@ -2060,7 +2060,7 @@ for (var i = 0; i < 3; i++) {
 
 </details>
 
-# 4. setTimeout with let
+### 4. setTimeout with let
 
 ```javascript id="oj75dc"
 for (let i = 0; i < 3; i++) {
@@ -2083,7 +2083,7 @@ for (let i = 0; i < 3; i++) {
 
 </details>
 
-# 5. Event Loop
+### 5. Event Loop
 
 ```javascript id="h5l4f9"
 console.log("Start");
@@ -2115,7 +2115,7 @@ Promise callbacks go to the Microtask Queue which executes before Callback Queue
 
 </details>
 
-# 6. this Keyword
+### 6. this Keyword
 
 ```javascript id="kj1q9z"
 const user = {
@@ -2143,7 +2143,7 @@ The function lost its object context.
 
 </details>
 
-# 7. Array Reference
+### 7. Array Reference
 
 ```javascript id="g2f6w3"
 const arr1 = [1, 2];
@@ -2167,7 +2167,7 @@ Arrays are reference types.
 
 </details>
 
-# 8. Object Comparison
+### 8. Object Comparison
 
 ```javascript id="9lsz93"
 console.log([] == []);
@@ -2188,7 +2188,7 @@ Objects and arrays compare by reference, not by value.
 
 </details>
 
-# 9. Optional Chaining
+### 9. Optional Chaining
 
 ```javascript id="n7l6f2"
 const user = {};
@@ -2205,7 +2205,7 @@ undefined;
 
 </details>
 
-# 10. Promise Chaining
+### 10. Promise Chaining
 
 ```javascript id="xvd7wu"
 Promise.resolve(5)
