@@ -6,47 +6,51 @@
 
 ### Q 1. What is Angular?
 
-Angular is a popular open-source front-end web framework developed and maintained by Google. It is used to build dynamic, single-page web applications (SPAs). Angular utilizes TypeScript, a superset of JavaScript, and offers a comprehensive set of tools and capabilities like two-way data binding, dependency injection, routing, and component-based architecture..
+Angular is a popular open-source front-end web framework developed and maintained by Google. It is used to build dynamic, single-page web applications (SPAs). Angular utilizes TypeScript, a superset of JavaScript, and offers a comprehensive set of tools and capabilities like two-way data binding, dependency injection, routing, and component-based architecture.
 
 <div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
 
 ### Q 2. What are the Angular lifecycle hooks?
 
-**1. ngOnChanges(changes: SimpleChanges)**
+**1. ngOnChanges:**
 
-- Called when Angular sets or updates data-bound input properties (@Input()).
-- Receives a SimpleChanges object showing previous and current values.
+- Called whenever an `@Input()` value changes.
+- Used for: Detecting input changes from parent component.
 
-**2. ngOnInit()**
+**2. ngOnInit():**
 
 - Called once after the first ngOnChanges.
-- Ideal for initialization logic, e.g., fetching data.
+- Used for: API calls and Initial data loading.
 
-**3. ngDoCheck()**
+**3. ngDoCheck():**
 
-- Called during every change detection cycle.
-- Lets you implement custom change detection beyond Angular’s default.
+- Called during every change detection cycle. Lets you implement custom change detection beyond Angular’s default.
+- Used for: Custom change detection logic.
 
-**4. ngAfterContentInit()**
+**4. ngAfterContentInit():**
 
-- Called once after Angular projects external content into the component using - `<ng-content>`.
+- Called once after external content `ng-content` is projected into the component.
+- Used for: Accessing projected content.
 
-**5. ngAfterContentChecked()**
+**5. ngAfterContentChecked():**
 
 - Called after every check of projected content.
+- Used for: Responding to projected content updates.
 
-**6. ngAfterViewInit()**
+**6. ngAfterViewInit():**
 
-- Called once after Angular initializes the component’s view and its child views.
+- Called after component view and child views are initialized.
+- Used for: DOM access and `@viewChild` operations.
 
 **7. ngAfterViewChecked()**
 
 - Called after every check of the component’s view and its children.
+- Used for: Responding after view updates
 
 **8. ngOnDestroy()**
 
 - Called just before the component/directive is destroyed.
-- Ideal for cleanup, e.g., unsubscribing from Observables, detaching event listeners.
+- Used for: Cleanup, Unsubscribing Observables and Clearing timers.
 
 <div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
 
@@ -67,7 +71,7 @@ Angular is a popular open-source front-end web framework developed and maintaine
 
 ### Q 4. What is Component?
 
-Components are the basic building blocks, which control a part of the UI. A component is defined with a **@Component** decorator. Every component consists of three parts.
+Components are the main building blocks, which control a part of the UI. A component is defined with a `@Component` decorator. Every component consists of three parts.
 
 - **Template:** which loads the view for the component
 - **Stylesheet :** which defines the look and feel for the component
@@ -90,12 +94,12 @@ export class TestComponent implements OnInit {
 
 ### Q 5. What is Module?
 
-A module is a place where we can group components, directives, services, and pipes. A module is defined with a **@NgModule** decorator. By default, modules are of two types.
+A module is a place where we can group components, directives, services, and pipes. A module is defined with a `@NgModule` decorator. There are two types of modules.
 
 - **Root Module:**
 - **Feature Module:**
 
-> _**NOTE:** Every application can have only one root module whereas, it can have one or more feature modules._
+> _**👉 NOTE:** Every application can have only one root module whereas, it can have one or more feature modules._
 
 ```typescript
 import { BrowserModule } from "@angular/platform-browser";
@@ -117,7 +121,7 @@ export class AppModule {}
 
 ### Q 6. What is Service?
 
-Services are objects which get instantiated only once during the lifetime of an application. The main objective of a service is to share data, functions with different components of an Angular application. A service is defined with a **@Injectable** decorator.
+Services are objects which get instantiated only once during the lifetime of an application. The main objective of a service is to share data, functions with different components of an Angular application. A service is defined with a `@Injectable` decorator.
 
 ```typescript
 import { Injectable } from "@angular/core";
@@ -139,11 +143,11 @@ Metadata is used to decorate a class so that it can configure the expected behav
 
 ### Q 8. What is Decorators?
 
-Decorators are design patterns used to decoration of a class without modifying the source code.
+Decorators are functions that provide metadata to Angular classes, helping Angular to understand how they should behave.
 
 There are four main types of angular decorators:
 
-1. **Class Decorators:** e.g. @Component and @NgModule
+1. **Class Decorators:** e.g. `@Component`, `@NgModule` and `@Pipe`
 
 ```typescript
 import { NgModule, Component } from "@angular/core";
@@ -170,7 +174,7 @@ export class MyModule {
 }
 ```
 
-2. **Property Decorators:** e.g. @Input() and @Output()
+2. **Property Decorators:** e.g. `@Input()`, `@Output()`, `@ViewChild` and `@ViewChildren`
 
 ```typescript
 import { Component, Input } from "@angular/core";
@@ -187,7 +191,7 @@ export class MyComponent {
 <prop-component [propProperty]="propData"></prop-component>
 ```
 
-3. **Method Decorators:** e.g. @HostListener()
+3. **Method Decorators:** e.g. `@HostListener()`
 
 ```typescript
 import { Component, HostListener } from "@angular/core";
@@ -204,7 +208,7 @@ export class MyComponent {
 }
 ```
 
-4. **Parameter Decorators:** e.g. @Inject()
+4. **Parameter Decorators:** e.g. `@Inject()`
 
 ```typescript
 import { Component, Inject } from "@angular/core";
@@ -225,13 +229,15 @@ export class MyComponent {
 
 ### Q 9. What is Directive?
 
-Directives are used add behaviour to an existing DOM element or an existing component instance.
+Directives are used to modify the behavior, appearance of DOM elements.
 
 **Types of directives:**
 
 1. **Component directives:** These are directives with a template.
 2. **Structural directives:** These directives change the DOM layout by adding and removing DOM elements. Ex. **`ngIf`, `ngFor`,** and **`ngSwitch`**.
 3. **Attribute Directives:** These directives change the appearance or behavior of an element, component, or another directive. Ex. **`ngClass`** and **`ngStyle`**.
+
+> _**👉 NOTE:** The `*` is syntactic sugar for Angular’s internal `<ng-template>`._
 
 <div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
 
@@ -262,30 +268,30 @@ In the HTML page you can use it like a below
 
 ### Q 11. What is Data Binding
 
-Data binding define communication between a component and template, making it very easy to define interactive applications without worrying about pushing and pulling data.
+Data Binding is a technique used to synchronize data between the Angular component and the HTML template.
 
 There are Four types of Data binding
 
-1. **Interpolation / One way data biding {{ value }}:** Adds the value of a property from the component.
+1. **Interpolation / One way data biding `{{ }}`:** Used to display data from component to template.
 
 ```html
 <p>Name: {{ title }}</p>
 <p>{{ 1 + 1 }}</p>
 ```
 
-2. **Two-way data binding [(ngModel)] = "value":** Two-way data binding allows to have the data flow both ways. For example, in the below code snippet, both the email DOM input and component email property are in sync
+2. **Two-way data binding `[(ngModel)]` = "value":** Two-way data binding allows to have the data flow both ways. For example, in the below code snippet, both the title DOM input and component title property are in sync.
 
 ```html
 <input type="text" [(ngModel)]="title" />
 ```
 
-3. **Property binding [property] = "value":** The value is passed from the component to the specified property or simple HTML attribute
+3. **Property binding `[]` = "value":** Used to bind component data to HTML element properties.
 
 ```html
 <input type="text" [disabled]="isDisabled" />
 ```
 
-4. **Event binding (event) = "function":** When a specific DOM event happens (eg.: click, change, keyup), call the specified method in the component
+4. **Event binding (event) = "function":** Used to handle user events from template to component.
 
 ```html
 <button (click)="onClick()"></button>
@@ -295,7 +301,7 @@ There are Four types of Data binding
 
 ### Q 12. What are Pipes?
 
-Pipes are simple functions that use template expressions to accept data as input and transform it into a desired output. For example, let us take a pipe to transform a component's text into upper case using uppercase pipe. Ex. `DatePipe`, `UpperCasePipe`, and `CurrencyPipe`
+Pipes are used to transform or format data in Angular templates without changing the original value. They take input data, process it, and return a transformed output. They are written using the `|` symbol.
 
 ```html
 <p>Hello {{ name | uppercase }}</p>
@@ -305,33 +311,28 @@ Pipes are simple functions that use template expressions to accept data as input
 
 ### Q 13. Difference between Pure and Impure pipe?
 
-A pure pipe is only called when Angular detects a change in the value or the parameters passed to a pipe. For example, any changes to a primitive input value (String, Number, Boolean, Symbol) or a changed object reference (Date, Array, Function, Object). An impure pipe is called for every change detection cycle no matter whether the value or parameters changes. i.e, An impure pipe is called often, as often as every keystroke or mouse-move.
+A pure pipe runs only when Angular detects a change in the input value or its reference. This includes changes in primitive values like `String`, `Number`, `Boolean`, and `Symbol`, or when the reference of objects such as `Array`, `Object`, `Date`, or `Function` changes.
+
+An impure pipe runs during every change detection cycle, even if the value has not changed. Because of this, it can execute very frequently, such as on every keystroke or mouse movement.
 
 <div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
 
 ### Q 14. What is the async pipe?
 
-The AsyncPipe subscribes to an observable or promise and returns the latest value it has emitted. When a new value is emitted, the pipe marks the component to be checked for changes.
-
-Let's take a time observable which continuously updates the view for every 2 seconds with the current time.
+The async pipe automatically subscribes to Observables or Promises and unsubscribes when the component is destroyed.
 
 ```typescript
-@Component({
-  selector: "async-observable-pipe",
-  template: `<div>
-    <code>observable|async</code>: Time: {{ time | async }}
-  </div>`,
-})
-export class AsyncObservablePipeComponent {
-  time: Observable<string>;
-  constructor() {
-    this.time = new Observable((observer) => {
-      setInterval(() => {
-        observer.next(new Date().toString());
-      }, 2000);
-    });
-  }
-}
+// Example with Observable
+users$ = this.userService.getUsers();
+
+<div *ngFor="let user of users$ | async">
+  {{ user.name }}
+</div>
+
+// Example with Promise
+message = Promise.resolve('Hello Angular');
+
+<p>{{ message | async }}</p>
 ```
 
 <div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
@@ -382,49 +383,37 @@ export class FilterPipe implements PipeTransform {
 
 ### Q 16. What is dependency injection?
 
-Dependency Injection (DI) allows a class to receive dependencies from another class. Most of the time in Angular, dependency injection is done by injecting a service class into a component or module class.
-
-_TestService.ts_
+Dependency Injection is a design pattern where Angular automatically provides required dependencies (services or objects) to a class instead of the class creating them manually.
 
 ```typescript
-import { Injectable } from "@angular/core";
-
-@Injectable()
-export class TestService {
-  constructor() {}
-
-  login(data) {
-    // Call api
-  }
-}
-```
-
-_AppComponent.ts_
-
-```typescript
-import { Component } from "@angular/core";
-import { TestService } from "./test.service";
-
-@Component({
-  selector: "app-root",
-  templateUrl: "./app.component.html",
-  styleUrls: ["./app.component.css"],
-  providers: [TestService],
+@Injectable({
+  providedIn: "root",
 })
-export class AppComponent {
-  constructor(private testSrv: TestService) {}
-
-  submit() {
-    this.testSrv.login(data);
+export class UserService {
+  getUsers() {
+    return ["John", "Alex"];
   }
 }
 ```
+
+```typescript
+constructor(private userService: UserService) {
+  console.log(this.userService.getUsers());
+}
+```
+
+**How Angular DI Works**
+
+- Service is registered in Angular Injector
+- Component requests dependency
+- Injector creates/provides service instance
+- Angular injects it into constructor
 
 <div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
 
 ### Q 17. How do you share data between components?
 
-**1. Input/Output Binding:** You can pass data from a parent component to a child component using input bindings (@Input decorator) and receive data back from the child using output bindings (@Output decorator with EventEmitter).
+**1. Input/Output Binding:** You can pass data from a parent component to a child component using input bindings `@Input` decorator and receive data back from the child using output bindings `@Output` with EventEmitter.
 
 **2. Service:** You can create a service and inject it into the components that need to share data. The service acts as a central place to store and manage the shared data.
 
@@ -435,15 +424,21 @@ export class AppComponent {
 - **`ng-template`**
   - It is used to define templates that can be reused or conditionally rendered.
   - ```html
-    <ng-template #myTemplate>Your template content here</ng-template>
+    <div *ngIf="isLoggedIn; else loginTemplate">Dashboard</div>
+
+    <ng-template #loginTemplate> Please Login </ng-template>
     ```
+
 - **`ng-container`**
   - It is used to group elements together without adding an extra element to the DOM.
   - ```html
-    <ng-container *ngIf="data">Your template content here</ng-container>
+    <ng-container *ngIf="isVisible">
+      <h1>Hello</h1>
+      <p>Angular</p>
+    </ng-container>
     ```
 - **`ng-content`**
-  - It is used to content projection, allowing the parent component to inject content into a child component.
+  - It allows a parent component to pass HTML/content into a child component.
   - ```html
     <!-- Child component template -->
     <div class="child-component">
@@ -454,15 +449,20 @@ export class AppComponent {
     <app-child>
       <p>Content projected into child component</p>
     </app-child>
+
+    <!-- Output -->
+    <div class="child-component">
+      <p>Content projected into child component</p>
+    </div>
     ```
 
 <div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
 
 ### Q 19. What is view encapsulation?
 
-View encapsulation specifies if the component's template and styles can impact the entire program or vice versa.
+View Encapsulation controls how component styles are applied in Angular.
 
-**Angular offers three encapsulation methods:**
+**Types of View Encapsulation:**
 
 - **Emulated (Default):** Styles defined within a component's CSS file are scoped to that component only and do not affect the global styles.
 - **Native (Shadow DOM):** Shadow DOM provides true encapsulation by creating a separate DOM subtree for each component and encapsulating the styles within that subtree.
@@ -533,6 +533,7 @@ _**Example:**_
 Angular protects routes using Route Guards like CanActivate, CanActivateChild, CanDeactivate, CanLoad, and CanMatch. CanActivate is most common for authentication, while CanDeactivate prevents navigation with unsaved changes. In modern Angular, CanMatch is preferred over CanLoad for lazy-loaded modules.
 
 **✅ Types of Route Guards**
+
 **1️⃣ CanActivate**
 
 - Controls access before entering a route
@@ -687,8 +688,6 @@ Now it activates only when exact path matches.
 
 In Angular, an interceptor is a service that provides a way to intercept HTTP requests or responses before they are sent to the server or received by the application. Interceptors are typically used to modify or augment HTTP requests or responses, add headers, handle errors, or perform other operations that need to be applied globally across multiple HTTP requests.
 
-**_auth.interceptor.ts_**
-
 ```typescript
 import { Injectable } from "@angular/core";
 import {
@@ -723,8 +722,6 @@ export class AuthInterceptor implements HttpInterceptor {
 }
 ```
 
-**_app.module.ts_**
-
 ```typescript
 import { NgModule } from "@angular/core";
 import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
@@ -743,11 +740,23 @@ import { AuthInterceptor } from "./auth.interceptor";
 export class AppModule {}
 ```
 
+**How It Works**
+
+- Component sends HTTP request
+- Interceptor catches request
+- Request can be modified
+- Request goes to server
+- Response comes back through interceptor
+
+> _**👉 NOTE:** Why do we use req.clone() in interceptor? Because Angular HTTP requests are immutable._
+
 <div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
 
 ### Q 26. What is an interface?
 
-In Angular, an interface is a TypeScript feature used to define the structure of objects. It acts as a contract that describes the properties and methods an object must have in order to be considered of that type. Interfaces are commonly used to enforce type-checking and provide better code readability and maintainability
+In Angular, an interface is a TypeScript feature used to define the structure of objects.
+
+It acts as a contract that describes the properties and methods an object must have in order to be considered of that type. Interfaces are commonly used to enforce type-checking and provide better code readability and maintainability
 
 ```typescript
 // Define the User interface
@@ -779,7 +788,7 @@ printUserInfo(user);
 
 ### Q 27. What is lazy loading?
 
-Lazy loading in Angular refers to a technique where modules are loaded asynchronously when they are needed, rather than being loaded all at once when the application starts up. This technique improves the initial loading time and reduces the initial bundle size of the application, as only the essential modules are loaded initially.
+Lazy Loading is a technique where feature modules are loaded asynchronously only when they are needed instead of loading the entire application at startup.
 
 ```typescript
 import { NgModule } from "@angular/core";
@@ -804,16 +813,12 @@ export class AppRoutingModule {}
 
 ### Q 28. How to optimize loading large data in angular?
 
-1. **AOT:** The Angular Ahead-of-Time (AOT) compiler converts your Angular HTML and TypeScript code into efficient JavaScript code during the build phase before the browser downloads and runs that code. Compiling your application during the build process provides a faster rendering in the browser.
-2. **Tree-shaking:** This is the process of removing unused code resulting in smaller build size. In angular-cli, Tree-Shaking is enabled by default.
-3. **Lazy loading:** Lazy loading is the mechanism where instead of loading complete app, we load only the modules which are required at the moment thereby reducing the initial load time.
-4. **Ivy Render Engine:** It results in much smaller bundle size than the current engine with improved debugging experience.
-5. **RxJS:** RxJS makes the whole library more tree-shakable thereby reducing the final bundle size. However, it has some breaking changes like operators chaining is not possible instead, pipe() function (helps in better tree shaking) is introduced to add operators.
+1. **Pagination:** Instead of loading all data at once, implement pagination to fetch and display data in smaller, manageable chunks. This reduces the initial load time and enhances the responsiveness of your application.
+2. **Infinite Scrolling:** Implement infinite scrolling, where data is loaded dynamically as the user scrolls down the page. This provides a seamless user experience by continuously loading data without requiring the user to navigate through pagination controls.
+3. **Virtual Scrolling:** Render only visible items instead of the full list. Angular CDK provides virtual scrolling. Which will improves the DOM performance.
+4. **OnPush Change Detection:** Reduces unnecessary component re-rendering.
+5. **TrackBy in `*ngFor`:** Prevents Angular from re-rendering unchanged items. Faster DOM updates and better rendering performance
 6. **Caching:** Implement client-side caching mechanisms, such as browser caching or in-memory caching using libraries like **`ngrx/store`**, to store frequently accessed data locally. This reduces the number of API requests and improves performance.
-7. **Pagination:** Instead of loading all data at once, implement pagination to fetch and display data in smaller, manageable chunks. This reduces the initial load time and enhances the responsiveness of your application.
-8. **Infinite Scrolling:** Implement infinite scrolling, where data is loaded dynamically as the user scrolls down the page. This provides a seamless user experience by continuously loading data without requiring the user to navigate through pagination controls.
-9. **Progressive Loading:** Load data progressively by initially displaying a placeholder or summary information while fetching the complete dataset in the background. This gives users immediate feedback and improves perceived performance.
-10. **Optimize Rendering:** Optimize rendering performance by minimizing DOM manipulations, avoiding unnecessary re-renders, and utilizing Angular features like OnPush change detection strategy and trackBy function for ngFor loops.
 
 <div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
 
