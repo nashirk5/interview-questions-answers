@@ -94,14 +94,41 @@ export class TestComponent implements OnInit {
 
 ### Q 5. What is Module?
 
-A module is a place where we can group components, directives, services, and pipes. A module is defined with a `@NgModule` decorator. There are two types of modules.
+A module is a place where we can group components, directives, services, and pipes. A module is defined with a `@NgModule` decorator. There are three types of modules.
 
-- **Root Module:**
-- **Feature Module:**
+- **Feature Module:** A module dedicated to a specific feature (user, admin, dashboard)
+  ```typescript
+  @NgModule({
+    declarations: [UserListComponent],
+    imports: [CommonModule],
+  })
+  export class UserModule {}
+  ```
+- **Shared Module:** A module that contains reusable components, pipes, directives
+  ```typescript
+  @NgModule({
+    declarations: [LoaderComponent, HighlightDirective],
+    exports: [LoaderComponent, HighlightDirective],
+  })
+  export class SharedModule {}
+  ```
+- **Shared Module:** Contains singleton services used globally
+  ```typescript
+  @NgModule({
+    providers: [AuthService, LoggerService],
+  })
+  export class CoreModule {}
+  ```
 
-> _**👉 NOTE:** Every application can have only one root module whereas, it can have one or more feature modules._
+| Module    | Purpose                        | Example                     |
+| --------- | ------------------------------ | --------------------------- |
+| AppModule | Root module of the application | App bootstrap, global setup |
+| Feature   | Business feature               | User, Admin                 |
+| Shared    | Reusable UI                    | Buttons, Pipes              |
+| Core      | Global services                | Auth, Logger                |
 
 ```typescript
+// Common module file
 import { BrowserModule } from "@angular/platform-browser";
 import { NgModule } from "@angular/core";
 
@@ -835,7 +862,7 @@ _AOT compilation offers better performance, smaller bundle sizes, and improved e
 
 ### Q 30. What are Observables and Promises?
 
-**Observable:** In Angular, Observables are a data streaming abstraction provided by the RxJS library. It is used to handle sequence of asynchronous operation or events over time.
+**Observable:** Observables are RxJS objects used to handle asynchronous data streams and can emit multiple values over time.
 
 ```typescript
 import { Observable, Observer } from "rxjs";
@@ -892,78 +919,42 @@ myPromise.catch();
 
 <div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
 
-### Q 32. What are RXJS and list some operators?
+### Q 32. What is RXJS?
 
-RxJS stands for Reactive Extensions for JavaScript. It’s a library for handling asynchronous data streams using Observables. Instead of working with single values (like a promise), RxJS allows you to work with streams of values over time. Think of it as a way to listen and react to data as it arrives, whether that data comes from user input, HTTP requests, WebSockets, or other sources.
+RxJS (Reactive Extensions for JavaScript) is a library used for reactive programming with Observables. It handle asynchronous data streams like HTTP requests, Events (click, input, scroll), WebSockets and Timers. In Angular, RxJS is used heavily with HttpClient, forms, and state management.
 
-At its core, RxJS provides a way to work with asynchronous data streams (like HTTP requests, events, or user inputs) as collections. You can subscribe to these streams and then use operators (like .map(), .filter(), .merge(), etc.) to manipulate and process the data in a declarative manner.
+**Reactive programming** is a programming style where you react to changes in data over time instead of actively pulling or checking for updates.
+
+In simple terms: You don’t ask for data repeatedly. You just “listen” and react when data changes
 
 **Key Concepts in RxJS:**
 
-**1. Observable:** Represents a stream of data or events. You can think of it as a producer that emits values over time.
+**1. Observable:** An Observable is a stream of data that emits values over time and only runs when someone subscribes to it. It can emit multiple values, an error, or a completion signal depending on the execution flow.
 
-**2. Observer:** The consumer of the observable stream. An observer subscribes to an observable to receive its values.
+**2. Observer:** An Observer is the consumer that receives data from an Observable. It defines how to handle incoming values, errors, and completion using next, error, and complete.
 
 **3. Subscription:** The process of linking an observer to an observable. When you subscribe, you start receiving the data from the observable.
 
-**4. Operators:** Functions that enable transformation, combination, or manipulation of data from observables. Some examples include:
+**4. Operators:** Operators are functions used inside `.pipe()` to transform, filter, or control data flowing through an Observable. They help in shaping the data before it reaches the subscriber.
 
-- **map:** Transforms the data.
-- **filter:** Filters out certain items based on a condition.
-- **merge:** Combines multiple observables into one.
-- **debounceTime:** Introduces a delay between events.
+**5. Subject:** A Subject is both an Observable and an Observer, meaning it can emit and receive values. It is used when you want to multicast data to multiple subscribers.
 
-**5. Subject:** A special type of observable that can also act as an observer. It allows multicasting to multiple subscribers.
+**Common Operators:** RxJS operators are used inside `.pipe()` to transform, filter, and control data streams.
 
-**6. Scheduler:** Manages the timing of when certain operations (like emitting values) should occur.
-
-| Area           | Operators                                                     |
-| -------------- | ------------------------------------------------------------- |
-| Creation       | from,fromEvent, of                                            |
-| Combination    | combineLatest, concat, merge, startWith , withLatestFrom, zip |
-| Filtering      | debounceTime, distinctUntilChanged, filter, take, takeUntil   |
-| Transformation | bufferTime, concatMap, map, mergeMap, scan, switchMap         |
-| Utility        | tap                                                           |
-| Multicasting   | share                                                         |
-
-**Common Operators:**
-
-**1. Pipe Operator:** The pipe() operator is a method to compose multiple operators together in a readable, functional way. It’s commonly used in Angular for HTTP responses, user input handling, and reactive forms.
-
-**Use Cases:**
-Transforming data: e.g., converting API responses before using them.
-Filtering values: e.g., only pass certain items from a list.
-Combining streams: e.g., merge multiple Observables.
-Error handling: e.g., catchError within the pipeline.
-Debouncing user input for search fields or auto-complete.
+**1. Pipe Operator:** Used to combine multiple operators.
 
 ```js
-// Example 1:
-this.http.get<User[]>('/api/users')
-  .pipe(
-    map(users => users.filter(u => u.active)), // only active users
-    map(users => users.map(u => u.name)) // extract names
-  )
-  .subscribe(names => this.userNames = names);
-
-// Example 2:
-fromEvent(searchInput, 'input')
+fromEvent(searchInput, "input")
   .pipe(
     debounceTime(300),
-    map(event => event.target.value),
+    map((event) => event.target.value),
     distinctUntilChanged(),
-    switchMap(query => this.http.get(`/api/search?q=${query}`))
+    switchMap((query) => this.http.get(`/api/search?q=${query}`)),
   )
-  .subscribe(results => this.searchResults = results);
+  .subscribe((results) => (this.searchResults = results));
 ```
 
-**2. Map Operator:** The map() operator, basically, helps us to transform data using an observer. It takes each value emitted by an Observable and transforms it into something else, then passes it along to the next step in the pipeline.
-
-**Use Cases**
-
-- Transform API responses into a usable format.
-- Extract specific properties from objects.
-- Convert values (e.g., numbers to strings, timestamps to readable dates).
+**2. Map Operator:** `map()` operator helps to transforms each emitted value into a new value. It is used when you want to modify data coming from a stream.
 
 ```js
 // Example 1:
@@ -987,7 +978,7 @@ this.http.get<User[]>('/api/users')
   .subscribe(names => console.log(names));
 ```
 
-**3. Filter Operator:** The filter() allows an Observable to emit only values that meet a specified condition, discarding the rest. If the condition returns true, filter will emit value.
+**3. Filter Operator:** If the condition returns true, filter will emit value. Filters values based on a condition. If the condition returns true, filter will emit value.
 
 ```js
 // Example 1:
@@ -1006,32 +997,7 @@ this.http.get<User[]>('/api/users')
   .subscribe(activeUsers => console.log(activeUsers));
 ```
 
-**4. ConcatMap Operator:** Creates an output Observable which sequentially emits all values from given Observable and then moves on to the next.
-
-```js
-import { of } from 'rxjs';
-import { concatMap, delay } from 'rxjs/operators';
-
-of(1, 2, 3)
-  .pipe(
-    concatMap(val => of(`Result ${val}`).pipe(delay(1000)))
-  )
-  .subscribe(console.log);
-
-// Output:
-Result 1
-Result 2
-Result 3
-```
-
-**5. Tap Operator:** The tap() lets you perform side effects like logging or debugging on Observable values without changing them.
-
-**Use Cases**
-
-- Logging values for debugging streams.
-- Updating loading indicators or counters in UI.
-- Triggering side effects like saving to local storage or analytics events.
-- Performing actions without breaking the pipeline before passing values to map or filter.
+**4. Tap Operator:** The `tap()` lets you perform side effects like logging or debugging on Observable values without changing them.
 
 ```js
 // Example 1: Logging API responses
@@ -1052,21 +1018,59 @@ this.http.get('/api/data')
   .subscribe(data => this.data = data);
 ```
 
+**5. switchMap():** Cancels the previous inner Observable and switches to the latest one. Commonly used in search or API calls.
+
+```js
+this.searchControl.valueChanges
+  .pipe(
+    debounceTime(300),
+    distinctUntilChanged(),
+    switchMap((searchTerm) =>
+      this.http.get(`/api/products?search=${searchTerm}`),
+    ),
+  )
+  .subscribe((results) => {
+    this.products = results;
+  });
+```
+
+**6. mergeMap():** Executes Observables one after another in sequence. Each request waits for the previous one to finish.
+
+```js
+from([1, 2, 3])
+  .pipe(mergeMap((id) => this.http.get(`/api/users/${id}`)))
+  .subscribe((user) => {
+    console.log(user);
+  });
+```
+
+**7. ConcatMap Operator:** Creates an output Observable which sequentially emits all values from given Observable and then moves on to the next.
+
+```js
+from([1, 2, 3])
+  .pipe(concatMap((id) => this.http.post("/api/save", { id })))
+  .subscribe((res) => {
+    console.log("Saved:", res);
+  });
+```
+
+| Area           | Operators                                                     |
+| -------------- | ------------------------------------------------------------- |
+| Creation       | from,fromEvent, of                                            |
+| Combination    | combineLatest, concat, merge, startWith , withLatestFrom, zip |
+| Filtering      | debounceTime, distinctUntilChanged, filter, take, takeUntil   |
+| Transformation | bufferTime, concatMap, map, mergeMap, scan, switchMap         |
+| Utility        | tap                                                           |
+| Multicasting   | share                                                         |
+
 <div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
 
-### Q 33. What is switchMap and mergeMap, its difference?
+### Q 33. What is switchMap and mergeMap, and its difference?
 
-**🔹 switchMap:** `switchMap` maps each value from a source Observable to an inner Observable and switches to the latest one, cancelling any previous emissions that haven’t completed.
-It’s used in Angular for autocomplete, live search, or reactive form validation, where only the latest input matters.
-Common pitfalls include unintended cancellation of previous streams and forgetting proper error handling.
+**SwitchMap:** `switchMap()` cancels the previous inner Observable and only keeps the latest one active. If a new value comes before the previous request completes, the old one is discarded.
 
-> switchMap cancels previous streams and keeps only the latest, ideal for live search or reactive forms.
-
-**Use Cases**
-
-- Live search / autocomplete: cancel previous HTTP requests if the user types a new character.
-- Dependent API calls where only the latest input matters.
-- Reactive forms where the latest value triggers async validation.
+**Real use case:**
+Search box. If user types “a → ap → app”, only the last request (“app”) is considered. Previous API calls are cancelled to avoid unnecessary responses.
 
 ```js
 // Example 1: Autocomplete search
@@ -1089,17 +1093,10 @@ this.form
   .subscribe((isAvailable) => (this.emailAvailable = isAvailable));
 ```
 
-**🔹 mergeMap** mergeMap maps each source value to an inner Observable and subscribes to all of them concurrently.
-It does not cancel previous Observables, allowing multiple operations to run in parallel.
-Ideal for independent tasks like multiple file uploads or batch API calls.
-Common pitfalls include overloading with too many concurrent operations and loss of order in emitted results.
+**MergeMap** `mergeMap()` does NOT cancel previous requests. It runs all inner Observables in parallel and returns results as they arrive.
 
-**Use Cases**
-
-- Multiple HTTP requests that can run concurrently.
-- Parallel processing of user actions, like batch uploads.
-- Combining streams where every emission should trigger a new async task.
-- Handling multiple API calls from a list without waiting for each to finish sequentially.
+**Real use case:**
+Loading multiple user details or uploading multiple files where each request should complete independently.
 
 ```js
 // Example 1: Parallel API calls for a list of IDs
@@ -1115,19 +1112,27 @@ from(userClicks)
   .subscribe((response) => console.log("Action processed:", response));
 ```
 
-| Feature              | **switchMap**                                                         | **mergeMap**                                                          |
-| -------------------- | --------------------------------------------------------------------- | --------------------------------------------------------------------- |
-| **Behavior**         | Switches to the latest inner Observable, **cancelling previous ones** | Merges all inner Observables **concurrently**, no cancellations       |
-| **Concurrency**      | 1 active at a time (previous cancelled)                               | Multiple active at a time (all run concurrently)                      |
-| **Order of Results** | Only latest emission matters                                          | Order not guaranteed, results arrive as completed                     |
-| **Use Case**         | Autocomplete search, live search, reactive forms (latest input only)  | Parallel API calls, batch processing, independent async tasks         |
-| **Pitfalls**         | Previous requests may be cancelled unintentionally                    | Too many concurrent requests can overload server; order not preserved |
+| Feature          | switchMap                     | mergeMap                         | concatMap                      |
+| ---------------- | ----------------------------- | -------------------------------- | ------------------------------ |
+| Execution        | Switches to latest Observable | Runs all Observables in parallel | Runs one after another (queue) |
+| Previous request | ❌ Cancelled                  | ❌ Not cancelled                 | ❌ Waits until completion      |
+| Order maintained | ❌ No                         | ❌ No                            | ✅ Yes                         |
+| Concurrency      | Only latest active            | Multiple at same time            | One at a time                  |
+| Best use case    | Search, autocomplete          | API calls, file uploads          | Sequential tasks, step forms   |
+| Risk             | Can miss previous results     | Can overload server              | Slower execution               |
+| Behavior style   | Latest wins                   | All execute                      | FIFO (queue system)            |
+
+**Easy Interview Memory Line**
+
+- switchMap = latest wins (cancel old)
+- mergeMap = all run together (parallel)
+- concatMap = one by one (queue order)
 
 <div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
 
 ### Q 34. What are forkJoin, combineLatest, zip and diff?
 
-**🔹 forkJoin** forkJoin executes multiple Observables in parallel and emits a single combined result when all of them complete.
+**forkJoin** forkJoin executes multiple Observables in parallel and emits a single combined result when all of them complete.
 If any Observable fails, the entire stream errors out.
 It is best suited for multiple HTTP calls that must finish before rendering a page.
 Common pitfalls include waiting forever if an Observable never completes, and failure if any Observable errors.
@@ -1158,7 +1163,7 @@ forkJoin([
 });
 ```
 
-**🔹 combineLatest** combineLatest combines multiple Observables and emits the latest values from each whenever any Observable emits.
+**combineLatest** combineLatest combines multiple Observables and emits the latest values from each whenever any Observable emits.
 It waits until all Observables emit at least once before producing output.
 Common pitfalls include no emission until all sources emit, memory leaks, or too frequent updates.
 
@@ -1218,48 +1223,43 @@ zip(slider1.valueChanges, slider2.valueChanges).subscribe(([val1, val2]) => {
 });
 ```
 
-| Feature            | **combineLatest**                                                                               | **forkJoin**                                                                 | **zip**                                                                |
-| ------------------ | ----------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- | ---------------------------------------------------------------------- |
-| **Emission**       | Emits **every time any source Observable emits**, but only after all have emitted at least once | Emits **once**, after **all source Observables complete**                    | Emits **once per combination**, pairing values **one-to-one** in order |
-| **Values emitted** | Latest value from each Observable at the moment of emission                                     | Only the **last value** of each Observable                                   | Pairs values from each Observable in order (like zip in arrays)        |
-| **Completion**     | Completes when **all sources complete**                                                         | Completes after **all sources complete**                                     | Completes when **any source completes**                                |
-| **Use Case**       | Reactive UI updates where you care about **latest values**                                      | Multiple parallel API calls where you need **all results before proceeding** | Coordinating streams where values are **paired sequentially**          |
-| **Pitfalls**       | Won’t emit until all sources have emitted at least once                                         | Won’t emit if a source never completes                                       | Stops when the shortest Observable completes, may lose extra values    |
+| Feature             | forkJoin                  | combineLatest                     | zip                  |
+| ------------------- | ------------------------- | --------------------------------- | -------------------- |
+| Emits               | Once (after all complete) | Every time any Observable changes | Paired values only   |
+| Requires completion | Yes                       | No                                | No                   |
+| Behavior            | Final result only         | Live updates                      | Synchronized pairing |
+| Order dependency    | No                        | No                                | Yes                  |
+| Best use case       | API calls, dashboard load | Real-time UI updates              | Matching streams     |
+
+**Easy Memory Trick**
+
+- forkJoin → Wait all, emit once (final result)
+- combineLatest → Anytime change, latest values
+- zip → Pair by index (like zipper)
 
 <div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
 
 ### Q 35. What is signal and its types?
 
-Signals in Angular are part of Angular’s reactive system, introduced to provide a simpler and more predictable way to manage reactive state.
-A Signal is essentially a reactive value container that notifies all subscribers automatically whenever its value changes — similar to how BehaviorSubject works, but with simpler syntax and better performance.
+A Signal is a reactive primitive introduced in Angular to manage state in a simple and efficient way. It holds a value and automatically notifies the UI whenever that value changes, without needing RxJS or manual subscriptions.
 
-Think of a Signal like a reactive variable: you read it directly, and Angular automatically tracks dependencies to update the UI when it changes.
+```js
+// Component
+import { signal } from '@angular/core';
+
+count = signal(0);
+
+increment() {
+  this.count.set(this.count() + 1);
+}
+
+// HTML
+<p>{{ count() }}</p>
+```
 
 **Types of Signals**
 
-**1. Writable Signal**
-
-- Can store a value and be updated with set or by modifying its state.
-- Example: countSignal.set(newValue)
-
-**2. Readonly Signal**
-
-- Cannot be updated directly — only allows reading.
-- Useful for exposing state safely from a service or component.
-
-**3. Computed Signal**
-
-- Derives its value from other signals automatically.
-- Updates automatically when the dependent signals change.
-
-**4. Effect (Reactive Effect)**
-
-- Runs a side-effect function whenever a signal it depends on changes.
-- Example: updating the DOM, logging, or triggering other actions.
-
-Real-World Examples
-
-Writable Signal
+**1. Writable Signal:** A signal whose value can be changed manually using set() or update(). Used for state management (like counter, form state, UI state). Real use case: Counter, toggle button, form inputs, UI state updates.
 
 ```js
 import { signal } from "@angular/core";
@@ -1269,7 +1269,7 @@ count.set(5); // update value
 console.log(count()); // read value -> 5
 ```
 
-Computed Signal
+**2. Computed Signal:** A signal that is derived from other signals and automatically updates when dependencies change. Real use case: Cart total price, filtered lists, derived UI values.
 
 ```js
 import { computed } from "@angular/core";
@@ -1284,7 +1284,7 @@ a.set(5);
 console.log(sum()); // 8 (auto-updated)
 ```
 
-Effect
+**3. Effect Signal:** Used to perform side effects whenever a signal changes (like logging, API calls, or syncing data). Real use case: Logging, saving to localStorage, triggering API calls.
 
 ```js
 import { effect } from "@angular/core";
@@ -1294,6 +1294,12 @@ effect(() => {
 });
 // Automatically logs whenever `sum` changes
 ```
+
+| Type            | Purpose                  | Writable | Example Use          |
+| --------------- | ------------------------ | -------- | -------------------- |
+| Writable Signal | Store and update value   | ✅ Yes   | Counter, form state  |
+| Computed Signal | Derived/calculated value | ❌ No    | Total price, filters |
+| Effect Signal   | Side effects on change   | ❌ No    | Logging, API sync    |
 
 <div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
 
@@ -1317,10 +1323,10 @@ obs$.subscribe((val) => console.log("Subscriber 2:", val));
 
 **Subject:**
 
--A special type of Observable that is also an observer — it can emit values manually using next().
--Hot by default, meaning multiple subscribers share the same execution.
--Useful for multicasting values to multiple subscribers.
--Commonly used for event buses, shared state, or bridging imperative code with Observables.
+- A special type of Observable that is also an observer — it can emit values manually using next().
+- Hot by default, meaning multiple subscribers share the same execution.
+- Useful for multicasting values to multiple subscribers.
+- Commonly used for event buses, shared state, or bridging imperative code with Observables.
 
 ```js
 const subject = new Subject<number>();
@@ -1330,9 +1336,18 @@ subject.next(Math.random());
 // Both subscribers receive the **same value**
 ```
 
+**Cold vs Hot Observables**
+
+- Cold Observable
+  - Starts execution for each subscriber
+  - Example: HTTP request
+- Hot Observable
+  - Shared execution
+  - Example: Subject, WebSocket
+
 <div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
 
-### Q 37. What are the difference between Subject, Behavior subject, and Replay subject?
+### Q 37. What are the difference between Subject, Behavior subject, Replay subject, and AsyncSubject?
 
 **1. Subject:**
 
@@ -1401,11 +1416,40 @@ subject.next(3);
 // observerA: 3
 ```
 
-| **Type**          | **Initial Value** | **Emits Last Value** | **Replay Previous Values** | **Use Case**                                                                      |
-| ----------------- | ----------------- | -------------------- | -------------------------- | --------------------------------------------------------------------------------- |
-| `Subject`         | No                | No                   | No                         | Multicasting to multiple observers; no memory of past values                      |
-| `BehaviorSubject` | Yes               | Yes (last value)     | No                         | Store and emit the **current state** to new subscribers                           |
-| `ReplaySubject`   | Optional          | Yes (all buffered)   | Yes (buffered n values)    | Emit **past n values** to new subscribers; useful for caching or replaying events |
+**4. AsyncSubject:**
+
+- An AsyncSubject is a special type of Subject that only emits the last value when the stream completes.
+- If the stream never completes, it will not emit anything.
+- Give me only the final result, and only when everything is done.
+
+```js
+const asyncSubject = new AsyncSubject<number>();
+
+asyncSubject.subscribe(v => console.log('A:', v));
+
+asyncSubject.next(1);
+asyncSubject.next(2);
+asyncSubject.next(3);
+
+asyncSubject.complete();
+
+// Output
+A: 3
+```
+
+| Feature                        | Subject               | BehaviorSubject             | ReplaySubject               | AsyncSubject               |
+| ------------------------------ | --------------------- | --------------------------- | --------------------------- | -------------------------- |
+| Stores values                  | ❌ No                 | ✅ Latest value             | ✅ Multiple values (buffer) | ✅ Only last value         |
+| New subscriber gets old values | ❌ No                 | ✅ Latest value immediately | ✅ Past buffered values     | ❌ Only after completion   |
+| Emits immediately              | ❌ Only future values | ✅ Yes (latest)             | ✅ Yes (replay history)     | ❌ No                      |
+| Requires initial value         | ❌ No                 | ✅ Yes                      | ❌ No                       | ❌ No                      |
+| Emits when complete() called   | ❌ No                 | ❌ No                       | ❌ No                       | ✅ Yes (only last value)   |
+| Common use case                | Events, clicks        | App state, login user       | Chat, history, cache        | Final result (HTTP/report) |
+
+- Subject → No memory
+- BehaviorSubject → Last value memory
+- ReplaySubject → Full history memory
+- AsyncSubject → Final value only
 
 <div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
 
@@ -1684,6 +1728,53 @@ getData();
 
 **Template forms:** Template-Driven Forms define form logic in the HTML template using directives like ngModel, making them simple and suitable for small forms.
 
+```html
+<h2>Template-driven Form</h2>
+
+<form #regForm="ngForm" (ngSubmit)="onSubmit(regForm)">
+  <!-- Name -->
+  <div>
+    <label>Name</label>
+    <input
+      type="text"
+      name="name"
+      ngModel
+      required
+      minlength="3"
+      #name="ngModel"
+    />
+    <div *ngIf="name.invalid && name.touched">
+      Name is required (min 3 characters)
+    </div>
+  </div>
+
+  <!-- Email -->
+  <div>
+    <label>Email</label>
+    <input type="email" name="email" ngModel required email #email="ngModel" />
+    <div *ngIf="email.invalid && email.touched">Enter a valid email</div>
+  </div>
+
+  <!-- Password -->
+  <div>
+    <label>Password</label>
+    <input
+      type="password"
+      name="password"
+      ngModel
+      required
+      minlength="6"
+      #password="ngModel"
+    />
+    <div *ngIf="password.invalid && password.touched">
+      Password must be at least 6 characters
+    </div>
+  </div>
+
+  <button type="submit" [disabled]="regForm.invalid">Register</button>
+</form>
+```
+
 **Reactive forms:** Reactive Forms define the form model in TypeScript using FormControl and FormGroup, giving better scalability, validation control, and testability. They follow a model-driven approach.
 
 | Feature       | Template Forms      | Reactive Forms      |
@@ -1695,16 +1786,158 @@ getData();
 | Scalability   | Small forms         | Large/complex forms |
 | Dynamic forms | Difficult           | Easy                |
 
-### Q 42. What is NgZone?
+### Q 42. Write a code to submit a form by using the Reactive form?
 
-Angular provides a service called NgZone which creates a zone named angular to automatically trigger change detection when the following conditions are satisfied.
+```js
+import { Component } from '@angular/core';
+import { FormBuilder, Validators, FormArray } from '@angular/forms';
+
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html'
+})
+export class AppComponent {
+
+  constructor(private fb: FormBuilder) {}
+
+  // Main Form
+  employeeForm = this.fb.group({
+    name: ['', [Validators.required, Validators.minLength(3)]],
+    email: ['', [Validators.required, Validators.email]],
+    department: ['', Validators.required],
+
+    // Dynamic skills list
+    skills: this.fb.array([])
+  });
+
+  // Getter for skills FormArray
+  get skills(): FormArray {
+    return this.employeeForm.get('skills') as FormArray;
+  }
+
+  // Add new skill
+  addSkill() {
+    this.skills.push(
+      this.fb.control('', Validators.required)
+    );
+  }
+
+  // Remove skill
+  removeSkill(index: number) {
+    this.skills.removeAt(index);
+  }
+
+  // Submit form
+  onSubmit() {
+    console.log('Employee Data:', this.employeeForm.value);
+
+    if (this.employeeForm.valid) {
+      // Here you would call API
+      alert('Employee Registered Successfully!');
+    } else {
+      alert('Form is invalid');
+    }
+  }
+}
+```
+
+```html
+<h2>Employee Registration Form</h2>
+
+<form [formGroup]="employeeForm" (ngSubmit)="onSubmit()">
+  <!-- Name -->
+  <div>
+    <label>Name</label>
+    <input type="text" formControlName="name" />
+    <div
+      *ngIf="employeeForm.get('name')?.invalid && employeeForm.get('name')?.touched"
+    >
+      Name is required (min 3 characters)
+    </div>
+  </div>
+
+  <!-- Email -->
+  <div>
+    <label>Email</label>
+    <input type="email" formControlName="email" />
+    <div
+      *ngIf="employeeForm.get('email')?.invalid && employeeForm.get('email')?.touched"
+    >
+      Enter valid email
+    </div>
+  </div>
+
+  <!-- Department -->
+  <div>
+    <label>Department</label>
+    <select formControlName="department">
+      <option value="">Select</option>
+      <option value="IT">IT</option>
+      <option value="HR">HR</option>
+      <option value="Finance">Finance</option>
+    </select>
+  </div>
+
+  <!-- Skills (Dynamic FormArray) -->
+  <div>
+    <h4>Skills</h4>
+
+    <button type="button" (click)="addSkill()">+ Add Skill</button>
+
+    <div formArrayName="skills">
+      <div *ngFor="let skill of skills.controls; let i = index">
+        <input [formControlName]="i" placeholder="Enter skill" />
+
+        <button type="button" (click)="removeSkill(i)">Remove</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Submit -->
+  <button type="submit" [disabled]="employeeForm.invalid">Submit</button>
+</form>
+```
+
+<div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
+
+### Q 43. What is NgZone?
+
+`NgZone` is a service in Angular that helps manage change detection automatically or manually when async operations happen (like setTimeout, API calls, WebSocket, etc.). In simple terms: `NgZone` tells Angular when to update the UI after async work.
 
 - When a sync or async function is executed.
 - When there is no microTask scheduled.
 
+```js
+// Running code inside Angular zone (default behavior)
+constructor(private ngZone: NgZone) {}
+
+ngOnInit() {
+  setTimeout(() => {
+    this.data = 'Updated inside Angular zone';
+  }, 1000);
+}
+
+// Running code outside Angular zone
+constructor(private ngZone: NgZone) {}
+
+ngOnInit() {
+  this.ngZone.runOutsideAngular(() => {
+    setTimeout(() => {
+      this.data = 'Updated outside Angular zone';
+
+      // Manually trigger UI update
+      this.ngZone.run(() => {
+        console.log('UI updated manually');
+      });
+
+    }, 1000);
+  });
+}
+```
+
 <div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
 
-### Q 43. What is angular change detection?
+### Q 44. What is angular change detection?
 
 Angular change detection is a built-in framework feature that ensures the automatic synchronization between the data of a component and its HTML template view.
 
@@ -1721,7 +1954,7 @@ ChangeDetectorRef.detectChanges(): It detects only the components and it's child
 
 <div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
 
-### Q 44. What is Ivy?
+### Q 45. What is Ivy?
 
 Ivy is Angular’s next-generation compilation and rendering engine, introduced in Angular 9.
 It improves bundle size, build speed, tree shaking, debugging, and incremental compilation.
@@ -1743,7 +1976,7 @@ It replaced the older View Engine with a more optimized and efficient architectu
 
 <div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
 
-### Q 45. What is difference between observable, subject and signal?
+### Q 46. What is difference between observable, subject and signal?
 
 **Real-World Analogy**
 
@@ -1767,37 +2000,6 @@ Signal is a reactive value container with auto-tracked dependencies and computed
 | **Side-effects**       | Can use `tap()` inside pipeline            | Can use `tap()` or emit manually                   | Use `effect()` for side-effects                                     |
 | **Use Case**           | Async streams like HTTP requests, timers   | Event buses, shared state, component communication | State management, reactive UI, derived values                       |
 | **Memory Management**  | Need to unsubscribe or use `async` pipe    | Need to unsubscribe if long-lived                  | Tracks dependencies automatically, no manual subscriptions required |
-
-<div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
-
-### Q 46. Compact Angular RxJS cheat sheet covering the most common operators!
-
-**Quick Analogies for Interviews**
-
-- Observable → Newspaper subscription → each subscriber gets full copy independently.
-- Subject → Live TV broadcast → subscribers see only what’s currently airing.
-- Signal → Thermostat → all UI components always reflect the latest value automatically.
-- switchMap → Changing TV channels → previous stops, latest plays.
-- mergeMap → Multiple delivery trucks → all run concurrently.
-- concatMap → Coffee line → one at a time, in order.
-- forkJoin → All friends arrive → start together once everyone is ready.
-- combineLatest → Dashboard → updates whenever any widget changes.
-- zip → Pairing socks → first with first, second with second, etc.
-
-| Operator / Concept | What It Does                                                  | Key Points                                         | Use Case                                     |
-| ------------------ | ------------------------------------------------------------- | -------------------------------------------------- | -------------------------------------------- |
-| **map**            | Transforms each emitted value                                 | Always emits same number of values                 | Multiply numbers, format API data            |
-| **filter**         | Emits only values meeting a condition                         | Doesn’t modify values                              | Only active users, valid inputs              |
-| **tap**            | Performs side effects without changing values                 | For logging, loaders, analytics                    | Debugging, UI updates                        |
-| **switchMap**      | Maps to inner Observable, **cancels previous**                | Only latest value matters                          | Autocomplete, live search, reactive forms    |
-| **mergeMap**       | Maps to inner Observables **concurrently**                    | All emissions run independently                    | Parallel API calls, batch processing         |
-| **concatMap**      | Maps to inner Observables **sequentially**                    | Preserves order                                    | Sequential API calls, dependent operations   |
-| **forkJoin**       | Waits for **all Observables to complete**, emits last values  | Emits once, fails if any error                     | Multiple HTTP requests, app initialization   |
-| **combineLatest**  | Emits on **any source emission** using latest values from all | Emits after all have emitted at least once         | Reactive forms, dashboards, UI state         |
-| **zip**            | Combines values **one-to-one in order**                       | Stops when shortest Observable completes           | Pairing inputs, batch coordination           |
-| **Observable**     | Cold, lazy stream                                             | Independent for each subscriber                    | HTTP calls, timers                           |
-| **Subject**        | Hot, can emit manually                                        | Multicasts to all subscribers                      | Event bus, shared state                      |
-| **Signal**         | Reactive value container                                      | Auto-updates dependents, supports computed/effects | State management, derived values, UI updates |
 
 <div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
 
@@ -1921,6 +2123,37 @@ Tree Shaking is a build-time optimization that removes unused code from the fina
 | Angular 14    | 2022 | Introduced **Typed Reactive Forms** for better TypeScript safety and autocomplete. Also improved standalone APIs preview.                             |
 | Angular 15    | 2022 | **Standalone Components became stable**, allowing apps without NgModules. Simplified architecture and improved lazy loading.                          |
 | Angular 16    | 2023 | Introduced **Signals**, a new reactive state management model. Also improved hydration and performance optimizations.                                 |
+
+<div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
+
+### Q 46. Compact Angular RxJS cheat sheet covering the most common operators!
+
+**Quick Analogies for Interviews**
+
+- Observable → Newspaper subscription → each subscriber gets full copy independently.
+- Subject → Live TV broadcast → subscribers see only what’s currently airing.
+- Signal → Thermostat → all UI components always reflect the latest value automatically.
+- switchMap → Changing TV channels → previous stops, latest plays.
+- mergeMap → Multiple delivery trucks → all run concurrently.
+- concatMap → Coffee line → one at a time, in order.
+- forkJoin → All friends arrive → start together once everyone is ready.
+- combineLatest → Dashboard → updates whenever any widget changes.
+- zip → Pairing socks → first with first, second with second, etc.
+
+| Operator / Concept | What It Does                                                  | Key Points                                         | Use Case                                     |
+| ------------------ | ------------------------------------------------------------- | -------------------------------------------------- | -------------------------------------------- |
+| **map**            | Transforms each emitted value                                 | Always emits same number of values                 | Multiply numbers, format API data            |
+| **filter**         | Emits only values meeting a condition                         | Doesn’t modify values                              | Only active users, valid inputs              |
+| **tap**            | Performs side effects without changing values                 | For logging, loaders, analytics                    | Debugging, UI updates                        |
+| **switchMap**      | Maps to inner Observable, **cancels previous**                | Only latest value matters                          | Autocomplete, live search, reactive forms    |
+| **mergeMap**       | Maps to inner Observables **concurrently**                    | All emissions run independently                    | Parallel API calls, batch processing         |
+| **concatMap**      | Maps to inner Observables **sequentially**                    | Preserves order                                    | Sequential API calls, dependent operations   |
+| **forkJoin**       | Waits for **all Observables to complete**, emits last values  | Emits once, fails if any error                     | Multiple HTTP requests, app initialization   |
+| **combineLatest**  | Emits on **any source emission** using latest values from all | Emits after all have emitted at least once         | Reactive forms, dashboards, UI state         |
+| **zip**            | Combines values **one-to-one in order**                       | Stops when shortest Observable completes           | Pairing inputs, batch coordination           |
+| **Observable**     | Cold, lazy stream                                             | Independent for each subscriber                    | HTTP calls, timers                           |
+| **Subject**        | Hot, can emit manually                                        | Multicasts to all subscribers                      | Event bus, shared state                      |
+| **Signal**         | Reactive value container                                      | Auto-updates dependents, supports computed/effects | State management, derived values, UI updates |
 
 <div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
 
