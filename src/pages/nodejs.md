@@ -1077,7 +1077,9 @@ For balancing across multiple servers, you need tools like Nginx or cloud load b
 
 ### Q 21. What is middleware?
 
-Middleware is a function that runs between the request and response cycle. It can modify the request/response, execute logic, or end the request. It uses the next() function to pass control to the next middleware.
+Middleware is a function that runs between the request and response cycle. It can perform tasks like authentication, validation, logging, and error handling. It uses the `next()` function to pass control to the next middleware.
+
+> _**👉 Note:** Forgetting to call `next()` can leave requests hanging indefinitely._
 
 **Example:**
 
@@ -1104,10 +1106,15 @@ app.listen(3000);
 
 **🔹 Types of Middleware**
 
-- Application-level middleware
-- Router-level middleware
-- Error-handling middleware
-- Built-in middleware (e.g., express.json())
+- Application-level middleware: It runs across the entire Express application.
+- Router-level middleware: It runs only for specific route groups
+- Error-handling middleware: Error-handling middleware is used to catch and process application errors and has the signature (err, req, res, next).
+- Built-in middleware (e.g., express.json()): I have created Role-Based Authorization, Response Formatting, Rate Limiting,
+
+**Interview Follow-Up Questions**
+
+1. What happens if a middleware sends a response and then calls next()?
+   - If a middleware sends a response and then calls next(), Express continues executing the next middleware. If the next middleware tries to send another response, Express will throw an error because HTTP allows only one response per request.
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
@@ -1598,7 +1605,7 @@ GET /users/1
 }
 ```
 
-**REST**
+**GraphQL**
 GraphQL is a query language for APIs that allows the client to request exactly the data it needs from a single endpoint, making data fetching more flexible and efficient.
 
 ```js
@@ -1621,7 +1628,12 @@ query {
 }
 ```
 
-**REST**
+**Interview Follow-Up Questions**
+
+1. What is the N+1 Problem in GraphQL and How Does DataLoader Solve It?
+   - The N+1 problem occurs when GraphQL executes one query to fetch records and then N additional queries to fetch related data. DataLoader solves this by batching multiple requests into a single database query and caching results within the same request. This significantly reduces database calls and improves GraphQL performance and scalability.
+
+**SOAP**
 SOAP is a protocol for exchanging structured information using XML, mainly used in enterprise systems where strict standards, security, and reliability are required.
 
 ```js
@@ -2179,20 +2191,69 @@ app.listen(3000, () => console.log("Server running on http://localhost:3000"));
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 38. How to build a microservices architecture with Node.js?
+### Q 38. In a large application with around 100 protected APIs, would you perform JWT authentication and RBAC authorization checks on every request?
+
+Yes, every protected API verifies the access token because JWT authentication is stateless.
+
+We use short-lived access tokens(15 - 30min) and validate them on every protected request. To keep users logged in, we use refresh tokens(7 - 15days) to generate new access tokens when they expire. This approach provides better security while avoiding frequent logins and reducing the impact of stale permissions.
+
+We validate JWT on every protected request because authentication is stateless. For RBAC, we typically store role information in the token to avoid database lookups. If permissions must take effect immediately, I use token versioning, where the token version is stored in both the JWT and Redis. When roles or permissions change, the version is incremented, causing all previously issued tokens to become invalid instantly.
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 39. How microservices communicate with each other?
+### Q 39. How did you implement logging in your project and its types?
+
+We used Winston for structured JSON logging. We logged API requests, responses, errors, and audit events. Each request was assigned a correlation ID to trace it across services. Logs were centralized in ELK/CloudWatch for monitoring and troubleshooting.
+
+ELK and CloudWatch are centralized logging platforms used to collect, store, and analyze application logs. ELK consists of Elasticsearch, Logstash, and Kibana, while CloudWatch is AWS's managed logging service. They help teams search logs, trace requests using correlation IDs, monitor errors, and create alerts.
+
+1. Application Logs: Normal application activity. Used for monitoring and debugging. Logs will store 30-90 Days.
+2. Error Logs: When something fails. Used for troubleshooting. Logs will store 90 Days.
+3. Audit Logs: Tracks who did what. Used for compliance and security. Logs will store 1-7 Years.
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 40. RabbitMQ and Kafka in Node.js?
+### Q 40. How to optimize the DB query?
+
+I optimize databases by analyzing query execution plans, adding proper indexes. My approach starts with identifying slow queries using EXPLAIN or EXPLAIN ANALYZE. I then verify indexing, optimize joins, avoid unnecessary columns, implement pagination, and reduce database round trips. At the application level, I use connection pooling, caching with Redis, and bulk operations where appropriate.
+
+**Connection pooling:** Connection pooling is the practice of maintaining a reusable set of database connections instead of creating a new connection for every request. It reduces connection overhead, improves performance, and helps applications scale under high traffic. In Node.js, pools are typically created once during application startup and reused across all database operations.
+
+I would first analyze query performance and indexing. If the workload is read-heavy, I'd introduce read replicas. For frequently accessed data, I'd use Redis caching. As data volume grows, I'd consider partitioning large tables and archiving historical data. Sharding would be the final option if a single database instance could no longer handle the workload.
+
+**What's the difference between Read Replication and Sharding?**
+
+- **Read Replica:** Same Data. Multiple Copies. Used to scale reads.
+- **Sharding:** Different Data. Different Databases. Used to scale storage and writes.
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 36. ?
+### Q 41. How microservices communicate with each other?
+
+Microservices can communicate synchronously using REST, GraphQL, or gRPC, and asynchronously using message brokers like Kafka or RabbitMQ.
+
+I use synchronous communication when an immediate response is needed and asynchronous communication for scalable event-driven workflows.
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
+
+### Q 42. RabbitMQ and Kafka in Node.js?
+
+RabbitMQ is a message broker primarily used for task queues and reliable message delivery. Once a message is consumed, it is typically removed from the queue. Kafka is an event streaming platform where events are stored for a configurable retention period and can be consumed by multiple services independently. I generally use RabbitMQ for background jobs and Kafka for event-driven architectures, analytics, and high-throughput systems.
+
+**Follow-Up Questions**
+
+1. What happens if a consumer is down?
+   - **RabbitMQ:** Message stays in the queue until a consumer processes it.
+   - **Kafk:** Message remains in the topic and can be consumed later.
+
+2. Can multiple consumers read the same message?
+   - **RabbitMQ:** Typically one message is processed by one consumer (within a consumer group/queue pattern).
+   - **Kafka** Many independent consumer groups can read the same event.
+
+<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
+
+<!-- ### Q 36. ?
+
+<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div> -->
 
 ##
