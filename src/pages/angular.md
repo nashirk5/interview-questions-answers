@@ -1939,9 +1939,7 @@ ngOnInit() {
 
 ### Q 44. What is angular change detection?
 
-Angular change detection is a built-in framework feature that ensures the automatic synchronization between the data of a component and its HTML template view.
-
-Change detection works by detecting common browser events like mouse clicks, HTTP requests, and other types of events, and deciding if the view of each component needs to be updated or not.
+Change Detection is Angular's mechanism for synchronizing component data with the DOM. By default, Angular checks the entire component tree using Zone.js-triggered cycles, while OnPush reduces checks by reacting only to input reference changes, events, and observable emissions. In Angular 16+, Signals provide fine-grained reactivity and further improve performance by updating only affected UI parts.
 
 There are two types of change detection:
 
@@ -1951,6 +1949,13 @@ There are two types of change detection:
 ApplicationRef.tick(): Invoke this method to explicitly process change detection and its side-effects. It check the full component tree.
 NgZone.run(callback): It evaluate the callback function inside the Angular zone.
 ChangeDetectorRef.detectChanges(): It detects only the components and it's children.
+
+**Follow-Up Questions**
+
+1. How does Angular internally know when to run Change Detection?
+   - Angular uses Zone.js to patch async APIs such as: setTimeout, Promise, HTTP requests,DOM events. When an async operation completes, Zone.js notifies Angular, which triggers a Change Detection cycle.
+2. Why is OnPush faster than Default Change Detection?
+   Default strategy checks the entire component tree whenever Change Detection runs. OnPush limits checks to: Input reference changes, Events, Observable emissions, Manual triggers. This reduces unnecessary component evaluations and improves performance.
 
 <div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
 
