@@ -257,7 +257,7 @@ function Welcome(props) {
 
 <div align="right"><b><a href="#react-interview-question-and-answers">↥ Back to top</a></b></div>
 
-### Q 713. What is Prop Drilling?
+### Q 13. What is Prop Drilling?
 
 Prop drilling happens when props are passed through multiple component levels just to reach a deeply nested child.
 
