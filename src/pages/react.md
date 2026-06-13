@@ -478,6 +478,8 @@ function InputFocus() {
 
 `useMemo` memoizes expensive calculations and returns a cached value to optimize performance.
 
+The function runs on the initial render. On subsequent renders, React returns the cached value. The function runs again only if a dependency changes.
+
 **When to use:** To avoid recalculating expensive operations on every render.
 
 ```javaScript
