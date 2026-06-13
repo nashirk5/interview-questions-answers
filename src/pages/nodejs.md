@@ -2252,6 +2252,125 @@ RabbitMQ is a message broker primarily used for task queues and reliable message
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
+### Q 43. What is Connection pooling?
+
+Connection pooling is a mechanism that maintains a reusable set of database connections. Instead of creating and closing a connection for every request, the application borrows a connection from the pool, executes the query, and returns it back. This reduces connection overhead, improves response time, and helps applications handle high traffic efficiently. In Node.js, libraries like MySQL2 and PostgreSQL provide built-in connection pooling support. While configuring pools, I ensure the total number of connections across all application instances stays within the database server's connection limit.
+
+**Real-World Analogy**
+
+Imagine a company has 100 employees and only 10 meeting rooms. Employees don't build a new meeting room every time they need one.
+
+- Take an available room.
+- Conduct the meeting.
+- Leave the room.
+- The room becomes available for others.
+
+A connection pool works the same way.
+
+```javascript
+// Node.js Example (MySQL)
+
+const mysql = require("mysql2");
+
+const pool = mysql.createPool({
+  host: "localhost",
+  user: "root",
+  password: "password",
+  database: "testdb",
+  connectionLimit: 10,
+});
+
+// Using the pool:
+pool.query("SELECT * FROM users", (err, results) => {
+  console.log(results);
+});
+```
+
+**Interview Follow-Up**
+
+What happens if all connections are busy?
+
+First 10 requests get connections. Remaining 40 requests wait in a queue. As connections are released, waiting requests receive them. If the wait exceeds the configured timeout, an error may occur.
+
+<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
+
+### Q 44. What is Worker Threads vs Cluster vs Child Process, difference, and when to use?
+
+**Worker Threads** are used when your Node application has CPU-intensive work such as image processing, PDF generation, encryption, or large calculations. They create additional JavaScript threads within the same process.
+
+When to Use: Image processing, Video processing, PDF generation, Data transformation, Encryption, and CPU-heavy calculations.
+
+```javascript
+const worker = new Worker("./imageProcessor.js");
+```
+
+_A user uploads a large image and resizing it takes 5 seconds. Running this in the main thread would block all requests. A Worker Thread prevents that._
+
+**Cluster** is used when you want to scale your Node server across multiple CPU cores. Each cluster worker is a separate Node process that can handle incoming requests independently.
+
+When to Use: Running Express APIs, High traffic applications, and Multiple CPU cores available.
+
+```javascript
+const cluster = require("cluster");
+const os = require("os");
+
+if (cluster.isPrimary) {
+  for (let i = 0; i < os.cpus().length; i++) {
+    cluster.fork();
+  }
+}
+```
+
+_If a server has 8 cores, cluster can create 8 Node processes so all cores are utilized._
+
+**Child Process** is used when you need to execute an external process or program such as Python scripts, shell commands, FFmpeg, Git commands, or another Node application.
+
+When to Use: Running Python scripts, Executing shell commands, Using FFmpeg, and Calling external tools.
+
+```javascript
+const { spawn } = require("child_process");
+
+spawn("python", ["predict.py"]);
+```
+
+_A Node API receives an image and sends it to a Python AI model for prediction._
+
+> _**👉 Note:** All three help Node.js perform work outside the main Event Loop, but they solve different problems.._
+
+**Think of it like this:**
+
+- Worker Thread → "Help me do heavy calculations."
+- Cluster → "Help me serve more users."
+- Child Process → "Help me run another application."
+
+**When to Use**
+
+<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
+
+**Worker Threads**
+**Cluster**
+**Child Process**
+
+**Follow-Up Questions**
+
+- Why not use Worker Threads for database queries?
+  - Database queries are I/O operations. Node already handles I/O asynchronously through the Event Loop and libuv. Using Worker Threads adds unnecessary overhead.
+- What is the difference between Cluster and Worker Threads?
+  - Cluster creates multiple Node processes, each with its own memory and Event Loop. Worker Threads create multiple threads inside the same Node process and can share memory using SharedArrayBuffer.Cluster is for scaling servers. Worker Threads are for CPU-intensive tasks.
+
+### Q 36. How to Handle a 2GB File Upload in Node.js?
+
+For large files such as 2GB, I would implement chunked uploads where the file is split into smaller pieces, typically 5MB each. The backend stores each chunk and merges them after all chunks are received. In production, I would use parallel uploads, streaming, and resumable uploads with metadata stored in Redis or a database.
+
+**Follow-Up Questions**
+
+- Why use chunk upload instead of a single upload?
+  - If the network fails at 95%, only the failed chunk needs to be retried instead of uploading the entire 2GB file again.
+- How would you implement resumable uploads?
+  - Generate an uploadId, store uploaded chunk numbers in Redis or a database, and when the user reconnects, upload only the missing chunks.
+
+<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
+
 <!-- ### Q 36. ?
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div> -->
