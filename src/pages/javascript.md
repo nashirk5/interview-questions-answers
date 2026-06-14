@@ -1972,6 +1972,10 @@ var greet = function () {
 
 <div align="right"><b><a href="#javascript">↥ Back to top</a></b></div>
 
+<!-- ### Q 57. JavaSCript.
+
+<div align="right"><b><a href="#javascript">↥ Back to top</a></b></div> -->
+
 ---
 
 # JavaScript Tricky Interview Questions
@@ -2228,8 +2232,252 @@ Promise.resolve(5)
 
 </details>
 
-<!-- ### Q 57. JavaSCript.
+---
 
-<div align="right"><b><a href="#javascript">↥ Back to top</a></b></div> -->
+# JavaScript Coding Challenges
+
+<details>
+
+<summary align="right">Show</summary>
+
+### 1. Check if a String is a Palindrome
+
+```js
+function isPalindrome(str) {
+  const formateStr = str.toLowerCase().replace(/[^a-z0-9]/g, "");
+  const reverse = formateStr.split("").reverse().join("");
+
+  return formateStr === reverse;
+}
+
+console.log(isPalindrome("madam")); // true
+
+// Without Using reverse()
+function reverseString(str) {
+  let result = "";
+
+  for (let i = str.length - 1; i >= 0; i--) {
+    result += str[i];
+  }
+
+  return result;
+}
+
+console.log(reverseString("hello"));
+```
+
+### 2. Check if Two Strings are Anagrams
+
+```js
+function isAnagram(str1, str2) {
+  const normalize = (str) => str.toLowerCase().split("").sort().join("");
+
+  return normalize(str1) === normalize(str2);
+}
+
+console.log(isAnagram("listen", "silent"));
+```
+
+### 3. Find Duplicate Elements in an Array
+
+```js
+function findDuplicates(arr) {
+  const seen = new Set();
+  const duplicates = new Set();
+
+  for (const item of arr) {
+    if (seen.has(item)) {
+      duplicates.add(item);
+    }
+    seen.add(item);
+  }
+
+  return [...duplicates];
+}
+
+console.log(findDuplicates([1, 2, 3, 2, 4, 1]));
+```
+
+### 4. Remove Duplicates from an Array
+
+```js
+// Using Set:
+function removeDuplicates(arr) {
+  return [...new Set(arr)];
+}
+
+// Without Set:
+function removeDuplicates(arr) {
+  const result = [];
+
+  for (const item of arr) {
+    if (!result.includes(item)) {
+      result.push(item);
+    }
+  }
+
+  return result;
+}
+```
+
+### 5. Find the Maximum Number in an Array
+
+```js
+function findMax(arr) {
+  let max = arr[0];
+
+  for (let num of arr) {
+    if (num > max) {
+      max = num;
+    }
+  }
+
+  return max;
+}
+
+console.log(findMax([10, 5, 30, 20]));
+```
+
+### 6. Flatten a Nested Array
+
+```js
+function flatten(arr) {
+  const result = [];
+
+  for (const item of arr) {
+    if (Array.isArray(item)) {
+      result.push(...flatten(item));
+    } else {
+      result.push(item);
+    }
+  }
+
+  return result;
+}
+
+console.log(flatten([1, [2, [3, 4]], 5]));
+```
+
+### 7. Count Character Occurrences
+
+```js
+function countChars(str) {
+  const map = {};
+
+  for (const char of str) {
+    map[char] = (map[char] || 0) + 1;
+  }
+
+  return map;
+}
+
+console.log(countChars("hello"));
+
+// Output
+{
+  h: 1,
+  e: 1,
+  l: 2,
+  o: 1
+}
+```
+
+### 8. Debounce
+
+```js
+function debounce(fn, delay) {
+  let timer;
+
+  return function (...args) {
+    clearTimeout(timer);
+
+    timer = setTimeout(() => {
+      fn.apply(this, args);
+    }, delay);
+  };
+}
+
+const search = debounce((value) => {
+  console.log(value);
+}, 500);
+```
+
+### 9. Polyfill for map, filter, reduce
+
+```js
+// Polyfill for map
+Array.prototype.myMap = function (callback) {
+  const result = [];
+
+  for (let i = 0; i < this.length; i++) {
+    result.push(callback(this[i], i, this));
+  }
+
+  return result;
+};
+
+// Polyfill for filter
+Array.prototype.myFilter = function (callback) {
+  const result = [];
+
+  for (let i = 0; i < this.length; i++) {
+    if (callback(this[i], i, this)) {
+      result.push(this[i]);
+    }
+  }
+
+  return result;
+};
+
+// Polyfill for reduce
+Array.prototype.myReduce = function (callback, initialValue) {
+  let accumulator = initialValue;
+
+  for (let i = 0; i < this.length; i++) {
+    accumulator = callback(accumulator, this[i], i, this);
+  }
+
+  return accumulator;
+};
+```
+
+### 10. Flatten Array
+
+```js
+function flatten(arr) {
+  let result = [];
+
+  for (const item of arr) {
+    if (Array.isArray(item)) {
+      result = result.concat(flatten(item));
+    } else {
+      result.push(item);
+    }
+  }
+
+  return result;
+}
+// Input: [1,[2,[3,4]],5]
+// Output: [1,2,3,4,5]
+```
+
+### 11. Fizz Buzz
+
+```js
+function fizzBuzz(num) {
+  for (let i = 1; i <= num; i++) {
+    let output = "";
+
+    if (i % 3 === 0) output += "Fizz";
+    if (i % 5 === 0) output += "Buzz";
+
+    console.log(output || i);
+  }
+}
+
+// fizzBuzz(15);
+```
+
+</details>
 
 ##
