@@ -2358,7 +2358,7 @@ _A Node API receives an image and sends it to a Python AI model for prediction._
 - What is the difference between Cluster and Worker Threads?
   - Cluster creates multiple Node processes, each with its own memory and Event Loop. Worker Threads create multiple threads inside the same Node process and can share memory using SharedArrayBuffer.Cluster is for scaling servers. Worker Threads are for CPU-intensive tasks.
 
-### Q 36. How to Handle a 2GB File Upload in Node.js?
+### Q 45. How to Handle a 2GB File Upload in Node.js?
 
 For large files such as 2GB, I would implement chunked uploads where the file is split into smaller pieces, typically 5MB each. The backend stores each chunk and merges them after all chunks are received. In production, I would use parallel uploads, streaming, and resumable uploads with metadata stored in Redis or a database.
 
