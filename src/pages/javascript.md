@@ -2041,10 +2041,16 @@ Each function gets its own closure memory.
 
 </details>
 
-### 3. setTimeout with var
+### 3. setTimeout
 
 ```javascript id="sl2wws"
+// setTimeout with var
 for (var i = 0; i < 3; i++) {
+  setTimeout(() => console.log(i), 1000);
+}
+
+// setTimeout with let
+for (let i = 0; i < 3; i++) {
   setTimeout(() => console.log(i), 1000);
 }
 ```
@@ -2056,26 +2062,7 @@ for (var i = 0; i < 3; i++) {
 3;
 3;
 3;
-```
 
-### Explanation
-
-`var` is function-scoped, so all callbacks share the same variable.
-
-</details>
-
-### 4. setTimeout with let
-
-```javascript id="oj75dc"
-for (let i = 0; i < 3; i++) {
-  setTimeout(() => console.log(i), 1000);
-}
-```
-
-<details>
-<summary>Show Output</summary>
-
-```javascript id="shqz3q"
 0;
 1;
 2;
@@ -2083,7 +2070,42 @@ for (let i = 0; i < 3; i++) {
 
 ### Explanation
 
-`let` creates a new block-scoped variable for every iteration.
+- `var` is function-scoped, so all callbacks share the same variable.
+- `let` creates a new block-scoped variable for every iteration.
+
+</details>
+
+### 4. Async/Await Trick
+
+```javascript id="oj75dc"
+async function test() {
+  console.log("A");
+
+  await Promise.resolve();
+
+  console.log("B");
+}
+
+console.log("C");
+
+test();
+
+console.log("D");
+```
+
+<details>
+<summary>Show Output</summary>
+
+```javascript id="shqz3q"
+C;
+A;
+D;
+B;
+```
+
+### Explanation
+
+`await` pauses execution and schedules the rest as a microtask.
 
 </details>
 
@@ -2097,7 +2119,12 @@ setTimeout(() => {
 }, 0);
 
 Promise.resolve().then(() => {
-  console.log("Promise");
+  console.log("Promise1");
+});
+
+new Promise((resolve, reject) => {
+  console.log("Promise2");
+  resolve("");
 });
 
 console.log("End");
@@ -2108,6 +2135,7 @@ console.log("End");
 
 ```javascript id="ttuxw7"
 Start;
+Promise2;
 End;
 Promise;
 Timeout;
@@ -2115,7 +2143,10 @@ Timeout;
 
 ### Explanation
 
-Promise callbacks go to the Microtask Queue which executes before Callback Queue.
+- The Promise constructor runs synchronously.
+- `.then()`, `.catch()`, and `.finally()` callbacks are placed in the Microtask Queue.
+- `setTimeout()` callbacks are placed in the Macrotask (Callback) Queue.
+- The Microtask Queue always has higher priority than the Macrotask Queue, so all - pending microtasks run before the next macrotask.
 
 </details>
 
@@ -2171,11 +2202,26 @@ Arrays are reference types.
 
 </details>
 
-### 8. Object Comparison
+### 8. Comparison
 
 ```javascript id="9lsz93"
 console.log([] == []);
 console.log([] === []);
+
+console.log({} == {});
+console.log({} === {});
+
+console.log([] == ![]);
+console.log([] === ![]);
+
+console.log({} == !{});
+console.log({} === !{});
+
+const arr = [];
+const arr2 = arr;
+
+console.log(arr == arr2);
+console.log(arr === arr2);
 ```
 
 <details>
@@ -2184,6 +2230,18 @@ console.log([] === []);
 ```javascript id="x26z2l"
 false;
 false;
+
+false;
+false;
+
+true;
+false;
+
+false;
+false;
+
+true;
+true;
 ```
 
 ### Explanation
@@ -2228,6 +2286,161 @@ Promise.resolve(5)
 ```javascript id="jlwm95"
 5;
 10;
+```
+
+</details>
+
+### 11. Async + Timeout + Promise
+
+```javascript
+async function foo() {
+  console.log("1");
+
+  await null;
+
+  console.log("2");
+}
+
+console.log("3");
+
+setTimeout(() => {
+  console.log("4");
+}, 0);
+
+foo();
+
+Promise.resolve().then(() => {
+  console.log("5");
+});
+
+console.log("6");
+```
+
+<details>
+<summary>Show Output</summary>
+
+```javascript
+3;
+1;
+6;
+2;
+5;
+4;
+```
+
+### Explanation
+
+Most people guess 5 before 2, but 2 was queued first by await.
+
+</details>
+
+</details>
+
+### 12. Evil One 😈
+
+```javascript
+console.log("1");
+
+setTimeout(() => console.log("2"));
+
+Promise.resolve().then(() => {
+  console.log("3");
+
+  setTimeout(() => console.log("4"));
+
+  Promise.resolve().then(() => {
+    console.log("5");
+  });
+});
+
+console.log("6");
+
+setTimeout(() => console.log("7"));
+
+Promise.resolve().then(() => console.log("8"));
+```
+
+<details>
+<summary>Show Output</summary>
+
+```javascript
+1;
+6;
+3;
+8;
+5;
+2;
+7;
+4;
+```
+
+### Explanation
+
+```js
+Sync:
+1
+6
+
+Microtasks:
+3
+8
+
+After 3:
+8
+5
+
+Macrotasks:
+2
+7
+4
+```
+
+</details>
+
+</details>
+
+### 11. Type Coercion
+
+```javascript
+"5" + 1            // "51"
+"5" - 1            // 4
+
+true + true        // 2
+
+[] + []            // ""
+[] + 1             // "1"
+
+[1] + 1            // "11"
+
+[] == 0            // true
+[] == false        // true
+[] == ![]          // true
+
+null == undefined  // true
+
+null >= 0          // true
+null == 0          // false
+
+undefined + 1      // NaN
+
+NaN == NaN         // false
+
++"123"             // 123
++[]                // 0
++{}                // NaN
+
+typeof null        // "object"
+```
+
+<details>
+<summary>Show Output</summary>
+
+```javascript
++  → Concatenates if either operand is a string.
+-, *, / → Convert operands to numbers.
+== → Performs type coercion.
+=== → No type coercion.
+Objects/Arrays → compared by reference.
 ```
 
 </details>
