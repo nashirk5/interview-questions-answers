@@ -112,7 +112,7 @@ A module is a place where we can group components, directives, services, and pip
   })
   export class SharedModule {}
   ```
-- **Shared Module:** Contains singleton services used globally
+- **Core Module:** Contains singleton services used globally
   ```typescript
   @NgModule({
     providers: [AuthService, LoggerService],
@@ -159,6 +159,41 @@ export class TestServiceService {
   constructor() {}
 }
 ```
+
+**Types of Service Instances**
+
+1. **Singleton Service (Most Common):** Every component gets the same instance.
+
+   ```js
+   @Injectable({
+     providedIn: "root",
+   })
+   export class UserService {}
+   ```
+
+2. **Module-Level Service:** One Instance Per Module Injector. Lazy-loaded modules may get separate instances.
+
+   ```js
+   @NgModule({
+     providers: [UserService],
+   })
+   export class UserModule {}
+   ```
+
+3. **Component-Level Service:** Every component instance gets its own service.
+
+   ```js
+   @Component({
+     providers: [UserService],
+   })
+   export class UserComponent {}
+   ```
+
+- What is the difference between `providedIn: 'root'` and `providers: [UserService]`?
+  - `providedIn: 'root'` creates a singleton service shared across the application. `providers` at the component level creates a new instance for each component instance.
+
+- When is a service instantiated?
+  - Not at application startup. Usually: First Time Requested -> Angular Creates Instance. This is called lazy instantiation.
 
 <div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
 
@@ -2095,207 +2130,334 @@ Tree Shaking is a build-time optimization that removes unused code from the fina
 
 <div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
 
-### Q 49. Angular Release History (Quick Interview Recap).
+### Q 49. What are Web Vitals?
 
-| Version           | Year | Major Updates                                                                           |
-| ----------------- | ---- | --------------------------------------------------------------------------------------- |
-| **AngularJS 1.x** | 2010 | First Angular framework, MVC architecture, two-way data binding, dependency injection   |
-| **Angular 2**     | 2016 | Complete rewrite of AngularJS, introduced **TypeScript**, component-based architecture  |
-| Angular 4         | 2017 | Smaller bundle size, improved **AOT compilation**, faster rendering                     |
-| Angular 5         | 2017 | Build optimizer, **HttpClient module**, improved compiler                               |
-| Angular 6         | 2018 | **Angular CLI improvements**, Angular Elements, RxJS 6 support                          |
-| Angular 7         | 2018 | **Virtual scrolling**, CLI prompts, performance improvements                            |
-| Angular 8         | 2019 | **Differential loading**, dynamic imports, web workers                                  |
-| Angular 9         | 2020 | **Ivy rendering engine** enabled by default                                             |
-| Angular 10        | 2020 | Better TypeScript integration, stricter project configuration                           |
-| Angular 11        | 2020 | Faster builds, improved **Hot Module Replacement (HMR)**                                |
-| Angular 12        | 2021 | Ivy everywhere, improved build system, strict typing                                    |
-| Angular 13        | 2021 | **View Engine removed**, Ivy fully adopted                                              |
-| Angular 14        | 2022 | **Typed Reactive Forms**, standalone component preview                                  |
-| Angular 15        | 2022 | **Standalone components stable**, simplified module usage                               |
-| Angular 16        | 2023 | **Signals introduced**, improved hydration, better performance                          |
-| Angular 17        | 2023 | **New control flow (`@if`, `@for`)**, deferrable views                                  |
-| Angular 18        | 2024 | **Signals improvements**, zoneless experiments, performance upgrades                    |
-| Angular 19        | 2024 | Improved server rendering, better hydration and performance                             |
-| Angular 20        | 2025 | Continued **signals-first architecture**, improved build tools and developer experience |
+Core Web Vitals are user-centric performance metrics defined by Google to measure page loading, responsiveness, and visual stability.
 
-### Here is the Major release for quick interview recap.
+The three key metrics are LCP (Largest Contentful Paint) for loading performance, INP (Interaction to Next Paint) for responsiveness, and CLS (Cumulative Layout Shift) for visual stability.
 
-| Version       | Year | Key Updates (2–3 lines)                                                                                                                               |
-| ------------- | ---- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Angular 2** | 2016 | Complete rewrite of AngularJS. Introduced **component-based architecture, TypeScript, RxJS, and dependency injection**. Foundation of modern Angular. |
-| Angular 9     | 2020 | Introduced **Ivy rendering engine** as default. Reduced bundle size, improved build speed, better debugging and tree-shaking.                         |
-| Angular 14    | 2022 | Introduced **Typed Reactive Forms** for better TypeScript safety and autocomplete. Also improved standalone APIs preview.                             |
-| Angular 15    | 2022 | **Standalone Components became stable**, allowing apps without NgModules. Simplified architecture and improved lazy loading.                          |
-| Angular 16    | 2023 | Introduced **Signals**, a new reactive state management model. Also improved hydration and performance optimizations.                                 |
+**Largest Contentful Paint(LCP):** Measures how long it takes for the largest visible content element to appear.
+
+**Interaction to Next Paint(INP):** Measures how quickly the UI responds after a user interaction. **Good Score ≤ 200ms**
+
+**Cumulative Layout Shift(CLS):** Measures unexpected movement of page elements. **Good Score ≤ 0.1**
+
+| Metric | Measures            | Good Score |
+| ------ | ------------------- | ---------- |
+| LCP    | Loading Performance | ≤ 2.5s     |
+| INP    | Interactivity       | ≤ 200ms    |
+| CLS    | Visual Stability    | ≤ 0.1      |
+
+In Angular applications, these can be improved through lazy loading, code splitting, OnPush change detection, virtual scrolling, image optimization, caching, and SSR.
 
 <div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
 
-### Q 46. Compact Angular RxJS cheat sheet covering the most common operators!
+### Q 50. How would you architect a large Angular application?
 
-**Quick Analogies for Interviews**
-
-- Observable → Newspaper subscription → each subscriber gets full copy independently.
-- Subject → Live TV broadcast → subscribers see only what’s currently airing.
-- Signal → Thermostat → all UI components always reflect the latest value automatically.
-- switchMap → Changing TV channels → previous stops, latest plays.
-- mergeMap → Multiple delivery trucks → all run concurrently.
-- concatMap → Coffee line → one at a time, in order.
-- forkJoin → All friends arrive → start together once everyone is ready.
-- combineLatest → Dashboard → updates whenever any widget changes.
-- zip → Pairing socks → first with first, second with second, etc.
-
-| Operator / Concept | What It Does                                                  | Key Points                                         | Use Case                                     |
-| ------------------ | ------------------------------------------------------------- | -------------------------------------------------- | -------------------------------------------- |
-| **map**            | Transforms each emitted value                                 | Always emits same number of values                 | Multiply numbers, format API data            |
-| **filter**         | Emits only values meeting a condition                         | Doesn’t modify values                              | Only active users, valid inputs              |
-| **tap**            | Performs side effects without changing values                 | For logging, loaders, analytics                    | Debugging, UI updates                        |
-| **switchMap**      | Maps to inner Observable, **cancels previous**                | Only latest value matters                          | Autocomplete, live search, reactive forms    |
-| **mergeMap**       | Maps to inner Observables **concurrently**                    | All emissions run independently                    | Parallel API calls, batch processing         |
-| **concatMap**      | Maps to inner Observables **sequentially**                    | Preserves order                                    | Sequential API calls, dependent operations   |
-| **forkJoin**       | Waits for **all Observables to complete**, emits last values  | Emits once, fails if any error                     | Multiple HTTP requests, app initialization   |
-| **combineLatest**  | Emits on **any source emission** using latest values from all | Emits after all have emitted at least once         | Reactive forms, dashboards, UI state         |
-| **zip**            | Combines values **one-to-one in order**                       | Stops when shortest Observable completes           | Pairing inputs, batch coordination           |
-| **Observable**     | Cold, lazy stream                                             | Independent for each subscriber                    | HTTP calls, timers                           |
-| **Subject**        | Hot, can emit manually                                        | Multicasts to all subscribers                      | Event bus, shared state                      |
-| **Signal**         | Reactive value container                                      | Auto-updates dependents, supports computed/effects | State management, derived values, UI updates |
+I would organize the application into Core, Shared, and Feature modules. Core contains singleton services, interceptors, and guards. Shared contains reusable components, directives, and pipes. Business domains are separated into feature modules with lazy loading to improve performance. I would keep business logic in services, use smart and dumb component patterns, implement centralized error handling through interceptors, and choose state management based on complexity, using services for smaller applications and NgRx for larger ones. For enterprise-scale systems, I would also consider micro frontends, reusable component libraries, and modern Angular features like standalone components and signals to improve maintainability and scalability.
 
 <div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
 
-### Q 50. Angular Interview Quick Revision Sheet.
+### Q 51. How do you optimize a 100k-row grid?
 
-**1️⃣ Angular Core Concepts**
-
-| Concept              | Quick Explanation                                                     |
-| -------------------- | --------------------------------------------------------------------- |
-| Component            | Basic building block of Angular UI (template + class + metadata).     |
-| Module (NgModule)    | Organizes components, directives, pipes, and services.                |
-| Standalone Component | Component that works **without NgModule** (introduced in Angular 15). |
-| Directive            | Adds behavior to DOM elements (`ngIf`, `ngFor`).                      |
-| Pipe                 | Transforms data in templates (`date`, `uppercase`).                   |
-| Service              | Business logic shared across components.                              |
-| Dependency Injection | Angular automatically provides service instances.                     |
-
-**2️⃣ Angular Lifecycle Hooks**
-
-| Hook            | Purpose                                 |
-| --------------- | --------------------------------------- |
-| ngOnInit        | Runs after component initialization     |
-| ngOnChanges     | Runs when input properties change       |
-| ngDoCheck       | Custom change detection                 |
-| ngAfterViewInit | Runs after view initialization          |
-| ngOnDestroy     | Cleanup (unsubscribe, remove listeners) |
-
-**3️⃣ Change Detection**
-
-| Strategy | Description                                                         |
-| -------- | ------------------------------------------------------------------- |
-| Default  | Angular checks every component in each change detection cycle       |
-| OnPush   | Angular checks component only when inputs/events/observables change |
-
-**Triggered by:**
-
-- events
-- HTTP responses
-- timers
-- promises
-
-**4️⃣ RxJS Essentials**
-
-| Concept       | Explanation                                      |
-| ------------- | ------------------------------------------------ |
-| Observable    | Stream of asynchronous data                      |
-| Subject       | Multicast observable that can emit values        |
-| switchMap     | Cancels previous request and switches to new one |
-| mergeMap      | Executes multiple observables concurrently       |
-| concatMap     | Executes observables sequentially                |
-| forkJoin      | Waits for all observables to complete            |
-| combineLatest | Emits when any observable emits                  |
-
-**5️⃣ Forms**
-
-| Type           | Description                                            |
-| -------------- | ------------------------------------------------------ |
-| Template Forms | Defined mainly in HTML using `ngModel`                 |
-| Reactive Forms | Defined in TypeScript using `FormGroup`, `FormControl` |
-| Typed Forms    | Introduced in Angular 14 for strong TypeScript typing  |
-
-```js
-FormControl → single input
-FormGroup → group of controls
-FormArray → dynamic controls
-```
-
-**6️⃣ Angular Architecture**
-
-```js
-Component
-   ↓
-Template
-   ↓
-Service (business logic)
-   ↓
-API / Backend
-```
-
-**Angular uses:**
-
-- Component-based architecture
-- Dependency Injection
-- RxJS for async operations
-
-7️⃣ Important Angular Features by Version
-
-| Version    | Feature                |
-| ---------- | ---------------------- |
-| Angular 2  | Component architecture |
-| Angular 9  | Ivy rendering engine   |
-| Angular 14 | Typed Forms            |
-| Angular 15 | Standalone Components  |
-| Angular 16 | Signals                |
-
-**8️⃣ Signals (Modern Reactivity)**
-
-```js
-count = signal(0);
-
-count.set(5);
-```
-
-Benefits:
-
-- fine-grained reactivity
-- less change detection
-- better performance
-
-**9️⃣ Angular Project Structure**
-
-```js
-src/
- ├── app/
- │   ├── components
- │   ├── services
- │   ├── models
- │   └── app.module.ts
- ├── assets
- ├── environments
- └── main.ts
-```
-
-main.ts bootstraps the application.
-
-**🔟 Angular Performance Best Practices**
-
-- Use OnPush change detection
-- Use trackBy in ngFor
-- Use lazy loading
-- Avoid unnecessary subscriptions
-- Use async pipe
-- Use signals where appropriate
+For a 100k-row grid, I would never render all rows at once because the DOM becomes too large and impacts memory, rendering, and change detection performance. Instead, I would use virtual scrolling to render only the visible rows, implement pagination or server-side paging if appropriate, use OnPush change detection, trackBy in ngFor, optimize API calls, and avoid expensive calculations inside templates.
 
 <div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
 
-### Q . Error Handling
+### Q 52. What causes memory leaks?
+
+Memory leaks occur when objects remain referenced and cannot be garbage collected. In Angular, the most common causes are unsubscribed Observables, event listeners, timers, and retained object references. I prevent them using AsyncPipe, takeUntil/takeUntilDestroyed, proper cleanup in ngOnDestroy, and regular memory profiling with browser DevTools.
+
+**Common Causes:**
+
+- Unsubscribed Observables (`Subject`, `BehaviorSubject`, `interval`, `valueChanges`)
+- Event listeners not removed
+- `setInterval` or long-running timers not cleared
+- Closures holding references to large objects
+- Detached DOM elements still referenced
+- Global variables
+- Misuse of `shareReplay()` or cached data
+
+**Prevention:**
+
+- Use `AsyncPipe`
+- Use `takeUntil()` or `takeUntilDestroyed()`
+- Remove event listeners in `ngOnDestroy`
+- Clear intervals/timeouts
+- Avoid unnecessary global references
+
+- How Would You Detect a Memory Leak?
+  - Using browser DevTools: Chrome DevTools -> Memory Tab -> Heap Snapshot
+
+<div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
+
+### Q 53. What is circular dependencies and how do you avoid ?
+
+Circular dependency occurs when two or more modules, services, or components depend on each other directly or indirectly. It can lead to runtime errors, unexpected behavior, and make the code difficult to maintain. I avoid it by maintaining clear separation of responsibilities, using interfaces/abstractions, introducing mediator services, and following a layered architecture.
+
+Circular dependencies are avoided by enforcing one-way dependency flow, extracting shared logic, and using a mediator service or state management instead of direct service-to-service coupling.
+
+How to Detect Circular Dependencies?
+
+```js
+npm install madge -g
+madge --circular src
+```
+
+Angular build warnings and dependency graph tools can also help identify them.
+
+<div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
+
+### Q 54. How would you reduce initial bundle size?
+
+To reduce the initial bundle size, I focus on loading only the code required for the first screen. I use lazy loading for feature modules, remove unused dependencies, optimize third-party libraries, enable tree shaking, use standalone components where appropriate, and optimize images and assets. The goal is to improve load time and Core Web Vitals such as LCP.
+
+**Key Techniques:**
+
+- **Lazy Loading:** Load feature modules only when users navigate to them.
+- **Code Splitting:** Split large bundles into smaller chunks.
+- **Tree Shaking:** Remove unused code during production builds.
+- **Optimize Third-Party Libraries:** Import only required modules/functions.
+- **Standalone Components:** Reduce module overhead and improve route-level loading.
+- **Image Optimization:** Compress and lazy-load images.
+- **Avoid Large Dependencies:** Replace heavy libraries with lighter alternatives when possible.
+- **Production Build Optimizations:** AOT compilation, minification, compression (Gzip/Brotli).
+
+<div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
+
+### Q 55. What is template lazy loading?
+
+Yes, Angular supports template-level lazy loading. In Angular 17+, I can use `@defer` blocks to lazy load components based on conditions such as viewport visibility, user interaction, or idle time. This reduces the initial bundle size and improves page load performance because heavy components are downloaded only when required. Additionally, for images I use the browser's native `loading="lazy"` attribute.
+
+**Load on Viewport:** Downloads when the component scrolls into view.
+
+```js
+@defer (on viewport) {
+  <app-heavy-chart />
+}
+```
+
+**Load on Interaction:** Downloads when the user interacts.
+
+```js
+@defer (on interaction) {
+  <app-user-details />
+}
+```
+
+<div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
+
+### Q 56. What is Web Security and how do you handle it?
+
+1. **XSS (Cross-Site Scripting):** XSS occurs when malicious scripts are injected into a webpage and executed in a user's browser. Angular helps prevent XSS through built-in sanitization, but developers should avoid unsafe DOM manipulation and validate user input.
+
+   **Prevention:**
+   - Angular automatically sanitizes HTML.
+   - Avoid direct DOM manipulation.
+   - Use Angular bindings instead of innerHTML.
+   - Use Content Security Policy (CSP).
+
+2. **CORS:** CORS is a browser security mechanism that restricts cross-origin requests unless explicitly allowed by the server.
+   - Why does the API work in Postman but fail in the browser?
+     - Because browsers enforce CORS.
+
+     ```js
+     Frontend: app.company.com;
+
+     Backend: api.company.com;
+
+     // Backend must allow:
+     Access - Control - Allow - Origin;
+     ```
+
+3. **CSRF (Cross-Site Request Forgery):** CSRF attacks force authenticated users to perform unintended actions. Common protections include CSRF tokens and SameSite cookie settings.
+
+4. **Authentication vs Authorization:** Authentication verifies identity, while authorization determines what resources a user can access.
+
+5. **JWT Security:** Access Token and Refresh Token. Access Token and Refresh Token. Store in: Secure HttpOnly Cookies
+
+<div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
+
+### Q 57. What design patterns do you follow?
+
+In Angular, the most common design patterns I use are Singleton for services, Observer through RxJS, Factory via dependency injection, Facade for NgRx state management, Strategy for dynamic business rules, and Decorator through Angular decorators like `@Component` and `@Injectable`. These patterns help build scalable, maintainable, and loosely coupled enterprise applications.
+
+1. **Singleton Pattern:** Only one instance of a class exists throughout the application.
+
+   Angular services provided at the root level are examples of the Singleton pattern because only one instance is shared across the application.
+
+2. **Observer Pattern:** One object notifies multiple subscribers when data changes.
+
+   Angular heavily uses the Observer pattern through RxJS Observables and Subjects, where multiple subscribers react to emitted values.
+
+3. **Factory Pattern:** Create objects without exposing creation logic.
+
+   Angular's dependency injection system internally follows the Factory pattern to create and provide service instances.
+
+4. **Facade Pattern:** I frequently use the Facade pattern with NgRx to hide state management complexity and provide a simple API for components.
+
+5. **Strategy Pattern:** Switch behavior dynamically without changing the client code.
+   The Strategy pattern allows different algorithms or behaviors to be selected at runtime without modifying the calling code.
+
+6. **Decorator Pattern:** Angular extensively uses the Decorator pattern through decorators such as `@Component`, `@Injectable`, and `@Directive`.
+
+| Pattern   | Angular Example         |
+| --------- | ----------------------- |
+| Singleton | Services                |
+| Observer  | RxJS Observables        |
+| Factory   | Dependency Injection    |
+| Facade    | NgRx Facade Services    |
+| Strategy  | Dynamic Business Logic  |
+| Adapter   | API Response Mapping    |
+| Decorator | @Component, @Injectable |
+
+<div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
+
+### Q 58 What is loosely and tight coupled in angular?
+
+Tight Coupling: Components or services directly depend on concrete implementations, making code difficult to modify, test, and maintain.
+
+Loose Coupling: Components or services interact through Angular Dependency Injection, interfaces, inputs/outputs, and observables, reducing dependencies and making the application more flexible, testable, and maintainable.
+
+Angular is designed to encourage loose coupling through its Dependency Injection framework.
+
+<div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
+
+### Q 59. What is Hydration?
+
+Hydration allows Angular to reuse server-rendered HTML and make it interactive without re-rendering the entire page.
+
+It works with SSR to improve performance, reduce rendering work, improve Core Web Vitals such as LCP, and provide a better user experience.
+
+- When Is Hydration Used?
+  - Typically with: Angular Universal (SSR) + Hydration. SSR renders the page on the server. Hydration activates it on the client.
+
+```html
+<!-- Without Hydration -->
+Server ↓ HTML Sent to Browser ↓ Browser Displays HTML ↓ Angular Bootstraps ↓
+Destroys Existing DOM ↓ Recreates DOM
+
+<!-- This causes extra work and slower page rendering. -->
+
+---
+
+<!-- With Hydration -->
+Server ↓ HTML Sent to Browser ↓ Browser Displays HTML ↓ Angular Bootstraps ↓
+Reuses Existing DOM ↓ Attaches Events
+
+<!-- No unnecessary DOM recreation. -->
+```
+
+<div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
+
+### Q 60. What is New Control Flow (`@if`,` @for`, `@switch`),
+
+Angular 17 introduced built-in control flow syntax such as `@if`, `@for`, and `@switch` to replace structural directives like `*ngIf` and `*ngFor`. The new syntax is more readable, easier to maintain, and provides better performance, especially with `@for`, which includes an improved diffing mechanism and built-in tracking support.
+
+**`@if`**
+
+```html
+<!-- Before -->
+<div *ngIf="isLoggedIn">Welcome User</div>
+
+<!-- After -->
+@if (isLoggedIn) {
+<div>Welcome User</div>
+}
+
+<!-- Else Block -->
+
+<!-- Before -->
+<div *ngIf="isLoggedIn; else login">Welcome User</div>
+
+<ng-template #login> Please Login </ng-template>
+
+<!-- After -->
+@if (isLoggedIn) {
+<div>Welcome User</div>
+} @else {
+<div>Please Login</div>
+}
+```
+
+**`@for`**
+
+```html
+<!-- Before -->
+<div *ngFor="let user of users">{{ user.name }}</div>
+
+<!-- After -->
+@for (user of users; track user.id) {
+<div>{{ user.name }}</div>
+}
+
+<!-- Empty State -->
+
+<!-- Before -->
+<div *ngIf="users.length === 0">No Users Found</div>
+
+<!-- After -->
+@for (user of users; track user.id) {
+<div>{{ user.name }}</div>
+} @empty {
+<div>No Users Found</div>
+}
+```
+
+<div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
+
+### Q 61. What is HostBinding vs HostListener, viewChild vs viewChildren, and ViewChild vs ContentChild?
+
+**`@HostBinding`** is used to bind properties, classes, styles, or attributes to the host element.
+
+**`@HostListener`** is used to listen to events emitted by the host element such as click, mouseenter, or keydown.
+
+**`ViewChild`** is used to access a single child element or component from the view.
+
+**`ViewChildren`** is used when multiple matching elements or components need to be accessed.
+
+`ViewChild` accesses elements and components that belong to the component's own view.
+
+`ContentChild` accesses content projected into the component through `ng-content`. `ViewChild` works with the component template, whereas `ContentChild` works with projected content.
+
+`@HostBinding` binds properties or styles to the host element, while `@HostListener` listens to host element events. `ViewChild` retrieves a single element or component from the component's own template, `ViewChildren` retrieves multiple matching elements as a `QueryList`, and `ContentChild` is used to access content projected through `ng-content`. `ViewChild/ViewChildren` work with the view, whereas `ContentChild` works with projected content.
+
+<div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
+
+<!-- ### Q . Error
+
+<div align="right"><b><a href="#angular">↥ Back to top</a></b></div> -->
+
+### Q . Angular Release History (Quick Interview Recap).
+
+| Version           | Year     | Major Updates                                                                                                                           |
+| ----------------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| **AngularJS 1.x** | 2010     | First Angular framework, MVC architecture, two-way data binding, dependency injection                                                   |
+| **Angular 2**     | 2016     | Complete rewrite of AngularJS, introduced **TypeScript**, component-based architecture                                                  |
+| Angular 4         | 2017     | Smaller bundle size, improved **AOT compilation**, faster rendering                                                                     |
+| Angular 5         | 2017     | Build optimizer, **HttpClient module**, improved compiler                                                                               |
+| Angular 6         | 2018     | **Angular CLI improvements**, Angular Elements, RxJS 6 support                                                                          |
+| Angular 7         | 2018     | **Virtual scrolling**, CLI prompts, performance improvements                                                                            |
+| Angular 8         | 2019     | **Differential loading**, dynamic imports, web workers                                                                                  |
+| Angular 9         | 2020     | **Ivy rendering engine** enabled by default                                                                                             |
+| Angular 10        | 2020     | Better TypeScript integration, stricter project configuration                                                                           |
+| Angular 11        | 2020     | Faster builds, improved **Hot Module Replacement (HMR)**                                                                                |
+| Angular 12        | 2021     | Ivy everywhere, improved build system, strict typing                                                                                    |
+| Angular 13        | 2021     | **View Engine removed**, Ivy fully adopted                                                                                              |
+| Angular 14        | 2022     | **Typed Reactive Forms**, standalone component preview                                                                                  |
+| Angular 15        | 2022     | **Standalone components stable**, simplified module usage                                                                               |
+| Angular 16        | 2023     | **Signals introduced**, improved hydration, better performance                                                                          |
+| Angular 17        | 2023     | **New control flow (`@if`, `@for`)**, deferrable views                                                                                  |
+| Angular 18        | 2024     | **Signals improvements**, zoneless experiments, performance upgrades                                                                    |
+| Angular 19        | 2024     | Improved server rendering, better hydration and performance                                                                             |
+| Angular 20        | 2025     | Continued **signals-first architecture**, improved build tools and developer experience                                                 |
+| Angular 20        | May 2025 | Modern build pipeline, SSR improvements                                                                                                 |
+| Angular 21        | Nov 2025 | Zoneless change detection, Signal Forms improvements                                                                                    |
+| Angular 22        | Jun 2026 | Signal Forms stable, Zoneless default for new projects, OnPush default for new components, template and API enhancements ([Angular][1]) |
+
+[1]: https://angular.dev/reference/releases?utm_source=chatgpt.com "Versioning and releases • Angular"
+
+The biggest Angular milestones were Ivy in Angular 9, Standalone Components in Angular 14/15, Signals in Angular 16, the new control flow and deferred loading in Angular 17, and the continued move toward zoneless change detection and SSR improvements in Angular 18-20. These changes focus on better performance, simpler APIs, and improved developer experience. |
 
 <div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
 
