@@ -195,20 +195,29 @@ export class TestServiceService {
 - When is a service instantiated?
   - Not at application startup. Usually: First Time Requested -> Angular Creates Instance. This is called lazy instantiation.
 
-- What is providers in Angular?
-  - Providers are Angular's way of configuring Dependency Injection. A provider tells Angular how to create and supply an instance for a dependency. Providers can be registered at the root, module, or component level, which determines the lifetime and scope of the service instance. Angular uses a hierarchical injector system, so component-level providers can override root-level providers when needed.
-
 <div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
 
-### Q 7. What is Metadata?
+### Q 7. What is providers in Angular?
 
-Metadata is used to decorate a class so that it can configure the expected behavior of the class. The metadata is represented by decorators
+Providers are Angular's way of configuring Dependency Injection. A provider tells Angular how to create and supply an instance for a dependency. Providers can be registered at the root, module, or component level, which determines the lifetime and scope of the service instance. Angular uses a hierarchical injector system, so component-level providers can override root-level providers when needed.
+
+**Different Provider Types**
+
+| Provider Type       | Syntax                                                   | Purpose                                 | Creates New Instance? | Common Use Case                                     |
+| ------------------- | -------------------------------------------------------- | --------------------------------------- | --------------------- | --------------------------------------------------- |
+| **useClass**        | `provide: LoggerService, useClass: FileLoggerService`    | Replace one implementation with another | ✅ Yes                | Environment-specific services, mocking              |
+| **useValue**        | `provide: API_URL, useValue: 'https://api.com'`          | Inject a constant/static value          | ❌ No                 | Config values, feature flags, environment settings  |
+| **useFactory**      | `provide: UserService, useFactory: factoryFn`            | Create service dynamically using logic  | Depends on factory    | Runtime configuration, conditional service creation |
+| **useExisting**     | `provide: LoggerService, useExisting: FileLoggerService` | Create an alias to an existing provider | ❌ No                 | Multiple tokens pointing to same instance           |
+| **Direct Provider** | `providers: [UserService]`                               | Shorthand for `useClass`                | ✅ Yes                | Most common service registration                    |
 
 <div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
 
 ### Q 8. What is Decorators?
 
 Decorators are functions that provide metadata to Angular classes, helping Angular to understand how they should behave.
+
+**Metadata** is used to decorate a class so that it can configure the expected behavior of the class. The metadata is represented by decorators
 
 There are four main types of angular decorators:
 
