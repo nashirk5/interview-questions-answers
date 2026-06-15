@@ -90,6 +90,19 @@ export class TestComponent implements OnInit {
 }
 ```
 
+- When is a Component Destroyed?
+  - A component is destroyed when Angular removes it from the component tree, such as during route navigation, when an `*ngIf` condition becomes false, when a parent component is destroyed, or when a dynamically created component is explicitly destroyed. Before removing the component, Angular invokes the ngOnDestroy lifecycle hook, which is used to perform cleanup activities such as unsubscribing from Observables, removing event listeners, clearing timers, and closing WebSocket connections to prevent memory leaks.
+
+- Does Angular destroy services when component is destroyed?
+  - It depends how the service are injected. If its root level Not destroyed when component dies.
+
+| Service Scope            | Destroyed with Component?                |
+| ------------------------ | ---------------------------------------- |
+| `providedIn: 'root'`     | ❌ No                                    |
+| App-level provider       | ❌ No                                    |
+| Module-level provider    | ❌ Usually No (until module is unloaded) |
+| Component-level provider | ✅ Yes                                   |
+
 <div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
 
 ### Q 5. What is Module?
@@ -927,12 +940,21 @@ export class AppRoutingModule {}
 
 ### Q 28. How to optimize loading large data in angular?
 
-1. **Pagination:** Instead of loading all data at once, implement pagination to fetch and display data in smaller, manageable chunks. This reduces the initial load time and enhances the responsiveness of your application.
-2. **Infinite Scrolling:** Implement infinite scrolling, where data is loaded dynamically as the user scrolls down the page. This provides a seamless user experience by continuously loading data without requiring the user to navigate through pagination controls.
-3. **Virtual Scrolling:** Render only visible items instead of the full list. Angular CDK provides virtual scrolling. Which will improves the DOM performance.
-4. **OnPush Change Detection:** Reduces unnecessary component re-rendering.
-5. **TrackBy in `*ngFor`:** Prevents Angular from re-rendering unchanged items. Faster DOM updates and better rendering performance
-6. **Caching:** Implement client-side caching mechanisms, such as browser caching or in-memory caching using libraries like **`ngrx/store`**, to store frequently accessed data locally. This reduces the number of API requests and improves performance.
+1. Use Server-Side Pagination instead of loading all records at once.
+2. Implement Virtual Scrolling (Angular CDK) to render only visible rows.
+3. Use Infinite Scrolling for large lists and feeds.
+4. Enable Lazy Loading for feature modules.
+5. Use OnPush Change Detection to reduce unnecessary checks.
+6. Implement `trackBy` with `*ngFor` to avoid recreating DOM elements.
+7. Cache API responses using `shareReplay()`.
+8. Use Debounce and `distinctUntilChanged()` for search inputs.
+9. Prefer Async Pipe over manual subscriptions.
+10. Avoid fetching unnecessary fields from APIs.
+11. Use Skeleton Loaders instead of blocking spinners for better UX.
+12. Implement SSR/Hydration for faster initial page load.
+13. Use Tree Shaking and Code Splitting to reduce bundle size.
+14. Load images lazily using `loading="lazy"`.
+15. Profile performance using Lighthouse, Angular DevTools, and Chrome Performance Tab.
 
 <div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
 
@@ -1199,21 +1221,22 @@ from(userClicks)
   .subscribe((response) => console.log("Action processed:", response));
 ```
 
-| Feature          | switchMap                     | mergeMap                         | concatMap                      |
-| ---------------- | ----------------------------- | -------------------------------- | ------------------------------ |
-| Execution        | Switches to latest Observable | Runs all Observables in parallel | Runs one after another (queue) |
-| Previous request | ❌ Cancelled                  | ❌ Not cancelled                 | ❌ Waits until completion      |
-| Order maintained | ❌ No                         | ❌ No                            | ✅ Yes                         |
-| Concurrency      | Only latest active            | Multiple at same time            | One at a time                  |
-| Best use case    | Search, autocomplete          | API calls, file uploads          | Sequential tasks, step forms   |
-| Risk             | Can miss previous results     | Can overload server              | Slower execution               |
-| Behavior style   | Latest wins                   | All execute                      | FIFO (queue system)            |
+| Feature              | switchMap                     | mergeMap                         | concatMap                      | exhaustMap                                           |
+| -------------------- | ----------------------------- | -------------------------------- | ------------------------------ | ---------------------------------------------------- |
+| **Execution**        | Switches to latest Observable | Runs all Observables in parallel | Runs one after another (queue) | Ignores new Observables while current one is running |
+| **Previous request** | ❌ Cancelled                  | ❌ Not cancelled                 | ❌ Waits until completion      | ✅ Current request continues, new requests ignored   |
+| **Order maintained** | ❌ No                         | ❌ No                            | ✅ Yes                         | ✅ Yes (only first request processed)                |
+| **Concurrency**      | Only latest active            | Multiple at same time            | One at a time                  | One at a time (ignores new emissions)                |
+| **Best use case**    | Search, autocomplete          | Parallel API calls, file uploads | Sequential tasks, step forms   | Login, Submit button, Payment processing             |
+| **Risk**             | Can miss previous results     | Can overload server              | Slower execution               | Can ignore valid user actions                        |
+| **Behavior style**   | Latest wins                   | All execute                      | FIFO (queue system)            | First wins, rest ignored until completion            |
 
 **Easy Interview Memory Line**
 
-- switchMap = latest wins (cancel old)
-- mergeMap = all run together (parallel)
-- concatMap = one by one (queue order)
+- `switchMap` → Latest wins (cancel previous)
+- `mergeMap` → Everyone wins (run all in parallel)
+- `concatMap` → Wait in line (queue, one by one)
+- `exhaustMap` → First wins (ignore new until complete)
 
 <div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
 
