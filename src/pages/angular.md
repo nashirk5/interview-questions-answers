@@ -313,6 +313,46 @@ Directives are used to modify the behavior, appearance of DOM elements.
 
 > _**👉 NOTE:** The `*` is syntactic sugar for Angular’s internal `<ng-template>`._
 
+- Can we use multiple structural directives in a element?
+  - No. Angular does not allow multiple structural directives on the same host element.
+
+- Why?
+  - Structural directives (`*ngIf`, `*ngFor`, `*ngSwitchCase`, etc.) internally transform the element into an `<ng-template>`.
+
+```html
+<div *ngIf="isLoggedIn">Welcome</div>
+
+<!-- becomes: -->
+
+<ng-template [ngIf]="isLoggedIn">
+  <div>Welcome</div>
+</ng-template>
+
+<!-- Now imagine Angular sees: -->
+<div *ngIf="isLoggedIn" *ngFor="let user of users"></div>
+
+<!-- It doesn't know which <ng-template> should wrap the element first. -->
+ngIf? -> ngFor? OR ngFor? -> ngIf?
+```
+
+Use ng-container
+
+```html
+<ng-container *ngIf="isLoggedIn">
+  <div *ngFor="let user of users">{{ user.name }}</div>
+</ng-container>
+```
+
+Angular 17+ New Control Flow
+
+```js
+@if (isLoggedIn) {
+  @for (user of users; track user.id) {
+    <div>{{ user.name }}</div>
+  }
+}
+```
+
 <div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
 
 ### Q 10. Write a custom Directive
