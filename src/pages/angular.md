@@ -2424,6 +2424,124 @@ Angular 17 introduced built-in control flow syntax such as `@if`, `@for`, and `@
 
 <div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
 
+### Q 62. Coding Standards & Code Quality Tools?
+
+- **Angular Style Guide:** Follow Angular's recommended folder structure, naming conventions, component architecture, and best practices to maintain consistency across the application.
+
+- **ESLint:** Enforces coding standards, catches code smells, and prevents common development mistakes.
+
+- **Prettier:** Automatically formats code to ensure a consistent coding style across the team.
+
+- **SonarQube:** Identifies code smells, security vulnerabilities, duplicate code, technical debt, and test coverage issues.
+
+- **Jest / Karma:** Helps maintain code quality through automated unit and integration tests.
+
+- **GitHub Actions / Azure DevOps / Jenkins:** Automates linting, testing, security scans, and deployment through CI/CD pipelines.
+
+- **GitHub Copilot:** AI coding assistant that suggests code, test cases, and implementation patterns.
+
+- **Cursor AI:** AI-powered IDE that assists with code reviews, refactoring, debugging, and code explanations.
+
+- **CodeRabbit:** AI code reviewer that analyzes pull requests and provides suggestions for improvements and bug fixes.
+
+- **Husky:** Runs automated checks such as linting and tests before allowing commits.
+
+- **lint-staged:** Executes linting and formatting only on changed files to speed up pre-commit validation.
+
+<div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
+
+### Q 63. How do you deploy the build?
+
+**CI/CD Deployment Flow**
+
+- Developer raises a Pull Request (PR)
+  - Code is reviewed by team members before merging.
+- CI Pipeline Triggered
+  - Runs ESLint and Prettier checks.
+  - Executes unit test cases (Jasmine/Jest).
+  - Runs SonarQube analysis for code quality, security vulnerabilities, and code coverage.
+- Build Generation
+  - Angular production build is created using:
+  - `ng build --configuration production`
+  - Build artifacts are generated and versioned.
+- Artifact Storage
+  - The generated artifact is stored in the CI/CD platform (Azure DevOps Artifacts, Nexus, Artifactory, etc.).
+  - Each artifact has a unique version/build number.
+- Secrets Management
+  - Secrets are stored in HashiCorp Vault.
+  - CI/CD pipeline retrieves secrets securely during deployment.
+  - Secrets are never stored in source code or Git repositories.
+- Deployment
+  - CD pipeline picks the approved artifact.
+  - Deploys to Dev → QA/UAT → Production environments.
+  - Environment-specific configurations are injected during deployment.
+- Post-Deployment Validation
+  - Smoke tests.
+  - Health checks.
+  - Application monitoring and log verification.
+- Rollback Strategy
+  - If an issue is detected, no new build is created.
+  - Redeploy the previous stable artifact version.
+  - Since artifacts are immutable and already tested, rollback is fast and low risk.
+
+**Rollback:** For our Angular application, we don't maintain separate rollback code. Every release generates a versioned artifact that is stored in the artifact repository. If a deployment fails, we redeploy the previous stable artifact through the release pipeline.
+
+```yml
+trigger:
+  branches:
+    include:
+      - main
+
+pool:
+  vmImage: "ubuntu-latest"
+
+steps:
+  # Install Node.js
+  - task: NodeTool@0
+    inputs:
+      versionSpec: "20.x"
+
+  # Install dependencies
+  - script: |
+      npm install
+    displayName: "Install Dependencies"
+
+  # Run Lint
+  - script: |
+      npm run lint
+    displayName: "Run ESLint"
+
+  # Run Unit Tests
+  - script: |
+      npm run test -- --watch=false --browsers=ChromeHeadless
+    displayName: "Run Unit Tests"
+
+  # SonarQube Analysis
+  - task: SonarQubePrepare@5
+    inputs:
+      SonarQube: "SonarQube-Service"
+      scannerMode: "CLI"
+
+  - task: SonarQubeAnalyze@5
+
+  - task: SonarQubePublish@5
+    inputs:
+      pollingTimeoutSec: "300"
+
+  # Angular Production Build
+  - script: |
+      npm run build -- --configuration production
+    displayName: "Build Angular App"
+
+  # Publish Artifact
+  - task: PublishBuildArtifacts@1
+    inputs:
+      PathtoPublish: "dist"
+      ArtifactName: "angular-app"
+```
+
+<div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
+
 <!-- ### Q . Error
 
 <div align="right"><b><a href="#angular">↥ Back to top</a></b></div> -->
