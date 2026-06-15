@@ -1333,19 +1333,21 @@ zip(slider1.valueChanges, slider2.valueChanges).subscribe(([val1, val2]) => {
 });
 ```
 
-| Feature             | forkJoin                  | combineLatest                     | zip                  |
-| ------------------- | ------------------------- | --------------------------------- | -------------------- |
-| Emits               | Once (after all complete) | Every time any Observable changes | Paired values only   |
-| Requires completion | Yes                       | No                                | No                   |
-| Behavior            | Final result only         | Live updates                      | Synchronized pairing |
-| Order dependency    | No                        | No                                | Yes                  |
-| Best use case       | API calls, dashboard load | Real-time UI updates              | Matching streams     |
+| Feature              | forkJoin                       | combineLatest                 | zip                                        | withLatestFrom                         |
+| -------------------- | ------------------------------ | ----------------------------- | ------------------------------------------ | -------------------------------------- |
+| When does it emit?   | After all Observables complete | Whenever any Observable emits | When each Observable has emitted one value | When source emits                      |
+| Requires completion? | ✅ Yes                         | ❌ No                         | ❌ No                                      | ❌ No                                  |
+| Subsequent emissions | ❌ No                          | ✅ Yes                        | ✅ Yes                                     | ✅ Yes                                 |
+| Uses latest values   | Final values only              | Latest values from all        | Matching values by index                   | Latest value from secondary Observable |
+| Best use case        | Multiple API calls             | Dashboard/filter updates      | Pairing streams                            | Form + User Context                    |
+| Similar to           | Promise.all()                  | Real-time synchronization     | Zipping a file                             | Attach extra data                      |
 
 **Easy Memory Trick**
 
-- forkJoin → Wait all, emit once (final result)
-- combineLatest → Anytime change, latest values
-- zip → Pair by index (like zipper)
+- `forkJoin` → Everyone finishes, then talk (like Promise.all)
+- `combineLatest` → Tell me the latest from everyone
+- `zip` → Pair by position (1st with 1st, 2nd with 2nd)
+- `withLatestFrom` → Bring the latest helper value
 
 <div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
 
