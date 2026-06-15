@@ -195,6 +195,9 @@ export class TestServiceService {
 - When is a service instantiated?
   - Not at application startup. Usually: First Time Requested -> Angular Creates Instance. This is called lazy instantiation.
 
+- What is providers in Angular?
+  - Providers are Angular's way of configuring Dependency Injection. A provider tells Angular how to create and supply an instance for a dependency. Providers can be registered at the root, module, or component level, which determines the lifetime and scope of the service instance. Angular uses a hierarchical injector system, so component-level providers can override root-level providers when needed.
+
 <div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
 
 ### Q 7. What is Metadata?
