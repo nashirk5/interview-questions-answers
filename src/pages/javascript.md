@@ -2691,6 +2691,101 @@ function fizzBuzz(num) {
 // fizzBuzz(15);
 ```
 
+### 12. Format number
+
+```js
+function formatNumber(input) {
+  const str = String(input).toLowerCase().trim();
+  const value = parseFloat(str);
+
+  if (isNaN(value)) return "Invalid input";
+
+  const suffix = str.replace(String(value), "").trim();
+
+  const multipliers = {
+    k: 1_000,
+    l: 100_000,
+    cr: 10_000_000,
+  };
+
+  if (suffix && !(suffix in multipliers)) {
+    return "Invalid input";
+  }
+
+  const finalValue = (value * (multipliers[suffix] || 1)).toLocaleString(
+    "en-IN",
+  );
+
+  return finalValue;
+}
+
+console.log(formatNumber("10k")); // 10000
+console.log(formatNumber("10l")); // 1000000
+console.log(formatNumber("10cr")); // 100000000
+console.log(formatNumber(123)); // 123
+console.log(formatNumber("abc")); // Invalid input
+console.log(formatNumber("10xyz")); // Invalid input
+console.log(formatNumber("10.5k")); // 10500
+```
+
+### 13. Fizz Buzz
+
+```js
+// Solve the problem.
+
+const gameData = [
+  [7, 3, 7, 5, 4, 7, 7, 7, 5],
+  [3, 7, 3, 5, 6, 3, 3, 3, 5],
+  [25, 12, 24, 8, 14, 17, 28, 15, 13],
+];
+
+const teamNames = [
+  "Salmanus",
+  "Savvilles",
+  "Aphretros",
+  "Philidas",
+  "Adelphochus",
+  "Aesare",
+  "Erymasius",
+  "Hectillos",
+  "Krateus",
+];
+
+// Output
+// {team: 'Hectillos', wins: 7, losses: 3, pointsGiven: 15}
+// {team: 'Aesare', wins: 7, losses: 3, pointsGiven: 17}
+// {team: 'Aphretros', wins: 7, losses: 3, pointsGiven: 24}
+// {team: 'Salmanus', wins: 7, losses: 3, pointsGiven: 25}
+// {team: 'Erymasius', wins: 7, losses: 3, pointsGiven: 28}
+// {team: 'Philidas', wins: 5, losses: 5, pointsGiven: 8}
+// {team: 'Krateus', wins: 5, losses: 5, pointsGiven: 13}
+// {team: 'Adelphochus', wins: 4, losses: 6, pointsGiven: 14}
+// {team: 'Savvilles', wins: 3, losses: 7, pointsGiven: 12}
+
+//                 --- CODE ---
+
+const result = teamNames
+  .map((team, index) => ({
+    team,
+    wins: gameData[0][index],
+    losses: gameData[1][index],
+    pointsGiven: gameData[2][index],
+  }))
+  .sort((a, b) => {
+    if (b.wins !== a.wins) {
+      return b.wins - a.wins;
+    }
+
+    if (a.losses !== b.losses) {
+      return a.losses - b.losses;
+    }
+
+    return a.pointsGiven - b.pointsGiven;
+  });
+
+console.log(result);
+```
+
 </details>
 
 ##
