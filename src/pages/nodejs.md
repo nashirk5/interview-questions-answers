@@ -8,27 +8,9 @@
 
 Node.js is an open-source JavaScript runtime environment which is built on Chrome’s V8 engine. That uses a single-threaded, event-driven, non-blocking I/O model, where the event loop, powered by libuv, efficiently handles asynchronous operations. This architecture enables highly scalable server-side and real-time applications.
 
-<!-- _Key features of NodeJs:_
-
-1. **Asynchronous and Event-Driven:** Node.js uses a non-blocking, event-driven architecture, which allows it to handle multiple concurrent connections efficiently. This makes it suitable for building real-time applications like chat applications or streaming services.
-
-2. **JavaScript Everywhere:** Node.js enables developers to use JavaScript for both client-side and server-side development, fostering code reuse, and reducing context switching between languages.
-
-3. **V8 Engine:** Node.js is built on Chrome's V8 JavaScript engine, which compiles JavaScript code to native machine code, resulting in high performance and efficiency.
-
-4. **Package Ecosystem (npm):** Node.js has a vast ecosystem of open-source libraries and packages available through npm (Node Package Manager). Developers can easily install and manage dependencies for their projects using npm.
-
-5. **Single-Threaded, Event Loop:** Node.js operates on a single-threaded event loop model, where I/O operations are non-blocking and handled asynchronously. This allows Node.js to handle a large number of concurrent connections without the overhead of thread-based concurrency.
-
-6. **Scalability:** Node.js applications can be easily scaled horizontally by adding more instances or vertically by utilizing more powerful hardware. It also supports clustering for leveraging multiple CPU cores.
-
-Node.js is commonly used for building various types of applications, including web servers, RESTful APIs, real-time web applications, microservices, command-line tools, and more. Its lightweight, efficient, and scalable nature makes it a popular choice for building modern web applications. -->
-
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
 ### Q 2. How does NodeJs work?
-
-<!-- Node.js works by running JavaScript on the server using the V8 engine. It follows a single-threaded, event-driven, non-blocking I/O model. When an asynchronous task is triggered, it is handled by libuv and the OS, and once completed, the event loop executes its callback. This allows Node.js to handle multiple requests efficiently and scale well for server-side applications. -->
 
 Node.js is single-threaded, event-driven, non-blocking I/O model.
 
@@ -202,9 +184,16 @@ chat.emit("logout", "Bob");
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 7. What is streams and how many types are there?
+### Q 7. What is Streams and Backpressure.?
 
-Streams are objects that let you read or write data piece by piece. There are four types of streams
+**Streams** is a way to process data piece by piece (chunks) instead of loading the entire data into memory at once.
+
+**Backpressure** is a flow-control mechanism in streams. For example, during a 2GB file upload, if data arrives faster than the disk can write it, Node automatically pauses the incoming stream and resumes it when the disk catches up. This prevents excessive memory usage and keeps the application stable.
+
+**Follow-Up Questions**
+
+1. Does Node handle backpressure automatically?
+   - Yes. When using streams with pipe(), Node automatically manages backpressure by pausing and resuming the flow of data.
 
 **Types of Streams**
 
@@ -214,64 +203,6 @@ Streams are objects that let you read or write data piece by piece. There are fo
 | **Writable**  | Used to **write data** to a destination                                | `fs.createWriteStream('file.txt')` |
 | **Duplex**    | Can **read and write** data                                            | `net.Socket`                       |
 | **Transform** | A special duplex stream that can **modify data while reading/writing** | `zlib.createGzip()`                |
-
-**Common Event Methods for All Streams**
-
-| Event    | Description                                                   |
-| -------- | ------------------------------------------------------------- |
-| `data`   | Emitted when a chunk of data is available (readable streams). |
-| `end`    | Emitted when there is no more data to read.                   |
-| `finish` | Emitted when all data has been flushed (writable streams).    |
-| `error`  | Emitted when an error occurs.                                 |
-| `close`  | Emitted when the stream is fully closed.                      |
-
-**Example 1: Readable Stream**
-
-```js
-const fs = require("fs");
-
-const readStream = fs.createReadStream("input.txt", "utf8");
-
-readStream.on("data", (chunk) => {
-  console.log("Received chunk:", chunk);
-});
-
-readStream.on("end", () => {
-  console.log("Finished reading file");
-});
-```
-
-**Example 2: Writable Stream**
-
-```js
-const fs = require("fs");
-
-const writeStream = fs.createWriteStream("output.txt");
-
-writeStream.write("Hello ");
-writeStream.write("World!");
-writeStream.end(() => {
-  console.log("Finished writing file");
-});
-```
-
-**Example 3: Duplex / Transform Stream (Pipe Example)**
-
-```js
-const fs = require("fs");
-const zlib = require("zlib");
-
-// Read file -> Compress -> Write file
-const readStream = fs.createReadStream("input.txt");
-const writeStream = fs.createWriteStream("input.txt.gz");
-const gzip = zlib.createGzip();
-
-readStream.pipe(gzip).pipe(writeStream);
-
-writeStream.on("finish", () => {
-  console.log("File compressed successfully");
-});
-```
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
@@ -862,7 +793,7 @@ fs.readFile("example.txt", "utf8", (err, data) => {
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 117. What is an error-first callback?
+### Q 17. What is an error-first callback?
 
 An error-first callback is a standard pattern in Node.js for handling `asynchronous` operations.
 
@@ -1862,7 +1793,75 @@ const interval = setInterval(() => {
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 34. Explain Error Handling approaches in Node.js?
+### Q 34. How do you identify and debug memory leaks?
+
+I first monitor heap memory usage. If memory continuously grows and doesn't reduce after garbage collection, I suspect a memory leak. Then I take heap snapshots using Chrome DevTools or Node Inspector, compare snapshots over time, identify growing objects, and trace why references to those objects are not being released.
+
+**How to Debug It?**
+
+1. Monitor Memory
+
+   ```js
+   setInterval(() => {
+     console.log(process.memoryUsage());
+   }, 5000);
+
+   heapUsed;
+   heapTotal;
+   rss;
+
+   // If heapUsed continuously grows, investigate further.
+   ```
+
+2. Take Heap Snapshots
+
+   ```js
+   node --inspect app.js
+
+    // Open Chrome:
+    chrome://inspect
+
+    // Then:
+
+    Memory Tab
+    ↓
+    Take Heap Snapshot
+
+    // Take:
+
+    Snapshot 1
+    ↓
+    Generate Traffic
+    ↓
+    Snapshot 2
+
+    // Compare both snapshots.
+   ```
+
+3. Monitor Using PM2
+
+   ```js
+   // Start application:
+
+   pm2 start app.js
+
+   // Monitor:
+
+   pm2 monit
+
+   // Look for:
+
+   Memory: 200 MB
+   Memory: 400 MB
+   Memory: 800 MB
+   Memory: 1.5 GB
+
+   // If memory continuously grows, investigate further.
+   ```
+
+<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
+
+### Q 35. Explain Error Handling approaches in Node.js?
 
 **1. Using try-catch block:**
 
@@ -1931,7 +1930,7 @@ app.use((err, req, res, next) => {
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 35. What is Redis and how to implement it?
+### Q 36. What is Redis and how to implement it?
 
 Redis is an open-source, in-memory data store used as a database, cache, and message broker. It follows a key-value storage model, allowing data to be stored and retrieved directly from RAM using commands like `SET` and `GET`. It supports data types like strings, lists, sets, sorted sets, and hashes.
 
@@ -2060,7 +2059,7 @@ app.listen(PORT, async () => {
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 36. How to improve Node.js performance?
+### Q 37. How to improve Node.js performance?
 
 **1. Use Asynchronous & Non-Blocking Code**
 
@@ -2126,7 +2125,7 @@ Gzip compresses responses before sending them to the browser, thus, the browser 
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 37. How to use JSON Web Token (JWT) for authentication?
+### Q 38. How to use JSON Web Token (JWT) for authentication?
 
 JWT is a secure token-based authentication mechanism.
 Users log in and receive a signed JWT, which they send in request headers to access protected routes.
@@ -2191,7 +2190,7 @@ app.listen(3000, () => console.log("Server running on http://localhost:3000"));
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 38. In a large application with around 100 protected APIs, would you perform JWT authentication and RBAC authorization checks on every request?
+### Q 39. In a large application with around 100 protected APIs, would you perform JWT authentication and RBAC authorization checks on every request?
 
 Yes, every protected API verifies the access token because JWT authentication is stateless.
 
@@ -2201,7 +2200,7 @@ We validate JWT on every protected request because authentication is stateless. 
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 39. How did you implement logging in your project and its types?
+### Q 40. How did you implement logging in your project and its types?
 
 We used Winston for structured JSON logging. We logged API requests, responses, errors, and audit events. Each request was assigned a correlation ID to trace it across services. Logs were centralized in ELK/CloudWatch for monitoring and troubleshooting.
 
@@ -2213,7 +2212,7 @@ ELK and CloudWatch are centralized logging platforms used to collect, store, and
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 40. How to optimize the DB query?
+### Q 41. How to optimize the DB query?
 
 I optimize databases by analyzing query execution plans, adding proper indexes. My approach starts with identifying slow queries using EXPLAIN or EXPLAIN ANALYZE. I then verify indexing, optimize joins, avoid unnecessary columns, implement pagination, and reduce database round trips. At the application level, I use connection pooling, caching with Redis, and bulk operations where appropriate.
 
@@ -2228,7 +2227,7 @@ I would first analyze query performance and indexing. If the workload is read-he
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 41. How microservices communicate with each other?
+### Q 42. How microservices communicate with each other?
 
 Microservices can communicate synchronously using REST, GraphQL, or gRPC, and asynchronously using message brokers like Kafka or RabbitMQ.
 
@@ -2236,7 +2235,7 @@ I use synchronous communication when an immediate response is needed and asynchr
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 42. RabbitMQ and Kafka in Node.js?
+### Q 43. RabbitMQ and Kafka in Node.js?
 
 RabbitMQ is a message broker primarily used for task queues and reliable message delivery. Once a message is consumed, it is typically removed from the queue. Kafka is an event streaming platform where events are stored for a configurable retention period and can be consumed by multiple services independently. I generally use RabbitMQ for background jobs and Kafka for event-driven architectures, analytics, and high-throughput systems.
 
@@ -2252,9 +2251,11 @@ RabbitMQ is a message broker primarily used for task queues and reliable message
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 43. What is Connection pooling?
+### Q 44. What is Connection pooling?
 
-Connection pooling is a mechanism that maintains a reusable set of database connections. Instead of creating and closing a connection for every request, the application borrows a connection from the pool, executes the query, and returns it back. This reduces connection overhead, improves response time, and helps applications handle high traffic efficiently. In Node.js, libraries like MySQL2 and PostgreSQL provide built-in connection pooling support. While configuring pools, I ensure the total number of connections across all application instances stays within the database server's connection limit.
+Connection pooling is a mechanism that maintains a reusable set of database connections. Instead of creating and closing a connection for every request, the application borrows a connection from the pool, executes the query, and returns it back. This reduces connection overhead, improves response time, and helps applications handle high traffic efficiently.
+
+In Node.js, libraries like MySQL2 and PostgreSQL provide built-in connection pooling support. While configuring pools, I ensure the total number of connections across all application instances stays within the database server's connection limit.
 
 **Real-World Analogy**
 
@@ -2288,13 +2289,12 @@ pool.query("SELECT * FROM users", (err, results) => {
 
 **Interview Follow-Up**
 
-What happens if all connections are busy?
-
-First 10 requests get connections. Remaining 40 requests wait in a queue. As connections are released, waiting requests receive them. If the wait exceeds the configured timeout, an error may occur.
+1. What happens if all connections are busy?
+   - First 10 requests get connections. Remaining 40 requests wait in a queue. As connections are released, waiting requests receive them. If the wait exceeds the configured timeout, an error may occur.
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 44. What is Worker Threads vs Cluster vs Child Process, difference, and when to use?
+### Q 5. What is Worker Threads vs Cluster vs Child Process, difference, and when to use?
 
 **Worker Threads** are used when your Node application has CPU-intensive work such as image processing, PDF generation, encryption, or large calculations. They create additional JavaScript threads within the same process.
 
@@ -2358,7 +2358,7 @@ _A Node API receives an image and sends it to a Python AI model for prediction._
 - What is the difference between Cluster and Worker Threads?
   - Cluster creates multiple Node processes, each with its own memory and Event Loop. Worker Threads create multiple threads inside the same Node process and can share memory using SharedArrayBuffer.Cluster is for scaling servers. Worker Threads are for CPU-intensive tasks.
 
-### Q 45. How to Handle a 2GB File Upload in Node.js?
+### Q 46. How to Handle a 2GB File Upload in Node.js?
 
 For large files such as 2GB, I would implement chunked uploads where the file is split into smaller pieces, typically 5MB each. The backend stores each chunk and merges them after all chunks are received. In production, I would use parallel uploads, streaming, and resumable uploads with metadata stored in Redis or a database.
 
@@ -2370,6 +2370,331 @@ For large files such as 2GB, I would implement chunked uploads where the file is
   - Generate an uploadId, store uploaded chunk numbers in Redis or a database, and when the user reconnects, upload only the missing chunks.
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
+
+### Q 47. How does Node handle concurrency?
+
+Node.js handles concurrency using the Event Loop, libuv, and non-blocking I/O. When an operation like a database query, file read, or external API call is made, Node doesn't wait for it to complete. Instead, it delegates the work to libuv and continues processing other requests. Once the operation finishes, the callback is placed back in the Event Loop for execution. This enables a single Node.js process to handle thousands of concurrent connections efficiently.
+
+<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
+
+### Q 48. How do you scale a Node.js application?
+
+I scale Node.js applications both vertically and horizontally. For a single server, I use Cluster to utilize all CPU cores, and for larger systems, I deploy multiple instances behind a load balancer. I also use Redis, connection pooling, and database optimization to eliminate backend bottlenecks.
+
+There are two main ways to scale a Node.js application:
+
+1. **Vertical Scaling (Scale Up):** Increase server resources:
+
+   ```js
+   2 CPU → 8 CPU
+   4 GB RAM → 16 GB RAM
+   ```
+
+   - **Pros:** Simple and No code changes.
+   - **Cons:** Hardware limit exists and Expensive
+
+2. **Horizontal Scaling (Scale Out):** Run multiple application instances.
+
+   ```js
+          Load Balancer
+                ↓
+     ┌──────────┼──────────┐
+     ↓          ↓          ↓
+   Node 1     Node 2     Node 3
+   ```
+
+   - **Pros:** Better scalability and High availability
+   - **Cons:** More infrastructure complexity
+
+<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
+
+### Q 49. Database Scaling?
+
+I usually start database scaling with query optimization, indexing, and connection pooling. If traffic continues to grow, I introduce Redis caching and read replicas to reduce database load. For very large systems, I consider sharding and horizontal database scaling.
+
+1. **Connection Pooling:** Maintains a pool of reusable database connections instead of creating a new connection for every request. This reduces connection overhead and improves database performance.
+
+2. **Redis Caching;** Stores frequently accessed data in memory so requests can be served faster without hitting the database. This reduces database load and improves response times.
+
+3. **Read Replicas:** Creates one or more copies of the primary database to handle read queries. This helps distribute read traffic and reduces load on the primary database to INSERT, UPDATE, DELETE.
+
+4. **Database Indexing:** Creates a data structure that allows the database to find records quickly without scanning the entire table. It improves read performance but can slow down writes.
+
+5. **Query Optimization:** Improves SQL queries by reducing unnecessary scans, joins, and computations. Often the cheapest and most effective way to improve database performance.
+
+6. **Sharding:** Splits data across multiple database servers based on a sharding key (e.g., User ID). Used when a single database can no longer handle the volume of data or traffic.
+
+7. **Partitioning:** Divides a large table into smaller logical partitions within the same database. This improves query performance and makes large datasets easier to manage.
+
+8. **Materialized Views:** Stores precomputed query results so expensive aggregations don't need to run repeatedly. Useful for reporting and analytics workloads.
+
+9. **Denormalization:** Stores duplicate data to reduce joins and improve read performance. Common in high-read applications where performance is more important than storage efficiency.
+
+10. **Archiving:** Moves old or rarely accessed data to separate storage or tables. This keeps active tables smaller and improves query performance.
+
+> I use Partitioning when a table becomes very large but still fits within a single database server. I use Sharding when a single database server can no longer handle the storage, traffic, or resource requirements. Partitioning improves query performance, while Sharding improves overall scalability.
+
+<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
+
+### Q 50. MySQL vs PostgreSQL vs MongoDB?
+
+**MySQL:** MySQL is an open-source relational database management system (RDBMS) that stores data in tables consisting of rows and columns and uses SQL (Structured Query Language) to manage and query data.
+
+- Use for: E-commerce, Blogging platforms, & Traditional web applications
+
+**PostgreSQL:** PostgreSQL is an advanced open-source object-relational database management system (ORDBMS) that extends traditional relational database capabilities with advanced features such as JSON support, complex queries, custom data types, and strong ACID compliance.
+
+- Use for: Complex reporting systems, Banking systems, & SaaS products
+
+**MongoDB:** MongoDB is a NoSQL document-oriented database that stores data in flexible JSON-like documents (BSON) instead of tables and rows, allowing dynamic schemas and rapid application development.
+
+- Use for: Rapidly changing data structures, Social media, & Content management.
+
+| Feature         | MySQL            | PostgreSQL         | MongoDB                                |
+| --------------- | ---------------- | ------------------ | -------------------------------------- |
+| Type            | Relational       | Relational         | NoSQL                                  |
+| Schema          | Fixed            | Fixed              | Flexible                               |
+| Joins           | Yes              | Yes                | Limited                                |
+| ACID            | Yes              | Strong             | Yes (multi-document support available) |
+| Complex Queries | Good             | Excellent          | Limited                                |
+| JSON Support    | Basic            | Excellent          | Native                                 |
+| Scalability     | Good             | Excellent          | Excellent                              |
+| Best For        | Traditional Apps | Enterprise Systems | Flexible Data Models                   |
+
+<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
+
+### Q 51. TypeORM vs Prisma?
+
+**TypeORM:** TypeORM is a traditional ORM (Object Relational Mapper) that maps database tables directly to TypeScript/JavaScript classes using decorators.
+
+```ts
+@Entity()
+class User {
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @Column()
+  name: string;
+}
+```
+
+**Prisma:** Prisma is a modern type-safe ORM that generates a database client from a schema file, providing autocompletion and compile-time type safety.
+
+```ts
+model User {
+id Int @id @default(autoincrement())
+name String
+}
+const users = await prisma.user.findMany();
+```
+
+- Which ORM would you choose for a new Node.js project?
+  - Prisma. It provides excellent TypeScript support, better developer experience, and compile-time type safety.
+
+- Why do many teams move from TypeORM to Prisma?
+  - Because Prisma offers better type safety, simpler migrations, improved autocompletion, and fewer runtime surprises.
+
+<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
+
+### Q 52. Database Transactions?
+
+A Transaction is a group of database operations that are executed as a single unit of work.
+
+Either: `All operations succeed` or `All operations fail (Rollback)`.
+
+```js
+// Bank Transfer: Suppose: John Account = ₹1000 and Mike Account = ₹500. John transfers: ₹200 → Mike
+
+Steps:
+
+1. Deduct ₹200 from John
+2. Add ₹200 to Mike
+
+// If step 1 succeeds and step 2 fails: John = ₹800 and Mike = ₹500. Money is lost ❌
+
+// Using a transaction:
+
+BEGIN;
+
+UPDATE accounts
+SET balance = balance - 200
+WHERE id = 1;
+
+UPDATE accounts
+SET balance = balance + 200
+WHERE id = 2;
+
+COMMIT;
+
+// If any step fails:
+
+ROLLBACK;
+
+// Database returns to the original state.
+```
+
+<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
+
+### Q 53. ACID Properties?
+
+ACID properties are implemented by the database engine, not manually by developers. In applications, we use transactions with BEGIN, COMMIT, and ROLLBACK to ensure Atomicity, while the database handles Consistency, Isolation, and Durability internally through constraints, isolation levels, and transaction logs.
+
+- **A - Atomicity** Either everything happens or nothing happens.
+- **C - Consistency** Data must always remain valid before and after a transaction.
+- **I - Isolation** Multiple transactions should not interfere with each other. Example: Two users update the same account simultaneously. Database ensures transactions are handled safely.
+- **D - Durability** Once committed, data is permanently stored even if the database crashes.
+
+<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
+
+### Q 54. Design Patterns?
+
+Design patterns are reusable solutions to common software design problems. In backend development, I frequently use Singleton for database connections, Strategy for payment processing, Observer for event-driven systems, Factory for object creation, and Repository to separate business logic from data access.
+
+1. **Singleton Pattern:** Ensures only one instance of a class exists throughout the application. Used For Database connections and Redis clients.
+
+2. **Factory Pattern:** Creates objects without exposing the creation logic. Used For Payment gateways and Notification providers
+
+3. **Strategy Pattern:** Allows switching algorithms or behaviors at runtime. Used For
+   Payment systems, Discount calculations, and Tax calculations
+
+4. **Observer Pattern:** One object notifies multiple objects when an event occurs. Used For
+   Event-driven architecture, Notifications, and Microservices events
+
+5. **Repository Pattern:** Separates database access from business logic.
+
+<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
+
+### Q 55. Normalization?
+
+Normalization is the process of organizing data into multiple related tables to reduce data duplication and improve data consistency.
+
+`1NF` ensures each column contains a single value, `2NF` removes duplicate data by separating entities into related tables, and `3NF` removes transitive dependencies where a non-key column depends on another non-key column. Together, they reduce redundancy and improve data consistency.
+
+<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
+
+### Q 56. Optimistic Locking vs Pessimistic Locking?
+
+Both are techniques used to handle concurrent updates to the same data.
+
+**Optimistic Locking:** Assumes conflicts are rare. Instead of locking the row, it checks whether someone else modified the data before saving. Usually implemented using a: version column or timestamp column. Used in E-commerce and Low chance of conflicts.
+
+**Pessimistic Locking:** Assumes conflicts are likely. Locks the row immediately so nobody else can modify it. Used in Banking and Payment Systems.
+
+| Feature           | Optimistic   | Pessimistic         |
+| ----------------- | ------------ | ------------------- |
+| Locks Data?       | No           | Yes                 |
+| Performance       | Faster       | Slower              |
+| Concurrency       | High         | Lower               |
+| Conflict Handling | Detect Later | Prevent Immediately |
+| Best For          | Web Apps     | Banking/Payments    |
+
+<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
+
+### Q 57. N+1 Query Problem (Very Common ORM Interview Question).?
+
+The N+1 Query Problem occurs when an application executes one query to fetch parent records and then executes additional queries for each related record. This causes excessive database calls and poor performance. I typically solve it using JOINs, eager loading, or ORM relation loading to fetch related data in a single query.
+
+```ts
+// Bad
+const users = await userRepository.find();
+
+for (const user of users) {
+  user.orders = await orderRepository.find({
+    where: { userId: user.id }
+  });
+}
+
+// Good
+SELECT *
+FROM users u
+LEFT JOIN orders o
+ON u.id = o.user_id;
+```
+
+<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
+
+### Q 58. SQL JOINs (INNER JOIN vs LEFT JOIN vs RIGHT JOIN vs FULL JOIN).?
+
+Joins are used to combine data from multiple tables based on a related column.
+
+```js
+// Example Tables
+// Users
+id | name
+-----------
+1  | John
+2  | Mike
+3  | David
+// Orders
+id | user_id | product
+----------------------
+1  | 1       | Laptop
+2  | 1       | Mouse
+3  | 2       | Mobile
+```
+
+1. **INNER JOIN:** Returns only matching records from both tables. Use it When you only want records that exist in both tables.
+
+   ```js
+   SELECT u.name, o.product
+   FROM users u
+   INNER JOIN orders o
+   ON u.id = o.user_id;
+
+   // Result
+   John   Laptop
+   John   Mouse
+   Mike   Mobile
+   ```
+
+2. **LEFT JOIN:** Returns all rows from the left table and matching rows from the right table.
+
+   ```js
+   // Query
+   SELECT u.name, o.product
+   FROM users u
+   LEFT JOIN orders o
+   ON u.id = o.user_id;
+
+   // Result
+   John   Laptop
+   John   Mouse
+   Mike   Mobile
+   David  NULL
+   ```
+
+3. **RIGHT JOIN:** Returns all rows from the right table and matching rows from the left table.
+
+   ```js
+   // Query
+   SELECT u.name, o.product
+   FROM users u
+   RIGHT JOIN orders o
+   ON u.id = o.user_id;
+
+   // Result
+
+   John   Laptop
+   John   Mouse
+   Mike   Mobile
+   ```
+
+4. **FULL JOIN:** All rows from Left Table + All rows from Right Table. Whether matching or not.
+
+   ```js
+   // Query
+   SELECT u.name, o.product
+   FROM users u
+   FULL JOIN orders o
+   ON u.id = o.user_id;
+
+   // Result
+   John   Laptop
+   John   Mouse
+   Mike   Mobile
+   David  NULL
+   NULL   Tablet
+   ```
 
 <!-- ### Q 36. ?
 
