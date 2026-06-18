@@ -745,6 +745,8 @@ If you have any block level code then the event loop cannot move while the call 
 
 libuv is a C library used by Node.js to handle asynchronous I/O operations and implement the event loop. It interacts with the OS (operating system) and manages a thread pool for tasks like file system access and networking. It plays a role similar to Web APIs in the browser, but it’s a lower-level system library used in server-side environments.
 
+**Thread Pool:** Node.js uses libuv thread pool to handle blocking operations like file system, crypto, DNS, and compression. The default size is 4 threads, and tasks are queued when all threads are busy. This allows Node.js to keep the event loop free while handling heavy async work in the background.
+
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
 ### Q 16. What is a Callback Function?
@@ -2212,22 +2214,9 @@ ELK and CloudWatch are centralized logging platforms used to collect, store, and
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 41. How to optimize the DB query?
-
-I optimize databases by analyzing query execution plans, adding proper indexes. My approach starts with identifying slow queries using EXPLAIN or EXPLAIN ANALYZE. I then verify indexing, optimize joins, avoid unnecessary columns, implement pagination, and reduce database round trips. At the application level, I use connection pooling, caching with Redis, and bulk operations where appropriate.
-
-**Connection pooling:** Connection pooling is the practice of maintaining a reusable set of database connections instead of creating a new connection for every request. It reduces connection overhead, improves performance, and helps applications scale under high traffic. In Node.js, pools are typically created once during application startup and reused across all database operations.
-
-I would first analyze query performance and indexing. If the workload is read-heavy, I'd introduce read replicas. For frequently accessed data, I'd use Redis caching. As data volume grows, I'd consider partitioning large tables and archiving historical data. Sharding would be the final option if a single database instance could no longer handle the workload.
-
-**What's the difference between Read Replication and Sharding?**
-
-- **Read Replica:** Same Data. Multiple Copies. Used to scale reads.
-- **Sharding:** Different Data. Different Databases. Used to scale storage and writes.
-
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 42. How microservices communicate with each other?
+### Q 41. How microservices communicate with each other?
 
 Microservices can communicate synchronously using REST, GraphQL, or gRPC, and asynchronously using message brokers like Kafka or RabbitMQ.
 
@@ -2235,7 +2224,7 @@ I use synchronous communication when an immediate response is needed and asynchr
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 43. RabbitMQ and Kafka in Node.js?
+### Q 42. RabbitMQ and Kafka in Node.js?
 
 RabbitMQ is a message broker primarily used for task queues and reliable message delivery. Once a message is consumed, it is typically removed from the queue. Kafka is an event streaming platform where events are stored for a configurable retention period and can be consumed by multiple services independently. I generally use RabbitMQ for background jobs and Kafka for event-driven architectures, analytics, and high-throughput systems.
 
@@ -2251,7 +2240,7 @@ RabbitMQ is a message broker primarily used for task queues and reliable message
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 44. What is Connection pooling?
+### Q 43. What is Connection pooling?
 
 Connection pooling is a mechanism that maintains a reusable set of database connections. Instead of creating and closing a connection for every request, the application borrows a connection from the pool, executes the query, and returns it back. This reduces connection overhead, improves response time, and helps applications handle high traffic efficiently.
 
@@ -2294,7 +2283,7 @@ pool.query("SELECT * FROM users", (err, results) => {
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 5. What is Worker Threads vs Cluster vs Child Process, difference, and when to use?
+### Q 44. What is Worker Threads vs Cluster vs Child Process, difference, and when to use?
 
 **Worker Threads** are used when your Node application has CPU-intensive work such as image processing, PDF generation, encryption, or large calculations. They create additional JavaScript threads within the same process.
 
@@ -2358,7 +2347,7 @@ _A Node API receives an image and sends it to a Python AI model for prediction._
 - What is the difference between Cluster and Worker Threads?
   - Cluster creates multiple Node processes, each with its own memory and Event Loop. Worker Threads create multiple threads inside the same Node process and can share memory using SharedArrayBuffer.Cluster is for scaling servers. Worker Threads are for CPU-intensive tasks.
 
-### Q 46. How to Handle a 2GB File Upload in Node.js?
+### Q 45. How to Handle a 2GB File Upload in Node.js?
 
 For large files such as 2GB, I would implement chunked uploads where the file is split into smaller pieces, typically 5MB each. The backend stores each chunk and merges them after all chunks are received. In production, I would use parallel uploads, streaming, and resumable uploads with metadata stored in Redis or a database.
 
@@ -2371,13 +2360,13 @@ For large files such as 2GB, I would implement chunked uploads where the file is
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 47. How does Node handle concurrency?
+### Q 46. How does Node handle concurrency?
 
 Node.js handles concurrency using the Event Loop, libuv, and non-blocking I/O. When an operation like a database query, file read, or external API call is made, Node doesn't wait for it to complete. Instead, it delegates the work to libuv and continues processing other requests. Once the operation finishes, the callback is placed back in the Event Loop for execution. This enables a single Node.js process to handle thousands of concurrent connections efficiently.
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 48. How do you scale a Node.js application?
+### Q 47. How do you scale a Node.js application?
 
 I scale Node.js applications both vertically and horizontally. For a single server, I use Cluster to utilize all CPU cores, and for larger systems, I deploy multiple instances behind a load balancer. I also use Redis, connection pooling, and database optimization to eliminate backend bottlenecks.
 
@@ -2408,7 +2397,7 @@ There are two main ways to scale a Node.js application:
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 49. Database Scaling?
+### Q 48. Database Scaling?
 
 I usually start database scaling with query optimization, indexing, and connection pooling. If traffic continues to grow, I introduce Redis caching and read replicas to reduce database load. For very large systems, I consider sharding and horizontal database scaling.
 
@@ -2436,7 +2425,7 @@ I usually start database scaling with query optimization, indexing, and connecti
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 50. MySQL vs PostgreSQL vs MongoDB?
+### Q 49. MySQL vs PostgreSQL vs MongoDB?
 
 **MySQL:** MySQL is an open-source relational database management system (RDBMS) that stores data in tables consisting of rows and columns and uses SQL (Structured Query Language) to manage and query data.
 
@@ -2463,7 +2452,7 @@ I usually start database scaling with query optimization, indexing, and connecti
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 51. TypeORM vs Prisma?
+### Q 50. TypeORM vs Prisma?
 
 **TypeORM:** TypeORM is a traditional ORM (Object Relational Mapper) that maps database tables directly to TypeScript/JavaScript classes using decorators.
 
@@ -2496,7 +2485,7 @@ const users = await prisma.user.findMany();
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 52. Database Transactions?
+### Q 51. Database Transactions?
 
 A Transaction is a group of database operations that are executed as a single unit of work.
 
@@ -2535,7 +2524,7 @@ ROLLBACK;
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 53. ACID Properties?
+### Q 52. ACID Properties?
 
 ACID properties are implemented by the database engine, not manually by developers. In applications, we use transactions with BEGIN, COMMIT, and ROLLBACK to ensure Atomicity, while the database handles Consistency, Isolation, and Durability internally through constraints, isolation levels, and transaction logs.
 
@@ -2546,7 +2535,7 @@ ACID properties are implemented by the database engine, not manually by develope
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 54. Design Patterns?
+### Q 53. Design Patterns?
 
 Design patterns are reusable solutions to common software design problems. In backend development, I frequently use Singleton for database connections, Strategy for payment processing, Observer for event-driven systems, Factory for object creation, and Repository to separate business logic from data access.
 
@@ -2564,7 +2553,7 @@ Design patterns are reusable solutions to common software design problems. In ba
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 55. Normalization?
+### Q 54. Normalization?
 
 Normalization is the process of organizing data into multiple related tables to reduce data duplication and improve data consistency.
 
@@ -2572,7 +2561,7 @@ Normalization is the process of organizing data into multiple related tables to 
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 56. Optimistic Locking vs Pessimistic Locking?
+### Q 55. Optimistic Locking vs Pessimistic Locking?
 
 Both are techniques used to handle concurrent updates to the same data.
 
@@ -2590,7 +2579,7 @@ Both are techniques used to handle concurrent updates to the same data.
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 57. N+1 Query Problem (Very Common ORM Interview Question).?
+### Q 56. N+1 Query Problem (Very Common ORM Interview Question).?
 
 The N+1 Query Problem occurs when an application executes one query to fetch parent records and then executes additional queries for each related record. This causes excessive database calls and poor performance. I typically solve it using JOINs, eager loading, or ORM relation loading to fetch related data in a single query.
 
@@ -2613,7 +2602,7 @@ ON u.id = o.user_id;
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 58. SQL JOINs (INNER JOIN vs LEFT JOIN vs RIGHT JOIN vs FULL JOIN).?
+### Q 57. SQL JOINs (INNER JOIN vs LEFT JOIN vs RIGHT JOIN vs FULL JOIN).?
 
 Joins are used to combine data from multiple tables based on a related column.
 
