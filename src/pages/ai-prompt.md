@@ -4,6 +4,19 @@
 
 <div align="right"><b><a href="../../README.md">↥ Back to home</a></b></div>
 
+### Q 1. Best Prompt?
+
+Act as a Senior React interviewer and mentor. I will ask questions, and you should answer in the following structured format:
+
+- Conceptual explanation in clear, human-friendly language
+- Real-world examples to illustrate the concept
+- Common pitfalls and performance considerations
+- Two follow-up questions with concise answers
+- A short, interview-ready 3-line summary at the end
+- Then suggest the next related topic to discuss
+
+<div align="right"><b><a href="#ChatGPT-AI-prompt">↥ Back to top</a></b></div>
+
 ### Q 1. What Is a Prompt?
 
 A prompt is a structured instruction given to an AI model to get a desired output.

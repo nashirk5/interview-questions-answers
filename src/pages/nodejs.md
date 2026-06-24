@@ -2214,8 +2214,6 @@ ELK and CloudWatch are centralized logging platforms used to collect, store, and
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
-
 ### Q 41. How microservices communicate with each other?
 
 Microservices can communicate synchronously using REST, GraphQL, or gRPC, and asynchronously using message brokers like Kafka or RabbitMQ.
@@ -2684,6 +2682,33 @@ id | user_id | product
    David  NULL
    NULL   Tablet
    ```
+
+### Q 58. You have implemented JWT authentication in your application. If an attacker steals a valid JWT token from a user's browser and uses it from Postman or another machine, how would you detect and prevent unauthorized access?
+
+JWT alone cannot detect whether a stolen token is being used from Postman or another device. In enterprise applications, we store session metadata such as `IP, browser, device fingerprint, and location` in Redis or a database and validate it on every request. If significant mismatches are detected, we trigger re-authentication, MFA, or session revocation.
+
+```js
+// User Login
+{
+  "sessionId": "S123",
+  "userId": 100,
+  "ip": "49.205.x.x",
+  "browser": "Chrome",
+  "fingerprint": "3a7f9e1c8d",
+  "country": "India"
+}
+// Stored in Redis
+
+// JWT:
+{
+  "userId": 100,
+  "sessionId": "S123"
+}
+```
+
+**Fingerprint:** A device fingerprint is a unique identifier generated from browser and device characteristics such as OS, browser version, screen resolution, timezone, and language settings. It helps identify a device across requests and is commonly used as an additional security signal to detect suspicious activity or stolen tokens. However, it should be combined with IP, session tracking, and refresh token rotation rather than used alone.
+
+<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
 <!-- ### Q 36. ?
 
