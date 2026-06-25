@@ -2501,7 +2501,128 @@ Angular 17 introduced built-in control flow syntax such as `@if`, `@for`, and `@
 
 <div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
 
-### Q 62. Coding Standards & Code Quality Tools?
+### Q 62. What are `@Injectable()`, `@Inject()`, `inject()`?
+
+1. `@Injectable()` marks a class as injectable and allows Angular to create it through the DI system.
+
+   ```ts
+   import { Injectable } from "@angular/core";
+
+   @Injectable({
+     providedIn: "root",
+   })
+   export class UserService {
+     getUsers() {
+       return [];
+     }
+   }
+
+   // Usage:
+   constructor(
+    private userService: UserService
+   ) {}
+   ```
+
+2. `@Inject()` is used when Angular cannot determine what dependency to inject, such as InjectionTokens or primitive values.
+
+   ```ts
+   // Create token:
+   export const API_URL = new InjectionToken() < string > "API_URL";
+
+   // Providers:
+   providers: [
+     {
+       provide: API_URL,
+       useValue: 'https://api.com'
+     }
+   ]
+
+   // Inject:
+   constructor(
+     @Inject(API_URL)
+     private apiUrl: string
+   ) {}
+   ```
+
+   - **Why Do We Need It?**
+     - Angular can create: `UserService` because it's a class. But Angular cannot create: `string`, `number`, `boolean`, `interface`. Angular doesn't know which string to inject. Therefore: `@Inject(API_URL)` removes ambiguity.
+   - **Real Use Cases:** Configuration, Environment Values, Custom Tokens.
+
+3. `inject()` is a modern Angular function that retrieves dependencies directly without constructor injection and is commonly used in standalone components, guards, and interceptors.
+
+   ```ts
+   constructor(
+     private userService: UserService
+   ) {}
+
+   // You can write:
+   private userService = inject(UserService);
+   ```
+
+   - **Real Use Case:** Standalone Components, Functional Guards, Interceptors.
+
+```js
+Step 1
+
+@Injectable()
+class UserService
+
+↓
+
+Angular can create it
+
+
+Step 2
+
+constructor(
+  private userService: UserService
+)
+
+↓
+
+Angular injects it automatically
+
+
+Step 3
+
+Need primitive value?
+
+constructor(
+  @Inject(API_URL)
+  private apiUrl: string
+)
+
+↓
+
+Tell Angular exactly which token
+
+
+Step 4
+
+No constructor?
+
+const userService =
+  inject(UserService)
+
+↓
+
+Get dependency directly
+```
+
+| Feature                   | @Injectable()         | @Inject()                          | inject()                               |
+| ------------------------- | --------------------- | ---------------------------------- | -------------------------------------- |
+| Type                      | Decorator             | Decorator                          | Function                               |
+| Applied To                | Class                 | Constructor Parameter              | Anywhere in DI Context                 |
+| Purpose                   | Make class injectable | Specify dependency token           | Retrieve dependency directly           |
+| Used For                  | Services              | Injection Tokens, Primitive Values | Services, Tokens, Guards, Interceptors |
+| Angular Creates Instance? | ✅ Yes                | ❌ No                              | ❌ No                                  |
+| Constructor Required?     | N/A                   | ✅ Yes                             | ❌ No                                  |
+| Common In                 | Services              | Config Values                      | Standalone APIs                        |
+| Angular Version           | All                   | All                                | Angular 14+                            |
+
+<div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
+
+### Q 63. Coding Standards & Code Quality Tools?
 
 - **Angular Style Guide:** Follow Angular's recommended folder structure, naming conventions, component architecture, and best practices to maintain consistency across the application.
 
@@ -2527,7 +2648,7 @@ Angular 17 introduced built-in control flow syntax such as `@if`, `@for`, and `@
 
 <div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
 
-### Q 63. How do you deploy the build?
+### Q 64. How do you deploy the build?
 
 **CI/CD Deployment Flow**
 
