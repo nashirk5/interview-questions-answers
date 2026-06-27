@@ -1322,7 +1322,42 @@ console.log(moment().format("YYYY-MM-DD"));
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 24. What are RESTful Web Services?
+### Q 24. What is crypto in Node.js?
+
+The crypto module in Node.js is a built-in module used for cryptographic operations like hashing, encryption, decryption, and generating secure random data. It is commonly used for password hashing, tokens, and data security.
+
+**🔹 Example 1: Hashing a Password**
+
+```js
+const crypto = require("crypto");
+
+const hash = crypto.createHash("sha256").update("mypassword").digest("hex");
+
+console.log(hash);
+```
+
+This converts a password into a secure hash.
+
+```js
+🔹 Example 2: Generate Random Token
+const crypto = require("crypto");
+
+const token = crypto.randomBytes(16).toString("hex");
+console.log(token);
+```
+
+Used for: Password reset tokens, API keys & Session IDs
+
+**🔹 Common Methods**
+
+- `createHash()` → Create hash (SHA256, MD5, etc.)
+- `createCipheriv()` → Encrypt data
+- `createDecipheriv()` → Decrypt data
+- `randomBytes()` → Generate secure random values
+
+<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
+
+### Q 25. What are RESTful Web Services?
 
 RESTful web services in Node.js are APIs that follow REST principles using resource-based URLs and standard HTTP methods like GET, POST, PUT, and DELETE. They are stateless and typically return JSON responses with proper HTTP status codes.
 
@@ -1336,12 +1371,20 @@ RESTful web services in Node.js are APIs that follow REST principles using resou
 
 **Uses Standard HTTP Status Codes**
 
-- 200 → OK
-- 201 → Created
-- 400 → Bad Request
-- 401 → Unauthorized
-- 404 → Not Found
-- 500 → Server Error
+- `200` → OK
+- `201` → Created
+- `204` → No Content
+- `400` → Bad Request
+- `401` → Unauthorized
+- `403` → Forbidden
+- `404` → Not Found
+- `405` → Method Not Allowed
+- `409` → Conflict
+- `422` → Unprocessable Entity
+- `429` → Too Many Requests
+- `500` → Internal Server Error
+- `502` → Bad Gateway
+- `503` → Service Unavailable
 
 > Note: PATCH is used to partially update a resource, while PUT replaces the entire resource.
 
@@ -1424,7 +1467,7 @@ If you send the same request multiple times and the result remains the same → 
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 25. Difference Between PUT and PATCH?
+### Q 26. Difference Between PUT and PATCH?
 
 PUT replaces the entire resource on the server and requires the full payload. PATCH updates only specified fields and requires a partial payload. Use PUT for complete replacement and PATCH for partial modifications.
 
@@ -1437,7 +1480,150 @@ PUT replaces the entire resource on the server and requires the full payload. PA
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 26. How many types of API functions are there?
+### Q 27. GraphQL vs REST API?
+
+`REST` uses multiple endpoints and returns predefined responses, making it simple and suitable for most CRUD applications. `GraphQL` uses a single endpoint and lets clients request specific fields, reducing unnecessary data transfer. I choose REST for simple APIs and GraphQL for data-heavy, complex frontend applications.
+
+| Criteria          | REST API                                 | GraphQL                                 |
+| ----------------- | ---------------------------------------- | --------------------------------------- |
+| **Endpoints**     | Multiple endpoints (`/users`, `/orders`) | Single endpoint (`/graphql`)            |
+| **Data Fetching** | Server decides response structure        | Client chooses required fields          |
+| **Network Calls** | May require multiple API calls           | Often a single query fetches everything |
+| **Best For**      | Simple CRUD applications and public APIs | Complex UIs, dashboards, mobile apps    |
+
+<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
+
+### Q 28. What is GraphQL?
+
+GraphQL is a query language for APIs that allows clients to request exactly the data they need, no more and no less.
+
+> With REST APIs, the server decides what data to return. With GraphQL, the client decides what data it wants.
+
+- **Resolver:** A Resolver is a function that tells GraphQL how to fetch the requested data. Think of it as the controller/service method behind a GraphQL field.
+
+- **Mutation:** A Mutation is used to create, update, or delete data on the server.
+  - GET → Query
+  - POST/PUT/DELETE → Mutation
+
+<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
+
+### Q 59. What is N+1 Query Problem?
+
+The N+1 problem occurs when an application executes 1 query to fetch a list of records and then N additional queries to fetch related data for each record.
+
+This causes many unnecessary database calls and poor performance. I typically solve it using JOINs, eager loading, or DataLoader to fetch related data in a single query.
+
+```ts
+// Bad
+const users = await userRepository.find();
+
+for (const user of users) {
+  user.orders = await orderRepository.find({
+    where: { userId: user.id }
+  });
+}
+
+// Good
+SELECT *
+FROM users u
+LEFT JOIN orders o
+ON u.id = o.user_id;
+```
+
+- **Eager Loading:** Eager Loading fetches related data upfront using joins or includes to avoid multiple database queries.
+
+  ```js
+  const users = await User.findAll({
+    include: [Order],
+  });
+
+  console.log(users);
+
+  // Generated SQL (roughly)
+  SELECT *
+  FROM Users u
+  LEFT JOIN Orders o
+  ON u.id = o.userId;
+  ```
+
+- **DataLoader:** DataLoader batches and caches requests in GraphQL, combining many resolver calls into a single database query.
+
+  ```js
+  const DataLoader = require("dataloader");
+
+  const orderLoader = new DataLoader(async (userIds) => {
+    const orders = await Order.findAll({
+      where: {
+        userId: userIds,
+      },
+    });
+
+    return userIds.map((id) => orders.filter((order) => order.userId === id));
+  });
+
+  const resolvers = {
+    User: {
+      orders: (user) => orderLoader.load(user.id)
+    }
+  };
+
+  // DataLoader batches into:
+  SELECT *
+  FROM Orders
+  WHERE userId IN (1,2,3);
+  ```
+
+<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
+
+### Q 30. What is Federation?
+
+GraphQL Federation is a GraphQL architecture pattern that allows multiple GraphQL services (subgraphs) to be combined into a single GraphQL API.
+
+It enables independent teams to own different domains while presenting a unified schema to clients. Federation is commonly used in large-scale microservice architectures.
+
+```ts
+// User Service (Subgraph 1)
+type User {
+  id: ID!
+  name: String!
+}
+
+Query {
+  user(id: ID!): User
+}
+
+// Order Service (Subgraph 2)
+type Order {
+  id: ID!
+  amount: Float!
+}
+
+extend type User {
+  orders: [Order]
+}
+
+// Gateway
+const gateway = new ApolloGateway({
+  services: [
+    { name: "users", url: "http://users-service/graphql" },
+    { name: "orders", url: "http://orders-service/graphql" }
+  ]
+});
+
+// Frontend Query
+query {
+  user(id: "1") {
+    name
+    orders {
+      amount
+    }
+  }
+}
+```
+
+<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
+
+### Q 31. How many types of API functions are there?
 
 There are two types of API functions in Node.js:
 
@@ -1450,7 +1636,7 @@ There are two types of API functions in Node.js:
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 27. What is the difference between req.params and req.query?
+### Q 32. What is the difference between req.params and req.query?
 
 - `req.params` is used to get route parameters defined in the URL path, like `/users/:id`.
 - `req.query` is used to get query string values after the `?`, like `/users?age=25`.
@@ -1491,7 +1677,7 @@ app.get("/users", (req, res) => {
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 28. What is the difference between Asynchronous and Non-blocking?
+### Q 33. What is the difference between Asynchronous and Non-blocking?
 
 Asynchronous means a task executes separately and completes later using callbacks or promises.
 Non-blocking means the system does not stop execution while waiting for a task, especially I/O operations.
@@ -1521,125 +1707,25 @@ console.log("Reading file...");
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 29. What are REST, GraphQl and SOAP, and its difference?
+### Q 34. What is Garbage collection and how it works?
 
-**REST**
-REST is an architectural style for building APIs that use standard HTTP methods to access and manage resources, usually returning data in JSON format in a simple and scalable way.
+Garbage collection is the automatic process of freeing unused memory in Node.js. Node.js memory is divided into code segment, stack, and heap. Garbage collection only works on heap memory where objects are stored. The V8 engine uses a mark-and-sweep algorithm to remove unreachable objects from memory.
 
-```js
-// Request:
-GET /users/1
+- **Code Segment:** Stores the program’s instructions and function definitions. This memory is static and does not change during execution.
+- **Stack:** Holds function calls, local variables, and execution contexts in LIFO order. It is automatically cleared when functions finish executing.
+- **Heap:** Stores objects, arrays, and dynamic data. Garbage collection works here to remove unreachable objects and free memory.
 
-// Response:
-{
-  "id": 1,
-  "name": "John",
-  "email": "john@example.com"
-}
-```
+**🔹 How Garbage Collection Works in Node.js**
 
-**GraphQL**
-GraphQL is a query language for APIs that allows the client to request exactly the data it needs from a single endpoint, making data fetching more flexible and efficient.
+Node.js uses the V8 engine’s garbage collector, which mainly follows a Mark-and-Sweep algorithm.
 
-```js
-// Request:
-query {
-  user(id: 1) {
-    name
-    email
-  }
-}
-
-// Response:
-{
-  "data": {
-    "user": {
-      "name": "John",
-      "email": "john@example.com"
-    }
-  }
-}
-```
-
-**Interview Follow-Up Questions**
-
-1. What is the N+1 Problem in GraphQL and How Does DataLoader Solve It?
-   - The N+1 problem occurs when GraphQL executes one query to fetch records and then N additional queries to fetch related data. DataLoader solves this by batching multiple requests into a single database query and caching results within the same request. This significantly reduces database calls and improves GraphQL performance and scalability.
-
-**SOAP**
-SOAP is a protocol for exchanging structured information using XML, mainly used in enterprise systems where strict standards, security, and reliability are required.
-
-```js
-// Request:
-<soap:Envelope>
-  <soap:Body>
-    <GetUser>
-      <UserId>1</UserId>
-    </GetUser>
-  </soap:Body>
-</soap:Envelope>
-
-// Response:
-<soap:Envelope>
-  <soap:Body>
-    <GetUserResponse>
-      <User>
-        <Id>1</Id>
-        <Name>John</Name>
-        <Email>john@example.com</Email>
-      </User>
-    </GetUserResponse>
-  </soap:Body>
-</soap:Envelope>
-```
-
-**🔎 Comparison**
-
-| Feature     | REST                | GraphQL                 | SOAP             |
-| ----------- | ------------------- | ----------------------- | ---------------- |
-| Type        | Architectural style | Query language          | Protocol         |
-| Data Format | JSON (mostly)       | JSON                    | XML only         |
-| Endpoints   | Multiple endpoints  | Single endpoint         | Single endpoint  |
-| Flexibility | Fixed response      | Client-defined response | Strict structure |
+- **Memory Allocation:** When you create variables, objects, or functions. Memory is allocated in the heap.
+- **Mark Phase:** The garbage collector starts from the root object (global scope) and marks all objects that are still reachable (in use). If an object can be accessed, it is marked as active.
+- **Sweep Phase:** After marking, V8 removes all unmarked (unreachable) objects from memory. Now the original object is unreachable → GC will remove it.
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 30. What is crypto in Node.js?
-
-The crypto module in Node.js is a built-in module used for cryptographic operations like hashing, encryption, decryption, and generating secure random data. It is commonly used for password hashing, tokens, and data security.
-
-**🔹 Example 1: Hashing a Password**
-
-```js
-const crypto = require("crypto");
-
-const hash = crypto.createHash("sha256").update("mypassword").digest("hex");
-
-console.log(hash);
-```
-
-This converts a password into a secure hash.
-
-```js
-🔹 Example 2: Generate Random Token
-const crypto = require("crypto");
-
-const token = crypto.randomBytes(16).toString("hex");
-console.log(token);
-```
-
-Used for: Password reset tokens, API keys & Session IDs
-
-**🔹 Common Methods**
-
-- `createHash()` → Create hash (SHA256, MD5, etc.)
-- `createCipheriv()` → Encrypt data
-- `createDecipheriv()` → Decrypt data
-- `randomBytes()` → Generate secure random values
-
-<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
-
-### Q 31. How to debug an application in Node.js?
+### Q 35. How to debug an application in Node.js?
 
 Node.js applications can be debugged using console logs, the built-in Node inspector, or IDE debuggers like VS Code.
 
@@ -1718,25 +1804,7 @@ Used to monitor: Errors, Crashes & Performance
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 32. What is Garbage collection and how it works?
-
-Garbage collection is the automatic process of freeing unused memory in Node.js. Node.js memory is divided into code segment, stack, and heap. Garbage collection only works on heap memory where objects are stored. The V8 engine uses a mark-and-sweep algorithm to remove unreachable objects from memory.
-
-- **Code Segment:** Stores the program’s instructions and function definitions. This memory is static and does not change during execution.
-- **Stack:** Holds function calls, local variables, and execution contexts in LIFO order. It is automatically cleared when functions finish executing.
-- **Heap:** Stores objects, arrays, and dynamic data. Garbage collection works here to remove unreachable objects and free memory.
-
-**🔹 How Garbage Collection Works in Node.js**
-
-Node.js uses the V8 engine’s garbage collector, which mainly follows a Mark-and-Sweep algorithm.
-
-- **Memory Allocation:** When you create variables, objects, or functions. Memory is allocated in the heap.
-- **Mark Phase:** The garbage collector starts from the root object (global scope) and marks all objects that are still reachable (in use). If an object can be accessed, it is marked as active.
-- **Sweep Phase:** After marking, V8 removes all unmarked (unreachable) objects from memory. Now the original object is unreachable → GC will remove it.
-
-<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
-
-### Q 33. What memory leaks and its types?
+### Q 36. What memory leaks and its types?
 
 A memory leak occurs when unused memory is not released and heap usage keeps increasing.
 
@@ -1795,7 +1863,7 @@ const interval = setInterval(() => {
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 34. How do you identify and debug memory leaks?
+### Q 37. How do you identify and debug memory leaks?
 
 I first monitor heap memory usage. If memory continuously grows and doesn't reduce after garbage collection, I suspect a memory leak. Then I take heap snapshots using Chrome DevTools or Node Inspector, compare snapshots over time, identify growing objects, and trace why references to those objects are not being released.
 
@@ -1863,7 +1931,7 @@ I first monitor heap memory usage. If memory continuously grows and doesn't redu
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 35. Explain Error Handling approaches in Node.js?
+### Q 38. Explain Error Handling approaches in Node.js?
 
 **1. Using try-catch block:**
 
@@ -1932,7 +2000,110 @@ app.use((err, req, res, next) => {
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 36. What is Redis and how to implement it?
+### Q 39. How to improve Node.js performance?
+
+**1. Use Asynchronous & Non-Blocking Code**
+
+- Avoid blocking the event loop with synchronous operations like fs.readFileSync or heavy loops.
+- Use async APIs, Promises, or async/await for I/O and database calls.
+
+  ```js
+  // Bad: blocking
+  const data = fs.readFileSync("file.txt");
+
+  // Good: non-blocking
+  fs.readFile("file.txt", (err, data) => { ... });
+  ```
+
+**2. Query Optimization**
+
+Basic tips to improve your database performance/optimization overview
+
+- Indexing - Indexing is an approach to optimize the performance of a database by minimizing the number of disk accesses required when a query is processed.
+- Avoid SELECT - Use the SELECT statement to query only the data you need and avoid extra fetching loads to your database.
+
+  ```js
+  -- query1
+  SELECT * FROM Customers
+
+  -- query2 (optimized)
+  SELECT FirstName, LastName, Address, City, State, Zip FROM Customers
+  ```
+
+- Use LIMIT - LIMIT will return only the specified number of records.
+
+  ```js
+  SELECT FirstName, LastName, Address, City, State, Zip FROM Customers LIMIT 100
+  ```
+
+- Wildcard (%) - Use wildcard (%) character appropriately
+
+  ```js
+  -- SELECT customers whose first names start with "Avi"
+
+  -- query1
+  SELECT FirstName from Customers where FirstName like '%avi%'
+
+  -- query2 (optimized)
+  SELECT FirstName from Customers where FirstName like 'avi%'
+  ```
+
+**3. Implement Caching**
+
+- Use Redis or in-memory caches for frequently accessed data to reduce database calls.
+- Cache API responses, computed values, or session data.
+
+**4. Load Balancing:**
+
+The cluster module to allow load balancing and distribute incoming connections across all workers in an environment's numerous CPU cores using a round-robin technique.
+
+Using the PM2 process manager to keep applications alive indefinitely is another option. PM2 includes a cluster feature that allows you to run numerous processes over all cores without having to worry about changing the code to use the native cluster module.
+
+**5. Gzip Compression**
+
+Gzip compresses HTTP requests and responses.
+Gzip compresses responses before sending them to the browser, thus, the browser takes a shorter time to fetch them. Gzip also compresses the request to the remote server, which significantly increases web performance.
+
+<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
+
+### Q 40. How does Node handle concurrency?
+
+Node.js handles concurrency using the Event Loop, libuv, and non-blocking I/O. When an operation like a database query, file read, or external API call is made, Node doesn't wait for it to complete. Instead, it delegates the work to libuv and continues processing other requests. Once the operation finishes, the callback is placed back in the Event Loop for execution. This enables a single Node.js process to handle thousands of concurrent connections efficiently.
+
+<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
+
+### Q 41. How do you scale a Node.js application?
+
+I scale Node.js applications both vertically and horizontally. For a single server, I use Cluster to utilize all CPU cores, and for larger systems, I deploy multiple instances behind a load balancer. I also use Redis, connection pooling, and database optimization to eliminate backend bottlenecks.
+
+There are two main ways to scale a Node.js application:
+
+1. **Vertical Scaling (Scale Up):** Increase server resources:
+
+   ```js
+   2 CPU → 8 CPU
+   4 GB RAM → 16 GB RAM
+   ```
+
+   - **Pros:** Simple and No code changes.
+   - **Cons:** Hardware limit exists and Expensive
+
+2. **Horizontal Scaling (Scale Out):** Run multiple application instances.
+
+   ```js
+          Load Balancer
+                ↓
+     ┌──────────┼──────────┐
+     ↓          ↓          ↓
+   Node 1     Node 2     Node 3
+   ```
+
+   - **Pros:** Better scalability and High availability
+   - **Cons:** More infrastructure complexity
+
+<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
+
+### Q 42. What is Redis and how to implement it?
 
 Redis is an open-source, in-memory data store used as a database, cache, and message broker. It follows a key-value storage model, allowing data to be stored and retrieved directly from RAM using commands like `SET` and `GET`. It supports data types like strings, lists, sets, sorted sets, and hashes.
 
@@ -2061,73 +2232,7 @@ app.listen(PORT, async () => {
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 37. How to improve Node.js performance?
-
-**1. Use Asynchronous & Non-Blocking Code**
-
-- Avoid blocking the event loop with synchronous operations like fs.readFileSync or heavy loops.
-- Use async APIs, Promises, or async/await for I/O and database calls.
-
-  ```js
-  // Bad: blocking
-  const data = fs.readFileSync("file.txt");
-
-  // Good: non-blocking
-  fs.readFile("file.txt", (err, data) => { ... });
-  ```
-
-**2. Query Optimization**
-
-Basic tips to improve your database performance/optimization overview
-
-- Indexing - Indexing is an approach to optimize the performance of a database by minimizing the number of disk accesses required when a query is processed.
-- Avoid SELECT - Use the SELECT statement to query only the data you need and avoid extra fetching loads to your database.
-
-  ```js
-  -- query1
-  SELECT * FROM Customers
-
-  -- query2 (optimized)
-  SELECT FirstName, LastName, Address, City, State, Zip FROM Customers
-  ```
-
-- Use LIMIT - LIMIT will return only the specified number of records.
-
-  ```js
-  SELECT FirstName, LastName, Address, City, State, Zip FROM Customers LIMIT 100
-  ```
-
-- Wildcard (%) - Use wildcard (%) character appropriately
-
-  ```js
-  -- SELECT customers whose first names start with "Avi"
-
-  -- query1
-  SELECT FirstName from Customers where FirstName like '%avi%'
-
-  -- query2 (optimized)
-  SELECT FirstName from Customers where FirstName like 'avi%'
-  ```
-
-**3. Implement Caching**
-
-- Use Redis or in-memory caches for frequently accessed data to reduce database calls.
-- Cache API responses, computed values, or session data.
-
-**4. Load Balancing:**
-
-The cluster module to allow load balancing and distribute incoming connections across all workers in an environment's numerous CPU cores using a round-robin technique.
-
-Using the PM2 process manager to keep applications alive indefinitely is another option. PM2 includes a cluster feature that allows you to run numerous processes over all cores without having to worry about changing the code to use the native cluster module.
-
-**5. Gzip Compression**
-
-Gzip compresses HTTP requests and responses.
-Gzip compresses responses before sending them to the browser, thus, the browser takes a shorter time to fetch them. Gzip also compresses the request to the remote server, which significantly increases web performance.
-
-<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
-
-### Q 38. How to use JSON Web Token (JWT) for authentication?
+### Q 43. How to use JSON Web Token (JWT) for authentication?
 
 JWT is a secure token-based authentication mechanism.
 Users log in and receive a signed JWT, which they send in request headers to access protected routes.
@@ -2192,7 +2297,7 @@ app.listen(3000, () => console.log("Server running on http://localhost:3000"));
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 39. In a large application with around 100 protected APIs, would you perform JWT authentication and RBAC authorization checks on every request?
+### Q 44. In a large application with around 100 protected APIs, would you perform JWT authentication and RBAC authorization checks on every request?
 
 Yes, every protected API verifies the access token because JWT authentication is stateless.
 
@@ -2202,7 +2307,7 @@ We validate JWT on every protected request because authentication is stateless. 
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 40. How did you implement logging in your project and its types?
+### Q 45. How did you implement logging in your project and its types?
 
 We used Winston for structured JSON logging. We logged API requests, responses, errors, and audit events. Each request was assigned a correlation ID to trace it across services. Logs were centralized in ELK/CloudWatch for monitoring and troubleshooting.
 
@@ -2214,7 +2319,7 @@ ELK and CloudWatch are centralized logging platforms used to collect, store, and
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 41. How microservices communicate with each other?
+### Q 46. How microservices communicate with each other?
 
 Microservices can communicate synchronously using REST, GraphQL, or gRPC, and asynchronously using message brokers like Kafka or RabbitMQ.
 
@@ -2222,7 +2327,7 @@ I use synchronous communication when an immediate response is needed and asynchr
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 42. RabbitMQ and Kafka in Node.js?
+### Q 47. RabbitMQ and Kafka in Node.js?
 
 RabbitMQ is a message broker primarily used for task queues and reliable message delivery. Once a message is consumed, it is typically removed from the queue. Kafka is an event streaming platform where events are stored for a configurable retention period and can be consumed by multiple services independently. I generally use RabbitMQ for background jobs and Kafka for event-driven architectures, analytics, and high-throughput systems.
 
@@ -2238,7 +2343,7 @@ RabbitMQ is a message broker primarily used for task queues and reliable message
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 43. What is Connection pooling?
+### Q 48. What is Connection pooling?
 
 Connection pooling is a mechanism that maintains a reusable set of database connections. Instead of creating and closing a connection for every request, the application borrows a connection from the pool, executes the query, and returns it back. This reduces connection overhead, improves response time, and helps applications handle high traffic efficiently.
 
@@ -2281,7 +2386,7 @@ pool.query("SELECT * FROM users", (err, results) => {
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 44. What is Worker Threads vs Cluster vs Child Process, difference, and when to use?
+### Q 49. What is Worker Threads vs Cluster vs Child Process, difference, and when to use?
 
 **Worker Threads** are used when your Node application has CPU-intensive work such as image processing, PDF generation, encryption, or large calculations. They create additional JavaScript threads within the same process.
 
@@ -2345,7 +2450,7 @@ _A Node API receives an image and sends it to a Python AI model for prediction._
 - What is the difference between Cluster and Worker Threads?
   - Cluster creates multiple Node processes, each with its own memory and Event Loop. Worker Threads create multiple threads inside the same Node process and can share memory using SharedArrayBuffer.Cluster is for scaling servers. Worker Threads are for CPU-intensive tasks.
 
-### Q 45. How to Handle a 2GB File Upload in Node.js?
+### Q 50. How to Handle a 2GB File Upload in Node.js?
 
 For large files such as 2GB, I would implement chunked uploads where the file is split into smaller pieces, typically 5MB each. The backend stores each chunk and merges them after all chunks are received. In production, I would use parallel uploads, streaming, and resumable uploads with metadata stored in Redis or a database.
 
@@ -2358,44 +2463,7 @@ For large files such as 2GB, I would implement chunked uploads where the file is
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 46. How does Node handle concurrency?
-
-Node.js handles concurrency using the Event Loop, libuv, and non-blocking I/O. When an operation like a database query, file read, or external API call is made, Node doesn't wait for it to complete. Instead, it delegates the work to libuv and continues processing other requests. Once the operation finishes, the callback is placed back in the Event Loop for execution. This enables a single Node.js process to handle thousands of concurrent connections efficiently.
-
-<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
-
-### Q 47. How do you scale a Node.js application?
-
-I scale Node.js applications both vertically and horizontally. For a single server, I use Cluster to utilize all CPU cores, and for larger systems, I deploy multiple instances behind a load balancer. I also use Redis, connection pooling, and database optimization to eliminate backend bottlenecks.
-
-There are two main ways to scale a Node.js application:
-
-1. **Vertical Scaling (Scale Up):** Increase server resources:
-
-   ```js
-   2 CPU → 8 CPU
-   4 GB RAM → 16 GB RAM
-   ```
-
-   - **Pros:** Simple and No code changes.
-   - **Cons:** Hardware limit exists and Expensive
-
-2. **Horizontal Scaling (Scale Out):** Run multiple application instances.
-
-   ```js
-          Load Balancer
-                ↓
-     ┌──────────┼──────────┐
-     ↓          ↓          ↓
-   Node 1     Node 2     Node 3
-   ```
-
-   - **Pros:** Better scalability and High availability
-   - **Cons:** More infrastructure complexity
-
-<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
-
-### Q 48. Database Scaling?
+### Q 51. Database Scaling?
 
 I usually start database scaling with query optimization, indexing, and connection pooling. If traffic continues to grow, I introduce Redis caching and read replicas to reduce database load. For very large systems, I consider sharding and horizontal database scaling.
 
@@ -2423,7 +2491,7 @@ I usually start database scaling with query optimization, indexing, and connecti
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 49. MySQL vs PostgreSQL vs MongoDB?
+### Q 52. MySQL vs PostgreSQL vs MongoDB?
 
 **MySQL:** MySQL is an open-source relational database management system (RDBMS) that stores data in tables consisting of rows and columns and uses SQL (Structured Query Language) to manage and query data.
 
@@ -2437,20 +2505,27 @@ I usually start database scaling with query optimization, indexing, and connecti
 
 - Use for: Rapidly changing data structures, Social media, & Content management.
 
-| Feature         | MySQL            | PostgreSQL         | MongoDB                                |
-| --------------- | ---------------- | ------------------ | -------------------------------------- |
-| Type            | Relational       | Relational         | NoSQL                                  |
-| Schema          | Fixed            | Fixed              | Flexible                               |
-| Joins           | Yes              | Yes                | Limited                                |
-| ACID            | Yes              | Strong             | Yes (multi-document support available) |
-| Complex Queries | Good             | Excellent          | Limited                                |
-| JSON Support    | Basic            | Excellent          | Native                                 |
-| Scalability     | Good             | Excellent          | Excellent                              |
-| Best For        | Traditional Apps | Enterprise Systems | Flexible Data Models                   |
+| Criteria                         | MySQL                                     | PostgreSQL                                            |
+| -------------------------------- | ----------------------------------------- | ----------------------------------------------------- |
+| **Application Type**             | Simple CRUD applications, e-commerce, CMS | Enterprise systems, financial systems, analytics      |
+| **Complex Queries**              | Good for simple joins and transactions    | Better for complex joins, aggregations, and reporting |
+| **JSON Support**                 | Supports JSON                             | JSONB support is much faster and more powerful        |
+| **Scalability & Data Integrity** | Good for standard workloads               | Better for large-scale, data-intensive applications   |
+
+> _I choose MySQL for simple CRUD-based applications where ease of development and performance are important. I choose PostgreSQL when the application requires complex queries, advanced JSON support, strong data integrity, or enterprise-level scalability._
+
+| Criteria           | SQL                                            | NoSQL                                                         |
+| ------------------ | ---------------------------------------------- | ------------------------------------------------------------- |
+| **Data Structure** | Fixed schema (tables, rows, columns)           | Flexible schema (JSON, documents, key-value)                  |
+| **Relationships**  | Excellent for complex relationships and joins  | Better for denormalized data, limited joins                   |
+| **Scalability**    | Typically scales vertically                    | Designed for horizontal scaling                               |
+| **Best Use Case**  | Banking, ERP, inventory, transactional systems | Real-time apps, social media, large-scale distributed systems |
+
+> _I choose SQL when data has strong relationships, requires ACID transactions, and consistency is critical. I choose NoSQL when I need flexible schemas, horizontal scalability, and high-volume data processing._
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 50. TypeORM vs Prisma?
+### Q 53. TypeORM vs Prisma?
 
 **TypeORM:** TypeORM is a traditional ORM (Object Relational Mapper) that maps database tables directly to TypeScript/JavaScript classes using decorators.
 
@@ -2483,57 +2558,7 @@ const users = await prisma.user.findMany();
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 51. Database Transactions?
-
-A Transaction is a group of database operations that are executed as a single unit of work.
-
-Either: `All operations succeed` or `All operations fail (Rollback)`.
-
-```js
-// Bank Transfer: Suppose: John Account = ₹1000 and Mike Account = ₹500. John transfers: ₹200 → Mike
-
-Steps:
-
-1. Deduct ₹200 from John
-2. Add ₹200 to Mike
-
-// If step 1 succeeds and step 2 fails: John = ₹800 and Mike = ₹500. Money is lost ❌
-
-// Using a transaction:
-
-BEGIN;
-
-UPDATE accounts
-SET balance = balance - 200
-WHERE id = 1;
-
-UPDATE accounts
-SET balance = balance + 200
-WHERE id = 2;
-
-COMMIT;
-
-// If any step fails:
-
-ROLLBACK;
-
-// Database returns to the original state.
-```
-
-<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
-
-### Q 52. ACID Properties?
-
-ACID properties are implemented by the database engine, not manually by developers. In applications, we use transactions with BEGIN, COMMIT, and ROLLBACK to ensure Atomicity, while the database handles Consistency, Isolation, and Durability internally through constraints, isolation levels, and transaction logs.
-
-- **A - Atomicity** Either everything happens or nothing happens.
-- **C - Consistency** Data must always remain valid before and after a transaction.
-- **I - Isolation** Multiple transactions should not interfere with each other. Example: Two users update the same account simultaneously. Database ensures transactions are handled safely.
-- **D - Durability** Once committed, data is permanently stored even if the database crashes.
-
-<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
-
-### Q 53. Design Patterns?
+### Q 54. Design Patterns?
 
 Design patterns are reusable solutions to common software design problems. In backend development, I frequently use Singleton for database connections, Strategy for payment processing, Observer for event-driven systems, Factory for object creation, and Repository to separate business logic from data access.
 
@@ -2551,139 +2576,7 @@ Design patterns are reusable solutions to common software design problems. In ba
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 54. Normalization?
-
-Normalization is the process of organizing data into multiple related tables to reduce data duplication and improve data consistency.
-
-`1NF` ensures each column contains a single value, `2NF` removes duplicate data by separating entities into related tables, and `3NF` removes transitive dependencies where a non-key column depends on another non-key column. Together, they reduce redundancy and improve data consistency.
-
-<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
-
-### Q 55. Optimistic Locking vs Pessimistic Locking?
-
-Both are techniques used to handle concurrent updates to the same data.
-
-**Optimistic Locking:** Assumes conflicts are rare. Instead of locking the row, it checks whether someone else modified the data before saving. Usually implemented using a: version column or timestamp column. Used in E-commerce and Low chance of conflicts.
-
-**Pessimistic Locking:** Assumes conflicts are likely. Locks the row immediately so nobody else can modify it. Used in Banking and Payment Systems.
-
-| Feature           | Optimistic   | Pessimistic         |
-| ----------------- | ------------ | ------------------- |
-| Locks Data?       | No           | Yes                 |
-| Performance       | Faster       | Slower              |
-| Concurrency       | High         | Lower               |
-| Conflict Handling | Detect Later | Prevent Immediately |
-| Best For          | Web Apps     | Banking/Payments    |
-
-<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
-
-### Q 56. N+1 Query Problem (Very Common ORM Interview Question).?
-
-The N+1 Query Problem occurs when an application executes one query to fetch parent records and then executes additional queries for each related record. This causes excessive database calls and poor performance. I typically solve it using JOINs, eager loading, or ORM relation loading to fetch related data in a single query.
-
-```ts
-// Bad
-const users = await userRepository.find();
-
-for (const user of users) {
-  user.orders = await orderRepository.find({
-    where: { userId: user.id }
-  });
-}
-
-// Good
-SELECT *
-FROM users u
-LEFT JOIN orders o
-ON u.id = o.user_id;
-```
-
-<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
-
-### Q 57. SQL JOINs (INNER JOIN vs LEFT JOIN vs RIGHT JOIN vs FULL JOIN).?
-
-Joins are used to combine data from multiple tables based on a related column.
-
-```js
-// Example Tables
-// Users
-id | name
------------
-1  | John
-2  | Mike
-3  | David
-// Orders
-id | user_id | product
-----------------------
-1  | 1       | Laptop
-2  | 1       | Mouse
-3  | 2       | Mobile
-```
-
-1. **INNER JOIN:** Returns only matching records from both tables. Use it When you only want records that exist in both tables.
-
-   ```js
-   SELECT u.name, o.product
-   FROM users u
-   INNER JOIN orders o
-   ON u.id = o.user_id;
-
-   // Result
-   John   Laptop
-   John   Mouse
-   Mike   Mobile
-   ```
-
-2. **LEFT JOIN:** Returns all rows from the left table and matching rows from the right table.
-
-   ```js
-   // Query
-   SELECT u.name, o.product
-   FROM users u
-   LEFT JOIN orders o
-   ON u.id = o.user_id;
-
-   // Result
-   John   Laptop
-   John   Mouse
-   Mike   Mobile
-   David  NULL
-   ```
-
-3. **RIGHT JOIN:** Returns all rows from the right table and matching rows from the left table.
-
-   ```js
-   // Query
-   SELECT u.name, o.product
-   FROM users u
-   RIGHT JOIN orders o
-   ON u.id = o.user_id;
-
-   // Result
-
-   John   Laptop
-   John   Mouse
-   Mike   Mobile
-   ```
-
-4. **FULL JOIN:** All rows from Left Table + All rows from Right Table. Whether matching or not.
-
-   ```js
-   // Query
-   SELECT u.name, o.product
-   FROM users u
-   FULL JOIN orders o
-   ON u.id = o.user_id;
-
-   // Result
-   John   Laptop
-   John   Mouse
-   Mike   Mobile
-   David  NULL
-   NULL   Tablet
-   ```
-
-### Q 58. You have implemented JWT authentication in your application. If an attacker steals a valid JWT token from a user's browser and uses it from Postman or another machine, how would you detect and prevent unauthorized access?
+### Q 55. You have implemented JWT authentication in your application. If an attacker steals a valid JWT token from a user's browser and uses it from Postman or another machine, how would you detect and prevent unauthorized access?
 
 JWT alone cannot detect whether a stolen token is being used from Postman or another device. In enterprise applications, we store session metadata such as `IP, browser, device fingerprint, and location` in Redis or a database and validate it on every request. If significant mismatches are detected, we trigger re-authentication, MFA, or session revocation.
 
