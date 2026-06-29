@@ -2778,3 +2778,235 @@ The biggest Angular milestones were Ivy in Angular 9, Standalone Components in A
 <div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
 
 ##
+
+# TypeScript Interview Questions
+
+### Q 1. What is the difference between `interface` and `type`?
+
+Use `interface` for object contracts and `type` for unions, intersections, and advanced type manipulation.
+
+| interface                        | type                                    |
+| -------------------------------- | --------------------------------------- |
+| Used mainly for object contracts | Can represent any type                  |
+| Supports declaration merging     | Does not support merging                |
+| Can extend interfaces            | Can use intersections (`&`)             |
+| Preferred for models/APIs        | Preferred for unions and advanced types |
+
+```ts
+interface User {
+  id: number;
+}
+
+type Status = "loading" | "success" | "error";
+```
+
+<div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
+
+### Q 2. Difference between `any`, `unknown`, and `never`?
+
+`any` disables type checking, `unknown` requires type validation before use, and `never` represents values that should never occur, such as functions that always throw errors.
+
+| Type      | Description                        |
+| --------- | ---------------------------------- |
+| `any`     | Disables type checking             |
+| `unknown` | Safer version of any               |
+| `never`   | Represents values that never occur |
+
+```ts
+let a: any = 10;
+
+let b: unknown = 10;
+
+if (typeof b === "number") {
+  console.log(b);
+}
+
+function throwError(): never {
+  throw new Error();
+}
+```
+
+<div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
+
+### Q 3. What are Generics?
+
+Generics allow a function, class, or interface to work with multiple data types while preserving type safety.
+
+```ts
+function identity<T>(value: T): T {
+  return value;
+}
+
+identity<string>("Angular");
+identity<number>(100);
+```
+
+<div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
+
+### Q 4. What are Union Types?
+
+Union types allow a value to be one of several predefined types.
+
+```ts
+type Result = string | number;
+
+let value: Result;
+
+value = "Angular";
+value = 100;
+```
+
+<div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
+
+### Q 5. What is the difference between Union and Generic Types?
+
+Union means one of known types; Generic means any type determined at usage time.
+
+```ts
+// Known possible types.
+type Result = string | number;
+
+// Type decided later.
+function identity<T>(value: T): T {
+  return value;
+}
+```
+
+<div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
+
+### Q 6. What is the difference between enum and Union Types?
+
+Union types are lighter, more type-safe, and preferred over enums in modern TypeScript.
+
+```ts
+// Enum
+enum Status {
+  Loading,
+  Success,
+  Error,
+}
+
+// Union
+type Status = "loading" | "success" | "error";
+
+// Modern Recommendation Prefer unions.
+```
+
+<div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
+
+### Q 7. What are Utility Types?
+
+Utility types help create new types from existing types without duplicating code.
+
+```ts
+interface User {
+  id: number;
+  name: string;
+}
+
+// Partial
+type UserUpdate = Partial<User>;
+
+// Required
+type UserRequired = Required<User>;
+
+// Pick
+type UserDto = Pick<User, "id" | "name">;
+
+// Omit
+type UserWithoutId = Omit<User, "id">;
+```
+
+- Difference between Pick and Omit?
+  - `Pick` selects specific properties from a type, while `Omit` removes specific properties.
+
+<div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
+
+### Q 8. What are Type Guards?
+
+Type guards narrow types at runtime using checks like `typeof`, `instanceof`, `in`, or custom predicates.
+
+```ts
+function print(value: string | number) {
+  if (typeof value === "string") {
+    console.log(value.toUpperCase());
+  }
+}
+```
+
+<div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
+
+### Q 9. What is readonly?
+
+`readonly` enforces immutability at compile time. It prevents modification after initialization.
+
+```ts
+interface User {
+  readonly id: number;
+  name: string;
+}
+
+user.id = 2; // Error
+```
+
+<div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
+
+### Q 10. What is `as const`?
+
+`as const` makes values immutable and preserves literal types instead of widening them to general types like string or number.
+
+```ts
+const roles = ["admin", "user"] as const;
+```
+
+<div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
+
+### Q 11. What are Mapped Types?
+
+Mapped types iterate over properties of an existing type to create a new type.
+
+```ts
+interface User {
+  id: number;
+  name: string;
+}
+
+type ReadOnlyUser = {
+  readonly [K in keyof User]: User[K];
+};
+
+// Equivalent to:
+Readonly<User>;
+```
+
+<div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
+
+### Q 12. What is a Tuple?
+
+A Tuple is a fixed-length array where each position has a specific type. Unlike a normal array, a tuple enforces: Number of elements, Order of elements, & Type of each element
+
+```ts
+const employee: [string, number] = ["John", 25];
+
+// Meaning:
+Index 0 → string
+Index 1 → number
+
+// ✅ Valid
+["John", 25]
+
+// ❌ Invalid
+[25, "John"]
+```
+
+<div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
+
+<!-- ### Q . Error
+
+```ts
+
+```
+
+<div align="right"><b><a href="#angular">↥ Back to top</a></b></div> -->
+
+##
