@@ -2603,7 +2603,72 @@ JWT alone cannot detect whether a stolen token is being used from Postman or ano
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-<!-- ### Q 36. ?
+### Q 56. Middleware VS Guard vs Interceptor?
+
+**Middleware** is used when we need to process or enrich the incoming request before it reaches the controller, such as logging, correlation ID, or request modification.
+
+**Guards** handle authentication and authorization before the controller is reached.
+
+**Interceptors** are used to wrap around controller execution, allowing us to transform responses, measure execution time, implement caching, or modify the final output."
+
+I use `Middleware` when I need to process or enrich the incoming request before it reaches the application, such as logging, correlation IDs, or capturing client information. I use `Interceptors` when I need access to both the request and the controller response, such as response transformation, caching, execution-time monitoring, or response logging.
+
+<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
+
+### Q 57. What is Circuit Breaker?
+
+A Circuit Breaker is a design pattern that prevents your application from continuously calling a failing service.
+
+Instead of repeatedly trying a service that is down, it temporarily stops making requests, allowing the failing service time to recover.
+
+After a configurable number of failures, it opens the circuit and immediately returns a fallback response instead of waiting for timeouts. Once the service is expected to recover, it enters a half-open state to test the service before closing the circuit again.
+
+```js
+// Suppose your Order Service calls the Payment Service.
+
+Client
+   ↓
+Order Service
+   ↓
+Payment Service
+
+// Now imagine the Payment Service crashes.
+// Without a Circuit Breaker:
+
+Request 1 → Timeout ❌
+Request 2 → Timeout ❌
+Request 3 → Timeout ❌
+...
+10,000 Requests → Timeout ❌
+```
+
+**Problems:**
+
+- Threads remain busy waiting
+- CPU usage increases
+- Memory usage increases
+- Entire application becomes slow
+
+**Three States of a Circuit Breaker**
+
+1.  **Closed State (Normal):** Everything is healthy. All requests are allowed.
+2.  **Open State (Failure):** Too many failures detected. Immediately return an error or fallback response.
+3.  **Half-Open State (Recovery Check):** After waiting (e.g., 30 seconds): `Allow 1 request` If successful: `Circuit → Closed ✅` If it fails: `Circuit → Open ❌`
+
+<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
+
+### Q 58. What is Saga Pattern?
+
+Saga Pattern is a way to manage transactions across multiple microservices without using a single database transaction.
+
+**Two Types of Saga**
+
+1. **Choreography:** Services communicate through events like Kafka. No central coordinator.
+2. **Orchestration:** One Saga Coordinator controls the workflow.
+
+<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
+
+<!-- ### Q 59. ?
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div> -->
 
