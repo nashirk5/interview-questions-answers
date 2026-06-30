@@ -2603,19 +2603,7 @@ JWT alone cannot detect whether a stolen token is being used from Postman or ano
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 56. Middleware VS Guard vs Interceptor?
-
-**Middleware** is used when we need to process or enrich the incoming request before it reaches the controller, such as logging, correlation ID, or request modification.
-
-**Guards** handle authentication and authorization before the controller is reached.
-
-**Interceptors** are used to wrap around controller execution, allowing us to transform responses, measure execution time, implement caching, or modify the final output."
-
-I use `Middleware` when I need to process or enrich the incoming request before it reaches the application, such as logging, correlation IDs, or capturing client information. I use `Interceptors` when I need access to both the request and the controller response, such as response transformation, caching, execution-time monitoring, or response logging.
-
-<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
-
-### Q 57. What is Circuit Breaker?
+### Q 56. What is Circuit Breaker?
 
 A Circuit Breaker is a design pattern that prevents your application from continuously calling a failing service.
 
@@ -2657,7 +2645,7 @@ Request 3 → Timeout ❌
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 58. What is Saga Pattern?
+### Q 57. What is Saga Pattern?
 
 Saga Pattern is a way to manage transactions across multiple microservices without using a single database transaction.
 
@@ -2668,7 +2656,350 @@ Saga Pattern is a way to manage transactions across multiple microservices witho
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-<!-- ### Q 59. ?
+<!-- ### Q 58. ?
+
+<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div> -->
+
+##
+
+# NestJs Interview Questions
+
+### Q 1. What is NestJS?
+
+NestJS is a open-source Node.js framework for building scalable server-side applications. It is built on Express.js that uses TypeScript, Dependency Injection, and a modular architecture.
+
+<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
+
+### Q 2. What is dependency injection?
+
+Dependency Injection is a design pattern where NestJS automatically provides (services or objects) dependencies to a class instead of the class creating them manually. which reducing tight coupling and improving testability. We can create Dependency Injection with the help of `@Injectable()` decorator.
+
+```ts
+// NestJS scans modules.
+@Module({
+  providers: [UserService, EmailService],
+})
+export class AppModule {}
+
+// Creates instances of providers.
+EmailService
+UserService
+
+// Looks at constructor dependencies.
+constructor(
+  private emailService: EmailService
+)
+
+// Injects the required instance.
+UserService ---> EmailService
+```
+
+<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
+
+### Q 3. What is a Provider?
+
+Providers are NestJs's way of configuring Dependency Injection. A provider tells NestJs how to create and supply an instance for a dependency.
+
+**Types of Providers in NestJS**
+
+1. **Class Provider (`useClass`):** A Class Provider tells NestJS which class should be instantiated when a dependency is requested.
+
+   ```ts
+   {
+     provide: PaymentService,
+     useClass: StripePaymentService
+   }
+   ```
+
+2. **Value Provider (`useValue`):** A Value Provider injects a fixed value, object, or constant instead of creating a class instance.
+
+   ```ts
+   {
+     provide: 'API_URL',
+     useValue: 'https://api.example.com'
+   }
+
+   // Usage:
+   constructor(
+     @Inject('API_URL')
+     private apiUrl: string,
+   ) {}
+   ```
+
+3. **Factory Provider (`useFactory`):** A Factory Provider uses a function to dynamically create a dependency at runtime.
+
+   ```ts
+   {
+     provide: 'CONFIG',
+     useFactory: () => ({
+       env: process.env.NODE_ENV,
+     }),
+   }
+   ```
+
+4. **Existing Provider (`useExisting`):** An Existing Provider creates an alias for another provider instead of creating a new instance.
+
+   ```ts
+   {
+     provide: 'LOGGER',
+     useExisting: LoggerService,
+   }
+   ```
+
+| Provider Type   | Definition                               | Small Example                           |
+| --------------- | ---------------------------------------- | --------------------------------------- |
+| **useClass**    | Creates an instance of a class           | `PaymentService → StripePaymentService` |
+| **useValue**    | Injects a fixed value/object             | API URL, constants, mock data           |
+| **useFactory**  | Creates dependency using a function      | Database connection, dynamic config     |
+| **useExisting** | Creates an alias to an existing provider | `LOGGER → LoggerService`                |
+
+<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
+
+### Q 4. What is a Module?
+
+A module is a place where we can group controllers, providers, and services. A module is defined with a @Module decorator.
+
+```ts
+@Module({
+  controllers: [UserController],
+  providers: [UserService],
+})
+export class UserModule {}
+```
+
+<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
+
+### Q 5. What is a Controller?
+
+A Controller is responsible for handling incoming HTTP requests and returning responses to the client. A controller should contain minimal business logic. Its main responsibility is request handling and routing.
+
+```ts
+@Controller("users")
+export class UserController {
+  constructor(private readonly userService: UserService) {}
+
+  @Get()
+  findAll() {
+    return this.userService.findAll();
+  }
+}
+```
+
+- What's the difference between a Controller and a Service?
+  - Controller → Handles HTTP requests and responses.
+  - Service → Contains business logic and data processing.
+
+<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
+
+### Q 6. What are Decorators?
+
+Decorators are functions that provide metadata to NestJS classes, helping NestJS to understand how they should behave.
+
+Metadata is used to decorate a class so that it can configure the expected behavior of the class. The metadata is represented by decorators
+
+**There are four main types of decorators:**
+
+1. **Class Decorators:**
+
+   | Decorator       | Purpose                             |
+   | --------------- | ----------------------------------- |
+   | `@Controller()` | Marks a class as a controller       |
+   | `@Injectable()` | Marks a class as a provider/service |
+   | `@Module()`     | Marks a class as a module           |
+
+2. **Method Decorators:**
+
+   | Decorator   | HTTP Method |
+   | ----------- | ----------- |
+   | `@Get()`    | GET         |
+   | `@Post()`   | POST        |
+   | `@Put()`    | PUT         |
+   | `@Patch()`  | PATCH       |
+   | `@Delete()` | DELETE      |
+
+3. **Parameter Decorators:**
+   | Decorator | Purpose |
+   | ------------ | --------------- |
+   | `@Body()` | Request body |
+   | `@Param()` | Route parameter |
+   | `@Query()` | Query parameter |
+   | `@Headers()` | Request headers |
+   | `@Req()` | Request object |
+   | `@Res()` | Response object |
+
+<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
+
+### Q 7. Custom Decorators?
+
+A custom decorator is a reusable function that allows extracting request data or attaching metadata to routes. It simplifies controller code and improves reusability. Common examples include `@User()` for accessing request user and `@Roles()` for role-based authorization.
+
+Custom decorators in NestJS are used to extract request data or attach metadata to routes, making controllers cleaner and more reusable.
+
+<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
+
+### Q 8. What is Middleware, Guard, Pipe, Interceptor?
+
+| Component       | Purpose                                              | Used                                               |
+| --------------- | ---------------------------------------------------- | -------------------------------------------------- |
+| **Middleware**  | Runs before routing. Used for request preprocessing. | Logging requests, Adding headers, & Correlation ID |
+| **Guard**       | Decides whether the request is allowed to proceed.   | Authentication & Authorization                     |
+| **Pipe**        | Validates and transforms incoming data.              | DTO Validation &Data Transformation                |
+| **Interceptor** | Executes logic before and after method execution.    | Response formatting & Performance Monitoring       |
+
+> Middleware = preprocess request, Guard = allow/deny request, Pipe = validate/transform data, Interceptor = wrap execution and modify response.
+
+```ts
+Request
+   │
+   ▼
+Middleware
+   │
+   ▼
+Guard
+   │
+   ▼
+Interceptor (Before)
+   │
+   ▼
+Pipe
+   │
+   ▼
+Controller
+   │
+   ▼
+Service
+   │
+   ▼
+Interceptor (After)
+   │
+   ▼
+Response
+```
+
+<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
+
+### Q 9. What is ValidationPipe?
+
+ValidationPipe is a built-in NestJS pipe that automatically validates incoming request data against a DTO and can also transform the data into the expected type. It is commonly used with `class-validator` and `class-transformer` to ensure only valid data reaches the application logic
+
+ValidationPipe checks whether the request data matches the rules defined in your DTO before it reaches the controller.
+
+- How to use ValidationPipe as globally?
+  ```ts
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+      transform: true,
+    }),
+  );
+  ```
+
+| Need                     | Solution                   |
+| ------------------------ | -------------------------- |
+| Validate request body    | ValidationPipe             |
+| Validate DTO fields      | class-validator            |
+| Convert string to number | ValidationPipe + transform |
+| Remove extra properties  | whitelist                  |
+| Reject extra properties  | forbidNonWhitelisted       |
+
+<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
+
+### Q 10. What is CORS, CSRF, XSS, Helmet?
+
+| Term       | Full Form                     | Purpose                                              | Protects Against                   |
+| ---------- | ----------------------------- | ---------------------------------------------------- | ---------------------------------- |
+| **CORS**   | Cross-Origin Resource Sharing | Controls which domains can access your API           | Unauthorized cross-origin requests |
+| **CSRF**   | Cross-Site Request Forgery    | Prevents requests made on behalf of a logged-in user | Forged requests                    |
+| **XSS**    | Cross-Site Scripting          | Prevents malicious JavaScript execution              | Script injection                   |
+| **Helmet** | Security Middleware           | Adds security-related HTTP headers                   | Various web vulnerabilities        |
+
+1. **CORS (Cross-Origin Resource Sharing):** CORS is a browser security mechanism that controls whether a web application from one origin can access resources from another origin. Browsers block requests between different origins by default. Origin consists of `Protocol + Domain + Port`.
+   - **Example:** Different ports = Different origins. Browser blocks the request unless the server allows it.
+     - Frontend: http://localhost:4200
+     - Backend: http://localhost:3000
+
+     ```ts
+     Enable CORS in NestJS
+     const app = await NestFactory.create(AppModule);
+
+     app.enableCors({
+       origin: 'http://localhost:4200',
+     });
+     ```
+
+2. **CSRF (Cross-Site Request Forgery):** CSRF is an attack where a malicious website tricks an authenticated user into performing unintended actions. It is commonly prevented using CSRF tokens and SameSite cookies.
+
+   Imagine: User logs into bank.com, Then visits a malicious website: `<form action="bank.com/transfer">`. The browser automatically sends cookies. Result: Money transferred without user's knowledge.
+
+3. **XSS (Cross-Site Scripting):** XSS is a vulnerability where attackers inject malicious JavaScript into webpages, allowing them to steal cookies, tokens, or manipulate page content. It is prevented through sanitization, encoding, and CSP policies.
+
+4. **Helmet:** Helmet is a middleware that secures Express and NestJS applications by setting various HTTP security headers, helping protect against XSS, clickjacking, MIME sniffing, and other common attacks.
+   - What Helmet Adds:
+     - Content-Security-Policy. Helps prevent XSS.
+     - X-Frame-Options. Prevents clickjacking.
+     - X-Content-Type-Options. Prevents MIME sniffing.
+     - Strict-Transport-Security. Forces HTTPS.
+
+   ```ts
+   // Install
+   npm install helmet
+
+   import helmet from 'helmet';
+
+   app.use(helmet());
+   ```
+
+<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
+
+### Q 11. Exception Filters?
+
+Exception Filters in NestJS are used to catch and handle thrown exceptions and transform them into a structured HTTP response. They help centralize error handling, prevent stack trace leakage, and ensure consistent error formatting across the application.
+
+Exception Filters are used to catch errors in NestJS and return a clean, consistent error response instead of raw exceptions.
+
+**Types of Custom Decorators**
+
+1. **Parameter Decorator:** Used to extract data from request.
+
+   ```ts
+   // Step 1: Create Decorator
+   import { createParamDecorator, ExecutionContext } from '@nestjs/common';
+
+   export const User = createParamDecorator(
+     (data: unknown, ctx: ExecutionContext) => {
+       const request = ctx.switchToHttp().getRequest();
+       return request.user;
+     },
+   );
+
+   // Step 2: Use in Controller
+   @Get('profile')
+   getProfile(@User() user: any) {
+     return user;
+   }
+   ```
+
+2. **Method Decorator:** Used for attaching metadata.
+
+   ```ts
+   // Step 1
+   import { SetMetadata } from '@nestjs/common';
+
+   export const Roles = (...roles: string[]) =>
+     SetMetadata('roles', roles);
+
+   // Step 2: Use in Controller
+   @Roles('admin')
+   @Get('admin')
+   getAdminData() {
+     return 'Admin Data';
+   }
+
+   // Step 3: Read in Guard
+   const roles = this.reflector.get<string[]>('roles', context.getHandler());
+   ```
+
+<!-- ### Q 12. ?
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div> -->
 
