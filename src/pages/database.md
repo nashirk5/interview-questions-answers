@@ -86,7 +86,16 @@ Normalization is the process of organizing data into multiple related tables to 
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 6. What is GROUP BY and SORT BY?
+### Q 6. What is Denormalization?
+
+Denormalization is the process of intentionally duplicating data to improve read performance. It reduces joins and speeds up queries at the cost of increased storage and maintenance complexity. It is commonly used in reporting systems, data warehouses, and NoSQL databases like MongoDB.
+
+> Normalization = Remove duplicate data.\
+> Denormalization = Add some duplicate data for faster queries
+
+<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
+
+### Q 7. What is GROUP BY and SORT BY?
 
 `GROUP BY` is used to combine rows that have the same values in one or more columns and then apply aggregate functions like COUNT, SUM, AVG, etc.
 
@@ -106,7 +115,7 @@ ORDER BY Salary DESC;
 
 <div align="right"><b><a href="#ChatGPT-AI-prompt">↥ Back to top</a></b></div>
 
-### Q 7. What are Aggregate Functions?
+### Q 8. What are Aggregate Functions?
 
 Aggregate functions are SQL functions that perform a calculation on multiple rows and return a single result.
 
@@ -124,7 +133,7 @@ Aggregate functions are SQL functions that perform a calculation on multiple row
 
 <div align="right"><b><a href="#ChatGPT-AI-prompt">↥ Back to top</a></b></div>
 
-### Q 8. What Index?
+### Q 9. What Index?
 
 An Index is a data structure that improves query performance by allowing faster data retrieval. It reduces the need for full table scans and speeds up WHERE, JOIN, and ORDER BY operations. While indexes improve reads, they add overhead to INSERT, UPDATE, and DELETE operations.
 
@@ -185,7 +194,7 @@ An Index is a data structure that improves query performance by allowing faster 
 
 <div align="right"><b><a href="#ChatGPT-AI-prompt">↥ Back to top</a></b></div>
 
-### Q 9. What is a View?
+### Q 10. What is a View?
 
 A View is a virtual table created from the result of a SQL query.
 
@@ -206,7 +215,7 @@ Unlike a real table, a view does not usually store data itself. Instead, it stor
 
 <div align="right"><b><a href="#ChatGPT-AI-prompt">↥ Back to top</a></b></div>
 
-### Q 10. What is a Trigger?
+### Q 11. What is a Trigger?
 
 A Trigger is a database object that automatically executes when an INSERT, UPDATE, or DELETE event occurs. It is commonly used for auditing, validation, history tracking, and enforcing business rules. Since triggers run automatically, excessive use can affect performance and maintainability.
 
@@ -238,7 +247,7 @@ VALUES ('John');
 
 <div align="right"><b><a href="#ChatGPT-AI-prompt">↥ Back to top</a></b></div>
 
-### Q 11. What is a Stored Procedure?
+### Q 12. What is a Stored Procedure?
 
 A Stored Procedure is a precompiled collection of SQL statements stored in the database. It improves reusability, security, and performance by centralizing business logic. Procedures can accept parameters and execute complex database operations.
 
@@ -256,13 +265,13 @@ EXEC GetEmployees;
 
 <div align="right"><b><a href="#ChatGPT-AI-prompt">↥ Back to top</a></b></div>
 
-### Q 12. Difference between Stored Procedure vs Functions?
+### Q 13. Difference between Stored Procedure vs Functions?
 
 Functions are primarily used for calculations and returning values, while Stored Procedures are used for performing database operations such as inserts, updates, deletes, and transactions. Functions can be called inside a SELECT statement, but Stored Procedures cannot.
 
 <div align="right"><b><a href="#ChatGPT-AI-prompt">↥ Back to top</a></b></div>
 
-### Q 13. SQL JOINs (INNER JOIN vs LEFT JOIN vs RIGHT JOIN vs FULL JOIN).?
+### Q 14. SQL JOINs (INNER JOIN vs LEFT JOIN vs RIGHT JOIN vs FULL JOIN).?
 
 Joins are used to combine data from multiple tables based on a related column.
 
@@ -347,7 +356,7 @@ id | user_id | product
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 14. Database Transactions?
+### Q 15. Database Transactions?
 
 A Transaction is a group of database operations that are executed as a single unit of work.
 
@@ -386,7 +395,7 @@ ROLLBACK;
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 15. ACID Properties?
+### Q 16. ACID Properties?
 
 ACID properties are implemented by the database engine, not manually by developers. In applications, we use transactions with BEGIN, COMMIT, and ROLLBACK to ensure Atomicity, while the database handles Consistency, Isolation, and Durability internally through constraints, isolation levels, and transaction logs.
 
@@ -397,7 +406,7 @@ ACID properties are implemented by the database engine, not manually by develope
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 58. Optimistic Locking vs Pessimistic Locking?
+### Q 17. Optimistic Locking vs Pessimistic Locking?
 
 Both are techniques used to handle concurrent updates to the same data.
 
@@ -415,7 +424,7 @@ Both are techniques used to handle concurrent updates to the same data.
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 16. Database Scaling?
+### Q 18. Database Scaling?
 
 I usually start database scaling with query optimization, indexing, and connection pooling. If traffic continues to grow, I introduce Redis caching and read replicas to reduce database load. For very large systems, I consider sharding and horizontal database scaling.
 
@@ -446,3 +455,146 @@ I usually start database scaling with query optimization, indexing, and connecti
 <!-- ### Q 1. What?
 
 <div align="right"><b><a href="#ChatGPT-AI-prompt">↥ Back to top</a></b></div> -->
+
+##
+
+## **MongoDB**
+
+### Q 1. What is MongoDB?
+
+MongoDB is a NoSQL document database. It stores data as BSON (Binary JSON) documents instead of rows and columns. MongoDB stores related data together in a single document. It is designed for flexibility, scalability, and high performance.
+
+<div align="right"><b><a href="#ChatGPT-AI-prompt">↥ Back to top</a></b></div>
+
+### Q 2. What is a Collection?
+
+A Collection is a group of MongoDB documents. It is similar to a SQL table. Documents inside can have different structures.
+
+<div align="right"><b><a href="#ChatGPT-AI-prompt">↥ Back to top</a></b></div>
+
+### Q 3. What is a Document?
+
+A document is a JSON-like data structure. It stores related data together. It is equivalent to a row in SQL.
+
+<div align="right"><b><a href="#ChatGPT-AI-prompt">↥ Back to top</a></b></div>
+
+### Q 4. What is BSON?
+
+BSON stands for Binary JSON and is MongoDB's internal storage format. It extends JSON by supporting additional data types such as ObjectId, Date, and Decimal128. BSON is optimized for efficient storage, indexing, and fast document retrieval.
+
+<div align="right"><b><a href="#ChatGPT-AI-prompt">↥ Back to top</a></b></div>
+
+### Q 5. What is ObjectId and how is it generated in MongoDB?
+
+ObjectId is MongoDB's default unique identifier used for the \_id field of a document. When you insert a document without specifying an \_id, MongoDB automatically generates an ObjectId.
+
+```json
+{
+  "_id": ObjectId("507f1f77bcf86cd799439011"),
+  "name": "John"
+}
+```
+
+<div align="right"><b><a href="#ChatGPT-AI-prompt">↥ Back to top</a></b></div>
+
+### Q 6. What is Embedding vs Referencing in MongoDB?
+
+**Embedding** stores related data within a single document. It reduces lookups and improves read performance. Best for one-to-one and one-to-few relationships.
+
+**Referencing** stores relationships using IDs. Similar to Foreign Keys in SQL. Best for large or frequently changing relationships.
+
+| Embedding    | Referencing      |
+| ------------ | ---------------- |
+| Faster reads | Less duplication |
+| One query    | Multiple queries |
+| More storage | Less storage     |
+
+<div align="right"><b><a href="#ChatGPT-AI-prompt">↥ Back to top</a></b></div>
+
+### Q 7. What is Aggregation Pipeline?
+
+Aggregation Pipeline is MongoDB's framework for data processing and analytics. It processes documents through stages such as `$match`, `$grou`p, `$sort`, `$project`, and `$lookup`. It is similar to SQL operations like `WHERE`, `GROUP BY`, `ORDER BY`, and `JOIN`.
+
+| SQL      | MongoDB  |
+| -------- | -------- |
+| WHERE    | $match   |
+| GROUP BY | $group   |
+| ORDER BY | $sort    |
+| SELECT   | $project |
+| JOIN     | $lookup  |
+
+```ts
+db.orders.aggregate([
+  // 1. Filter Orders
+  {
+    $match: {
+      status: "Completed",
+    },
+  },
+
+  // 2. Join Customer Data
+  {
+    $lookup: {
+      from: "customers",
+      localField: "customerId",
+      foreignField: "_id",
+      as: "customer",
+    },
+  },
+
+  // 3. Select Required Fields
+  {
+    $project: {
+      department: 1,
+      amount: 1,
+      customerName: {
+        $arrayElemAt: ["$customer.name", 0],
+      },
+    },
+  },
+
+  // 4. Group Data
+  {
+    $group: {
+      _id: "$department",
+      totalRevenue: {
+        $sum: "$amount",
+      },
+      totalOrders: {
+        $sum: 1,
+      },
+    },
+  },
+
+  // 5. Sort Results
+  {
+    $sort: {
+      totalRevenue: -1,
+    },
+  },
+]);
+```
+
+<div align="right"><b><a href="#ChatGPT-AI-prompt">↥ Back to top</a></b></div>
+
+### Q 8. Why MongoDB over PostgreSQL/MySQL?
+
+MongoDB is preferred when we need flexible schemas, rapid development, and horizontal scalability. PostgreSQL/MySQL are preferred when we need strong relational modeling, complex joins, and highly structured transactional data.
+
+<div align="right"><b><a href="#ChatGPT-AI-prompt">↥ Back to top</a></b></div>
+
+### Q 9. How do you optimize slow MongoDB queries?
+
+In production, my first step is to analyze the query using explain("executionStats") to identify collection scans. I then verify index usage, review compound index design, optimize aggregation stages by pushing $match early, reduce unnecessary fields with projections, and revisit schema design if excessive $lookup operations are involved.
+
+<div align="right"><b><a href="#ChatGPT-AI-prompt">↥ Back to top</a></b></div>
+
+<!-- ### Q 10. What is Sharding in MongoDB?
+
+<div align="right"><b><a href="#ChatGPT-AI-prompt">↥ Back to top</a></b></div> -->
+
+<!-- ### Q 1.
+
+<div align="right"><b><a href="#ChatGPT-AI-prompt">↥ Back to top</a></b></div> -->
+
+##
