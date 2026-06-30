@@ -210,23 +210,106 @@ export class TestServiceService {
 
 <div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
 
-### Q 7. What is providers in Angular?
+### Q 7. What is dependency injection?
 
-Providers are Angular's way of configuring Dependency Injection. A provider tells Angular how to create and supply an instance for a dependency. Providers can be registered at the root, module, or component level, which determines the lifetime and scope of the service instance. Angular uses a hierarchical injector system, so component-level providers can override root-level providers when needed.
+Dependency Injection is a design pattern where Angular automatically provides (services or objects) dependencies to a class instead of the class creating them manually. which reducing tight coupling and improving testability.We can create Dependency Injection with the help of `@Injectable()` decorator.
 
-**Different Provider Types**
+```typescript
+@Injectable({
+  providedIn: "root",
+})
+export class UserService {
+  getUsers() {
+    return ["John", "Alex"];
+  }
+}
+```
 
-| Provider Type       | Syntax                                                   | Purpose                                 | Creates New Instance? | Common Use Case                                     |
-| ------------------- | -------------------------------------------------------- | --------------------------------------- | --------------------- | --------------------------------------------------- |
-| **useClass**        | `provide: LoggerService, useClass: FileLoggerService`    | Replace one implementation with another | ✅ Yes                | Environment-specific services, mocking              |
-| **useValue**        | `provide: API_URL, useValue: 'https://api.com'`          | Inject a constant/static value          | ❌ No                 | Config values, feature flags, environment settings  |
-| **useFactory**      | `provide: UserService, useFactory: factoryFn`            | Create service dynamically using logic  | Depends on factory    | Runtime configuration, conditional service creation |
-| **useExisting**     | `provide: LoggerService, useExisting: FileLoggerService` | Create an alias to an existing provider | ❌ No                 | Multiple tokens pointing to same instance           |
-| **Direct Provider** | `providers: [UserService]`                               | Shorthand for `useClass`                | ✅ Yes                | Most common service registration                    |
+```typescript
+constructor(private userService: UserService) {
+  console.log(this.userService.getUsers());
+}
+```
+
+**How Angular DI Works**
+
+- Service is registered in Angular Injector
+- Component requests dependency
+- Injector creates/provides service instance
+- Angular injects it into constructor
 
 <div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
 
-### Q 8. What is Decorators?
+### Q 8. What is providers in Angular?
+
+Providers are Angular's way of configuring Dependency Injection. A provider tells Angular how to create and supply an instance for a dependency. Providers can be registered at the root, module, or component level, which determines the lifetime and scope of the service instance. Angular uses a hierarchical injector system, so component-level providers can override root-level providers when needed.
+
+**Types of Providers**
+
+1. **Class Provider (`useClass`):** A Class Provider tells Angular which class should be instantiated when a dependency is requested.
+
+   ```ts
+   providers: [
+     {
+       provide: LoggerService,
+       useClass: ConsoleLoggerService,
+     },
+   ];
+   ```
+
+2. **Value Provider (`useValue`):** A Value Provider injects a fixed value, object, or constant instead of creating a class instance.
+
+   ```ts
+   {
+     provide: 'API_URL',
+     useValue: 'https://api.example.com'
+   }
+
+   // Usage:
+   constructor(
+   @Inject('API_URL') private apiUrl: string
+   ) {}
+   ```
+
+3. **Factory Provider (`useFactory`):** A Factory Provider uses a function to dynamically create a dependency. Use `useFactory` when dependency creation requires logic, calculations, or runtime conditions.
+
+   ```ts
+   export function apiFactory() {
+     return window.location.hostname === "localhost"
+       ? "http://localhost:3000"
+       : "https://api.example.com";
+   }
+
+   providers: [
+     {
+       provide: "API_URL",
+       useFactory: apiFactory,
+     },
+   ];
+   ```
+
+4. **Existing Provider (`useExisting`):** An Existing Provider creates an alias for another provider instead of creating a new instance.
+
+   ```ts
+   providers: [
+     LoggerService,
+     {
+       provide: "LOGGER",
+       useExisting: LoggerService,
+     },
+   ];
+   ```
+
+| Provider Type   | Definition                                  | Creates New Instance? | Example                                 |
+| --------------- | ------------------------------------------- | --------------------- | --------------------------------------- |
+| **useClass**    | Creates an instance of a class              | ✅ Yes                | `LoggerService → ConsoleLoggerService`  |
+| **useValue**    | Provides a fixed value, object, or constant | ❌ No                 | API URL, configuration object           |
+| **useFactory**  | Creates a dependency using a function       | Depends on factory    | Database connection, environment config |
+| **useExisting** | Creates an alias to an existing provider    | ❌ No                 | `LOGGER → LoggerService`                |
+
+<div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
+
+### Q 9. What is Decorators?
 
 Decorators are functions that provide metadata to Angular classes, helping Angular to understand how they should behave.
 
@@ -314,7 +397,7 @@ export class MyComponent {
 
 <div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
 
-### Q 9. What is Directive?
+### Q 10. What is Directive?
 
 Directives are used to modify the behavior, appearance of DOM elements.
 
@@ -368,7 +451,7 @@ Angular 17+ New Control Flow
 
 <div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
 
-### Q 10. Write a custom Directive
+### Q 11. Write a custom Directive
 
 ```typescript
 import { Directive, AfterViewInit, ElementRef } from "@angular/core";
@@ -393,7 +476,7 @@ In the HTML page you can use it like a below
 
 <div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
 
-### Q 11. What is Data Binding
+### Q 12. What is Data Binding
 
 Data Binding is a technique used to synchronize data between the Angular component and the HTML template.
 
@@ -426,7 +509,7 @@ There are Four types of Data binding
 
 <div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
 
-### Q 12. What are Pipes?
+### Q 13. What are Pipes?
 
 Pipes are used to transform or format data in Angular templates without changing the original value. They take input data, process it, and return a transformed output. They are written using the `|` symbol.
 
@@ -436,7 +519,7 @@ Pipes are used to transform or format data in Angular templates without changing
 
 <div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
 
-### Q 13. Difference between Pure and Impure pipe?
+### Q 14. Difference between Pure and Impure pipe?
 
 A pure pipe runs only when Angular detects a change in the input value or its reference. This includes changes in primitive values like `String`, `Number`, `Boolean`, and `Symbol`, or when the reference of objects such as `Array`, `Object`, `Date`, or `Function` changes.
 
@@ -444,7 +527,7 @@ An impure pipe runs during every change detection cycle, even if the value has n
 
 <div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
 
-### Q 14. What is the async pipe?
+### Q 15. What is the async pipe?
 
 The async pipe automatically subscribes to Observables or Promises and unsubscribes when the component is destroyed.
 
@@ -464,7 +547,7 @@ message = Promise.resolve('Hello Angular');
 
 <div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
 
-### Q 15. How to create a custom pipe?
+### Q 16. How to create a custom pipe?
 
 **Example FilterPipe (Search Functionality)**
 
@@ -505,36 +588,6 @@ export class FilterPipe implements PipeTransform {
 
 <li *ngFor="let user of users | filter:searchText:'name'">{{ user.name }}</li>
 ```
-
-<div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
-
-### Q 16. What is dependency injection?
-
-Dependency Injection is a design pattern where Angular automatically provides required dependencies (services or objects) to a class instead of the class creating them manually.
-
-```typescript
-@Injectable({
-  providedIn: "root",
-})
-export class UserService {
-  getUsers() {
-    return ["John", "Alex"];
-  }
-}
-```
-
-```typescript
-constructor(private userService: UserService) {
-  console.log(this.userService.getUsers());
-}
-```
-
-**How Angular DI Works**
-
-- Service is registered in Angular Injector
-- Component requests dependency
-- Injector creates/provides service instance
-- Angular injects it into constructor
 
 <div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
 
