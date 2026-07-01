@@ -2675,6 +2675,89 @@ Get dependency directly
 
 <div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
 
+### Q 64. Guard vs Resolver vs Interceptor?
+
+1. **Guard:** Guard is used to allow or block route navigation based on conditions such as authentication, authorization, or permissions.
+
+   ```js
+   @Injectable()
+   export class AuthGuard implements CanActivate {
+
+   canActivate(): boolean {
+
+     return this.authService.isLoggedIn();
+   }
+   }
+
+   // Route:
+
+   {
+   path:'dashboard',
+   component:DashboardComponent,
+   canActivate:[AuthGuard]
+   }
+   ```
+
+2. **Resolver:** Resolver preloads data before route activation so that the component receives data immediately when it loads.
+
+   ```js
+   @Injectable()
+   export class UserResolver implements Resolve<User> {
+
+   resolve() {
+     return this.userService.getUser();
+   }
+   }
+
+   // Route:
+   {
+   path:'profile',
+   component:ProfileComponent,
+   resolve:{
+     user:UserResolver
+   }
+   }
+
+   // Component:
+   ngOnInit() {
+
+   this.route.data.subscribe(data=>{
+     this.user=data['user'];
+   });
+   }
+   ```
+
+3. **Interceptor:** Interceptor intercepts all HTTP requests and responses to perform cross-cutting concerns such as authentication, logging, error handling, and request modification.
+
+| Feature                    | Guard              | Resolver     | Interceptor          |
+| -------------------------- | ------------------ | ------------ | -------------------- |
+| Purpose                    | Control Navigation | Preload Data | Intercept HTTP Calls |
+| Executes Before Route Load | ✅                 | ✅           | ❌                   |
+| Executes During API Call   | ❌                 | ❌           | ✅                   |
+| Authentication             | ✅                 | ❌           | ✅ (Token Injection) |
+| Authorization              | ✅                 | ❌           | ❌                   |
+| Data Fetching              | ❌                 | ✅           | ❌                   |
+| Logging                    | ❌                 | ❌           | ✅                   |
+| Error Handling             | ❌                 | ❌           | ✅                   |
+
+```js
+User Clicks Route
+       ↓
+     Guard
+       ↓
+    Resolver
+       ↓
+Component Loads
+       ↓
+  API Call Starts
+       ↓
+  Interceptor
+       ↓
+ Backend API
+```
+
+<div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
+
 ### Q 63. Coding Standards & Code Quality Tools?
 
 - **Angular Style Guide:** Follow Angular's recommended folder structure, naming conventions, component architecture, and best practices to maintain consistency across the application.
