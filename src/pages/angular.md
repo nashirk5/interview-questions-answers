@@ -10,7 +10,7 @@ Angular is a popular open-source front-end web framework developed and maintaine
 
 <div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
 
-### Q 2. What are the Angular lifecycle hooks?
+### Q 2. What are Angular Lifecycle Hooks?
 
 **1. ngOnChanges:**
 
@@ -54,22 +54,7 @@ Angular is a popular open-source front-end web framework developed and maintaine
 
 <div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
 
-### Q 3. What are the building blocks of angular?
-
-1. Components
-2. Modules
-3. Services
-4. Metadata
-5. Decorators
-6. Directives
-7. Data Binding
-8. Pipes
-9. Dependency Injection
-10. Templates
-
-<div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
-
-### Q 4. What is Component?
+### Q 3. What is Component?
 
 Components are the main building blocks, which control a part of the UI. A component is defined with a `@Component` decorator. Every component consists of three parts.
 
@@ -102,6 +87,24 @@ export class TestComponent implements OnInit {
 | App-level provider       | ❌ No                                    |
 | Module-level provider    | ❌ Usually No (until module is unloaded) |
 | Component-level provider | ✅ Yes                                   |
+
+<div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
+
+### Q 4. What is a standalone component?
+
+Standalone components are a new feature in Angular that allows you to create reusable components that can be used without the need for an NgModule. This can make your code more modular, efficient, and easier to share. Angular 14+ Standalone Components. If playback doesn't begin shortly, try restarting your device.
+
+```typescript
+@Component({
+  standalone: true,
+  selector: "photo-gallery",
+  imports: [ImageGridComponent],
+  template: ` ... <image-grid [images]="imageList"></image-grid> `,
+})
+export class PhotoGalleryComponent {
+  // component logic
+}
+```
 
 <div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
 
@@ -240,7 +243,7 @@ constructor(private userService: UserService) {
 
 <div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
 
-### Q 8. What is providers in Angular?
+### Q 8. What is providers?
 
 Providers are Angular's way of configuring Dependency Injection. A provider tells Angular how to create and supply an instance for a dependency. Providers can be registered at the root, module, or component level, which determines the lifetime and scope of the service instance. Angular uses a hierarchical injector system, so component-level providers can override root-level providers when needed.
 
@@ -509,7 +512,46 @@ There are Four types of Data binding
 
 <div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
 
-### Q 13. What are Pipes?
+### Q 13. What are ng-template, ng-container, and ng-content?
+
+- **`ng-template`**
+  - It is used to define templates that can be reused or conditionally rendered.
+  - ```html
+    <div *ngIf="isLoggedIn; else loginTemplate">Dashboard</div>
+
+    <ng-template #loginTemplate> Please Login </ng-template>
+    ```
+
+- **`ng-container`**
+  - It is used to group elements together without adding an extra element to the DOM.
+  - ```html
+    <ng-container *ngIf="isVisible">
+      <h1>Hello</h1>
+      <p>Angular</p>
+    </ng-container>
+    ```
+- **`ng-content`**
+  - It allows a parent component to pass HTML/content into a child component.
+  - ```html
+    <!-- Child component template -->
+    <div class="child-component">
+      <ng-content></ng-content>
+    </div>
+
+    <!-- Parent component template -->
+    <app-child>
+      <p>Content projected into child component</p>
+    </app-child>
+
+    <!-- Output -->
+    <div class="child-component">
+      <p>Content projected into child component</p>
+    </div>
+    ```
+
+<div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
+
+### Q 14. What are Pipes?
 
 Pipes are used to transform or format data in Angular templates without changing the original value. They take input data, process it, and return a transformed output. They are written using the `|` symbol.
 
@@ -519,7 +561,7 @@ Pipes are used to transform or format data in Angular templates without changing
 
 <div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
 
-### Q 14. Difference between Pure and Impure pipe?
+### Q 15. Difference between Pure and Impure pipe?
 
 A pure pipe runs only when Angular detects a change in the input value or its reference. This includes changes in primitive values like `String`, `Number`, `Boolean`, and `Symbol`, or when the reference of objects such as `Array`, `Object`, `Date`, or `Function` changes.
 
@@ -527,7 +569,7 @@ An impure pipe runs during every change detection cycle, even if the value has n
 
 <div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
 
-### Q 15. What is the async pipe?
+### Q 16. What is the async pipe?
 
 The async pipe automatically subscribes to Observables or Promises and unsubscribes when the component is destroyed.
 
@@ -547,7 +589,7 @@ message = Promise.resolve('Hello Angular');
 
 <div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
 
-### Q 16. How to create a custom pipe?
+### Q 17. How to create a custom pipe?
 
 **Example FilterPipe (Search Functionality)**
 
@@ -591,54 +633,7 @@ export class FilterPipe implements PipeTransform {
 
 <div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
 
-### Q 17. How do you share data between components?
-
-**1. Input/Output Binding:** You can pass data from a parent component to a child component using input bindings `@Input` decorator and receive data back from the child using output bindings `@Output` with EventEmitter.
-
-**2. Service:** You can create a service and inject it into the components that need to share data. The service acts as a central place to store and manage the shared data.
-
-**3. RxJS Observables/Subjects:** You can use RxJS Observables or Subjects to create a data stream that multiple components can subscribe to. This allows for more complex scenarios like bi-directional communication and handling asynchronous data.
-
-### Q 18. What are ng-template, ng-container, and ng-content?
-
-- **`ng-template`**
-  - It is used to define templates that can be reused or conditionally rendered.
-  - ```html
-    <div *ngIf="isLoggedIn; else loginTemplate">Dashboard</div>
-
-    <ng-template #loginTemplate> Please Login </ng-template>
-    ```
-
-- **`ng-container`**
-  - It is used to group elements together without adding an extra element to the DOM.
-  - ```html
-    <ng-container *ngIf="isVisible">
-      <h1>Hello</h1>
-      <p>Angular</p>
-    </ng-container>
-    ```
-- **`ng-content`**
-  - It allows a parent component to pass HTML/content into a child component.
-  - ```html
-    <!-- Child component template -->
-    <div class="child-component">
-      <ng-content></ng-content>
-    </div>
-
-    <!-- Parent component template -->
-    <app-child>
-      <p>Content projected into child component</p>
-    </app-child>
-
-    <!-- Output -->
-    <div class="child-component">
-      <p>Content projected into child component</p>
-    </div>
-    ```
-
-<div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
-
-### Q 19. What is view encapsulation?
+### Q 18. What is view encapsulation?
 
 View Encapsulation controls how component styles are applied in Angular.
 
@@ -667,7 +662,195 @@ _**Example:**_
 
 <div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
 
-### Q 20. How do you define routes?
+### Q 19. How do you share data between components?
+
+**1. Input/Output Binding:** You can pass data from a parent component to a child component using input bindings `@Input` decorator and receive data back from the child using output bindings `@Output` with EventEmitter.
+
+**2. Service:** You can create a service and inject it into the components that need to share data. The service acts as a central place to store and manage the shared data.
+
+**3. RxJS Observables/Subjects:** You can use RxJS Observables or Subjects to create a data stream that multiple components can subscribe to. This allows for more complex scenarios like bi-directional communication and handling asynchronous data.
+
+<div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
+
+### Q 20. What are Template and Reactive forms?
+
+**Template forms:** Template-Driven Forms define form logic in the HTML template using directives like ngModel, making them simple and suitable for small forms.
+
+```html
+<h2>Template-driven Form</h2>
+
+<form #regForm="ngForm" (ngSubmit)="onSubmit(regForm)">
+  <!-- Name -->
+  <div>
+    <label>Name</label>
+    <input
+      type="text"
+      name="name"
+      ngModel
+      required
+      minlength="3"
+      #name="ngModel"
+    />
+    <div *ngIf="name.invalid && name.touched">
+      Name is required (min 3 characters)
+    </div>
+  </div>
+
+  <!-- Email -->
+  <div>
+    <label>Email</label>
+    <input type="email" name="email" ngModel required email #email="ngModel" />
+    <div *ngIf="email.invalid && email.touched">Enter a valid email</div>
+  </div>
+
+  <!-- Password -->
+  <div>
+    <label>Password</label>
+    <input
+      type="password"
+      name="password"
+      ngModel
+      required
+      minlength="6"
+      #password="ngModel"
+    />
+    <div *ngIf="password.invalid && password.touched">
+      Password must be at least 6 characters
+    </div>
+  </div>
+
+  <button type="submit" [disabled]="regForm.invalid">Register</button>
+</form>
+```
+
+**Reactive forms:** Reactive Forms define the form model in TypeScript using FormControl and FormGroup, giving better scalability, validation control, and testability. They follow a model-driven approach.
+
+| Feature       | Template Forms      | Reactive Forms      |
+| ------------- | ------------------- | ------------------- |
+| Setup         | HTML                | TypeScript          |
+| Data flow     | Two-way binding     | Reactive streams    |
+| Validation    | Template directives | Validators in TS    |
+| Testing       | Harder              | Easier              |
+| Scalability   | Small forms         | Large/complex forms |
+| Dynamic forms | Difficult           | Easy                |
+
+<div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
+
+### Q 21. Write a code to submit a form by using the Reactive form?
+
+```js
+import { Component } from '@angular/core';
+import { FormBuilder, Validators, FormArray } from '@angular/forms';
+
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html'
+})
+export class AppComponent {
+
+  constructor(private fb: FormBuilder) {}
+
+  // Main Form
+  employeeForm = this.fb.group({
+    name: ['', [Validators.required, Validators.minLength(3)]],
+    email: ['', [Validators.required, Validators.email]],
+    department: ['', Validators.required],
+
+    // Dynamic skills list
+    skills: this.fb.array([])
+  });
+
+  // Getter for skills FormArray
+  get skills(): FormArray {
+    return this.employeeForm.get('skills') as FormArray;
+  }
+
+  // Add new skill
+  addSkill() {
+    this.skills.push(
+      this.fb.control('', Validators.required)
+    );
+  }
+
+  // Remove skill
+  removeSkill(index: number) {
+    this.skills.removeAt(index);
+  }
+
+  // Submit form
+  onSubmit() {
+    console.log('Employee Data:', this.employeeForm.value);
+
+    if (this.employeeForm.valid) {
+      // Here you would call API
+      alert('Employee Registered Successfully!');
+    } else {
+      alert('Form is invalid');
+    }
+  }
+}
+```
+
+```html
+<h2>Employee Registration Form</h2>
+
+<form [formGroup]="employeeForm" (ngSubmit)="onSubmit()">
+  <!-- Name -->
+  <div>
+    <label>Name</label>
+    <input type="text" formControlName="name" />
+    <div
+      *ngIf="employeeForm.get('name')?.invalid && employeeForm.get('name')?.touched"
+    >
+      Name is required (min 3 characters)
+    </div>
+  </div>
+
+  <!-- Email -->
+  <div>
+    <label>Email</label>
+    <input type="email" formControlName="email" />
+    <div
+      *ngIf="employeeForm.get('email')?.invalid && employeeForm.get('email')?.touched"
+    >
+      Enter valid email
+    </div>
+  </div>
+
+  <!-- Department -->
+  <div>
+    <label>Department</label>
+    <select formControlName="department">
+      <option value="">Select</option>
+      <option value="IT">IT</option>
+      <option value="HR">HR</option>
+      <option value="Finance">Finance</option>
+    </select>
+  </div>
+
+  <!-- Skills (Dynamic FormArray) -->
+  <div>
+    <h4>Skills</h4>
+
+    <button type="button" (click)="addSkill()">+ Add Skill</button>
+
+    <div formArrayName="skills">
+      <div *ngFor="let skill of skills.controls; let i = index">
+        <input [formControlName]="i" placeholder="Enter skill" />
+
+        <button type="button" (click)="removeSkill(i)">Remove</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Submit -->
+  <button type="submit" [disabled]="employeeForm.invalid">Submit</button>
+</form>
+```
+
+<div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
+
+### Q 22. How do you define routes?
 
 In Angular, a route refers to navigating between different components or views.
 
@@ -696,7 +879,7 @@ export class AppModule {}
 
 <div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
 
-### Q 21. What is the purpose of Wildcard route?
+### Q 23. What is a Wildcard Route?
 
 If the URL doesn't match any predefined routes then it causes the router to throw an error and crash the app. In this case, you can use wildcard route. A wildcard route has a path consisting of two asterisks to match every URL.
 
@@ -708,40 +891,35 @@ _**Example:**_
 
 <div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
 
-### Q 22. How do you protect a route and its type?
+### Q 24. What are Route Guards?
 
 Angular protects routes using Route Guards like CanActivate, CanActivateChild, CanDeactivate, CanLoad, and CanMatch. CanActivate is most common for authentication, while CanDeactivate prevents navigation with unsaved changes. In modern Angular, CanMatch is preferred over CanLoad for lazy-loaded modules.
 
 **✅ Types of Route Guards**
 
-**1️⃣ CanActivate**
+- **CanActivate**
+  - Controls access before entering a route
+  - Most commonly used for authentication
 
-- Controls access before entering a route
-- Most commonly used for authentication
+- **CanActivateChild**
+  - Protects child routes
+  - Runs before any child route loads
 
-**2️⃣ CanActivateChild**
+- **CanDeactivate**
+  - Prevents leaving a route
+  - Useful for unsaved form changes
+  - Example use case:
+  - “Are you sure you want to leave without saving?”
 
-- Protects child routes
-- Runs before any child route loads
+- **CanLoad (Legacy Lazy Loading Guard)**
+  - Prevents lazy-loaded module from loading
+  - Runs before module is downloaded
+  - Not recommended in newer Angular versions
 
-**3️⃣ CanDeactivate**
-
-- Prevents leaving a route
-- Useful for unsaved form changes
-- Example use case:
-- “Are you sure you want to leave without saving?”
-
-**4️⃣ CanLoad (Legacy Lazy Loading Guard)**
-
-- Prevents lazy-loaded module from loading
-- Runs before module is downloaded
-- Not recommended in newer Angular versions
-
-**5️⃣ CanMatch (Modern Replacement for CanLoad)**
-
-- Controls whether a route should match
-- Used with lazy loading
-- Preferred in Angular 15+
+- **CanMatch (Modern Replacement for CanLoad)**
+  - Controls whether a route should match
+  - Used with lazy loading
+  - Preferred in Angular 15+
 
 | Guard Type       | Purpose                             |
 | ---------------- | ----------------------------------- |
@@ -753,7 +931,74 @@ Angular protects routes using Route Guards like CanActivate, CanActivateChild, C
 
 <div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
 
-### Q 23. What is router-outlet and how to create multiple router-outlets?
+### Q 25. What is Resolvers?
+
+Resolver are routing services that fetches or prepares data before a route is activated. It ensures that the required data is available before the component is created, preventing empty screens or loading spinners during initialization.
+
+**Common Pitfalls**
+
+- Resolver must return an Observable or Promise, otherwise routing fails.
+- Long-running HTTP calls can delay navigation, so use caching if necessary.
+
+**Example:** Imagine a User Profile page where you need the user data before showing the UI.
+
+**Resolver Service**
+
+```js
+import { Injectable } from '@angular/core';
+import { Resolve } from '@angular/router';
+import { Observable } from 'rxjs';
+import { UserService } from './user.service';
+
+@Injectable({ providedIn: 'root' })
+export class UserResolver implements Resolve<any> {
+  constructor(private userService: UserService) {}
+
+  resolve(): Observable<any> {
+    return this.userService.getUserProfile(); // fetches user data
+  }
+}
+```
+
+**Routing Module**
+
+```js
+const routes = [
+  {
+    path: "profile",
+    component: ProfileComponent,
+    resolve: { user: UserResolver }, // key: 'user' will hold the resolved data
+  },
+];
+```
+
+**Component Usage**
+
+```js
+import { ActivatedRoute } from '@angular/router';
+
+export class ProfileComponent {
+  user: any;
+
+  constructor(private route: ActivatedRoute) {
+    this.user = this.route.snapshot.data['user']; // access resolver data
+  }
+}
+```
+
+<div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
+
+### Q 26. Resolver vs Guard?
+
+| Resolver                       | Guard                                 |
+| ------------------------------ | ------------------------------------- |
+| Fetches data before navigation | Allows or blocks navigation           |
+| Returns data                   | Returns `true`, `false`, or `UrlTree` |
+| Used to preload data           | Used for authentication/authorization |
+
+<div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
+
+### Q 27. What is `router-outlet` and how to create multiple router-outlets?
 
 `router-outlet` is a directive that acts as a placeholder where Angular loads routed components dynamically. By default, there is one primary outlet, but we can create multiple named outlets using the `name` attribute. Named outlets allow rendering multiple routed components simultaneously in different layout sections.
 
@@ -821,7 +1066,7 @@ HelpComponent loads in the sidebar outlet
 
 <div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
 
-### Q 24. What routerLink and active router links?
+### Q 28. What are `routerLink` and `routerLinkActive`?
 
 `routerLink` is a directive used for declarative navigation in Angular without reloading the page. `routerLinkActive` adds CSS classes when the associated route is active. We can use `routerLinkActiveOptions` with `exact: true` to control exact route matching.
 
@@ -842,15 +1087,10 @@ HelpComponent loads in the sidebar outlet
 <a routerLink="/dashboard" routerLinkActive="active"> Dashboard </a>
 ```
 
-**Exact Matching (Important Interview Point)**
-
-By default, Angular does partial matching.
-
-**Example:** `/dashboard/settings` will also activate /dashboard`
-
-To avoid this:
+> _**👉 NOTE:** By default, Angular does partial matching. Example: `/dashboard/settings` will also activate /dashboard_
 
 ```html
+<!-- Now it activates only when exact path matches. -->
 <a
   routerLink="/dashboard"
   routerLinkActive="active"
@@ -860,11 +1100,56 @@ To avoid this:
 </a>
 ```
 
-Now it activates only when exact path matches.
+<div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
+
+### Q 29. What is lazy loading?
+
+Lazy Loading is a technique where feature modules are loaded asynchronously only when they are needed instead of loading the entire application at startup.
+
+```typescript
+import { NgModule } from "@angular/core";
+import { Routes, RouterModule } from "@angular/router";
+
+const routes: Routes = [
+  { path: "home", component: HomeComponent },
+  {
+    path: "lazy",
+    loadChildren: () => import("./lazy/lazy.module").then((m) => m.LazyModule),
+  },
+];
+
+@NgModule({
+  imports: [RouterModule.forRoot(routes)],
+  exports: [RouterModule],
+})
+export class AppRoutingModule {}
+```
 
 <div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
 
-### Q 25. What is an interceptor?
+### Q 30. What is Template Lazy Loading (`@defer`)?
+
+Yes, Angular supports template-level lazy loading. In Angular 17+, I can use `@defer` blocks to lazy load components based on conditions such as viewport visibility, user interaction, or idle time. This reduces the initial bundle size and improves page load performance because heavy components are downloaded only when required. Additionally, for images I use the browser's native `loading="lazy"` attribute.
+
+**Load on Viewport:** Downloads when the component scrolls into view.
+
+```js
+@defer (on viewport) {
+  <app-heavy-chart />
+}
+```
+
+**Load on Interaction:** Downloads when the user interacts.
+
+```js
+@defer (on interaction) {
+  <app-user-details />
+}
+```
+
+<div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
+
+### Q 31. What is an HTTP interceptor?
 
 In Angular, an interceptor is a service that provides a way to intercept HTTP requests or responses before they are sent to the server or received by the application. Interceptors are typically used to modify or augment HTTP requests or responses, add headers, handle errors, or perform other operations that need to be applied globally across multiple HTTP requests.
 
@@ -932,97 +1217,22 @@ export class AppModule {}
 
 <div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
 
-### Q 26. What is an interface?
+### Q 32. What are Promises and Observables?
 
-In Angular, an interface is a TypeScript feature used to define the structure of objects.
-
-It acts as a contract that describes the properties and methods an object must have in order to be considered of that type. Interfaces are commonly used to enforce type-checking and provide better code readability and maintainability
+**Promise:** Promises are used to handle asynchronous operations in javascript
 
 ```typescript
-// Define the User interface
-export interface User {
-  id: number;
-  username: string;
-  email: string;
-}
+let myPromise = new Promise(function (resolve, reject) {
+  // "Producing Code" (May take some time)
 
-// Example usage of the User interface
-const user: User = {
-  id: 1,
-  username: "john_doe",
-  email: "john@example.com",
-};
+  resolve(); // when successful
+  reject(); // when error
+});
 
-// Function that accepts a User object
-function printUserInfo(user: User) {
-  console.log(
-    `ID: ${user.id}, Username: ${user.username}, Email: ${user.email}`,
-  );
-}
-
-// Call the function with the user object
-printUserInfo(user);
+// "Consuming Code" (Must wait for a fulfilled Promise)
+myPromise.then();
+myPromise.catch();
 ```
-
-<div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
-
-### Q 27. What is lazy loading?
-
-Lazy Loading is a technique where feature modules are loaded asynchronously only when they are needed instead of loading the entire application at startup.
-
-```typescript
-import { NgModule } from "@angular/core";
-import { Routes, RouterModule } from "@angular/router";
-
-const routes: Routes = [
-  { path: "home", component: HomeComponent },
-  {
-    path: "lazy",
-    loadChildren: () => import("./lazy/lazy.module").then((m) => m.LazyModule),
-  },
-];
-
-@NgModule({
-  imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule],
-})
-export class AppRoutingModule {}
-```
-
-<div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
-
-### Q 28. How to optimize loading large data in angular?
-
-1. Use Server-Side Pagination instead of loading all records at once.
-2. Implement Virtual Scrolling (Angular CDK) to render only visible rows.
-3. Use Infinite Scrolling for large lists and feeds.
-4. Enable Lazy Loading for feature modules.
-5. Use OnPush Change Detection to reduce unnecessary checks.
-6. Implement `trackBy` with `*ngFor` to avoid recreating DOM elements.
-7. Cache API responses using `shareReplay()`.
-8. Use Debounce and `distinctUntilChanged()` for search inputs.
-9. Prefer Async Pipe over manual subscriptions.
-10. Avoid fetching unnecessary fields from APIs.
-11. Use Skeleton Loaders instead of blocking spinners for better UX.
-12. Implement SSR/Hydration for faster initial page load.
-13. Use Tree Shaking and Code Splitting to reduce bundle size.
-14. Load images lazily using `loading="lazy"`.
-15. Profile performance using Lighthouse, Angular DevTools, and Chrome Performance Tab.
-
-<div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
-
-### Q 29. What is AOT and JIT?
-
-- **JIT:** Just-in-Time (JIT) is a type of compilation that compiles your app in the browser at runtime, as the application is being loaded. .
-- **AOT:** Ahead-of-Time (AOT) is a type of compilation that compiles your app at build time, before the application is deployed to the client's browser.
-
-_AOT compilation offers better performance, smaller bundle sizes, and improved error detection compared to JIT compilation. It is the recommended compilation mode for production deployments of Angular applications. JIT compilation, on the other hand, provides faster development cycles and is suitable for development and testing environments._
-
-> _**NOTE: JIT** compilation was the default until **Angular 8**, now default is **AOT**_
-
-<div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
-
-### Q 30. What are Observables and Promises?
 
 **Observable:** Observables are RxJS objects used to handle asynchronous data streams and can emit multiple values over time.
 
@@ -1054,24 +1264,9 @@ observable.subscribe(
 );
 ```
 
-**Promise:** Promises are used to handle asynchronous operations in javascript
-
-```typescript
-let myPromise = new Promise(function (resolve, reject) {
-  // "Producing Code" (May take some time)
-
-  resolve(); // when successful
-  reject(); // when error
-});
-
-// "Consuming Code" (Must wait for a fulfilled Promise)
-myPromise.then();
-myPromise.catch();
-```
-
 <div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
 
-### Q 31. What are the difference between Promises and Observables?
+### Q 33. Difference between Promises and Observables?
 
 | Promise                                               | Observable                                                      |
 | ----------------------------------------------------- | --------------------------------------------------------------- |
@@ -1081,13 +1276,11 @@ myPromise.catch();
 
 <div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
 
-### Q 32. What is RXJS?
+### Q 34. What is RXJS?
 
 RxJS (Reactive Extensions for JavaScript) is a library used for reactive programming with Observables. It handle asynchronous data streams like HTTP requests, Events (click, input, scroll), WebSockets and Timers. In Angular, RxJS is used heavily with HttpClient, forms, and state management.
 
-**Reactive programming** is a programming style where you react to changes in data over time instead of actively pulling or checking for updates.
-
-In simple terms: You don’t ask for data repeatedly. You just “listen” and react when data changes
+**Reactive programming** is a programming style where you react to changes in data over time instead of actively pulling or checking for updates. In simple terms: You don’t ask for data repeatedly. You just “listen” and react when data changes
 
 **Key Concepts in RxJS:**
 
@@ -1227,7 +1420,7 @@ from([1, 2, 3])
 
 <div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
 
-### Q 33. What is switchMap and mergeMap, and its difference?
+### Q 35. What are `switchMap`, `mergeMap`, `concatMap`, `exhaustMap` and its difference?
 
 **SwitchMap:** `switchMap()` cancels the previous inner Observable and only keeps the latest one active. If a new value comes before the previous request completes, the old one is discarded.
 
@@ -1293,7 +1486,7 @@ from(userClicks)
 
 <div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
 
-### Q 34. What are forkJoin, combineLatest, zip and diff?
+### Q 36. What are `forkJoin`, `combineLatest`, `zip` and diff?
 
 **forkJoin** forkJoin executes multiple Observables in parallel and emits a single combined result when all of them complete.
 If any Observable fails, the entire stream errors out.
@@ -1404,115 +1597,71 @@ zip(slider1.valueChanges, slider2.valueChanges).subscribe(([val1, val2]) => {
 
 <div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
 
-### Q 35. What is signal and its types?
+### Q 37. What is difference between `forkJoin` vs `mergeMap`?
 
-A Signal is a reactive primitive introduced in Angular to manage state in a simple and efficient way. It holds a value and automatically notifies the UI whenever that value changes, without needing RxJS or manual subscriptions.
+| Feature             | `forkJoin()`                   | `mergeMap()`                                           |
+| ------------------- | ------------------------------ | ------------------------------------------------------ |
+| Purpose             | Combine multiple Observables   | Transform one Observable into many Observables         |
+| Execution           | Parallel                       | Parallel                                               |
+| Emits               | Once, after all complete       | As each inner Observable emits                         |
+| Order               | Returns one combined result    | Order is not guaranteed                                |
+| Requires Completion | ✅ Yes                         | ❌ No                                                  |
+| Best For            | Multiple independent API calls | Parallel async tasks (file uploads, multiple requests) |
 
-```js
-// Component
-import { signal } from '@angular/core';
+**Example:**
 
-count = signal(0);
+- **`forkJoin()` - Dashboard Loading:** When a user opens the Dashboard, you need to load: User Profile API, Orders API, Notifications API, & Analytics API. All APIs are independent, and the dashboard should appear only after all data is available.
 
-increment() {
-  this.count.set(this.count() + 1);
-}
+- **`mergeMap()` - Upload Multiple Files:** A user selects 10 files to upload. Instead of waiting for one upload to finish before starting the next, upload all files simultaneously. Each upload finishes at a different time, and the UI updates immediately.
 
-// HTML
-<p>{{ count() }}</p>
-```
+**Quick Memory Trick:**
 
-**Types of Signals**
-
-**1. Writable Signal:** A signal whose value can be changed manually using set() or update(). Used for state management (like counter, form state, UI state). Real use case: Counter, toggle button, form inputs, UI state updates.
-
-```js
-import { signal } from "@angular/core";
-
-const count = signal(0); // writable signal
-count.set(5); // update value
-console.log(count()); // read value -> 5
-```
-
-**2. Computed Signal:** A signal that is derived from other signals and automatically updates when dependencies change. Real use case: Cart total price, filtered lists, derived UI values.
-
-```js
-import { computed } from "@angular/core";
-
-const a = signal(2);
-const b = signal(3);
-
-const sum = computed(() => a() + b());
-console.log(sum()); // 5
-
-a.set(5);
-console.log(sum()); // 8 (auto-updated)
-```
-
-**3. Effect Signal:** Used to perform side effects whenever a signal changes (like logging, API calls, or syncing data). Real use case: Logging, saving to localStorage, triggering API calls.
-
-```js
-import { effect } from "@angular/core";
-
-effect(() => {
-  console.log(`The sum is ${sum()}`);
-});
-// Automatically logs whenever `sum` changes
-```
-
-| Type            | Purpose                  | Writable | Example Use          |
-| --------------- | ------------------------ | -------- | -------------------- |
-| Writable Signal | Store and update value   | ✅ Yes   | Counter, form state  |
-| Computed Signal | Derived/calculated value | ❌ No    | Total price, filters |
-| Effect Signal   | Side effects on change   | ❌ No    | Logging, API sync    |
+- `forkJoin()` → Run all together → Wait for all → Return one final result (like Promise.all()).
+- `mergeMap()` → Run all together → Emit results immediately as they complete.
+- Key Difference → forkJoin() combines multiple Observables, while mergeMap() transforms each emitted value into a new Observable and processes them concurrently.
 
 <div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
 
-### Q 36. What is difference between Subject and Observable?
+### Q 38. What is difference between Observable and Subject?
 
-**Observable:**
+| Feature   | Observable               | Subject                               |
+| --------- | ------------------------ | ------------------------------------- |
+| Purpose   | Produces data            | Produces and emits data               |
+| Multicast | ❌ No (Unicast)          | ✅ Yes (Multicast)                    |
+| Execution | Starts on `subscribe()`  | Can emit values anytime               |
+| Best For  | HTTP APIs, Timers, Forms | Component communication, Shared state |
 
-- A data producer that emits values over time.
-- Cold by default, meaning it only starts emitting when someone subscribes.
-- Each subscription is independent — each subscriber gets its own execution.
-- Cannot emit values manually from outside; it’s defined by its creator.
+**Quick Memory Trick**
 
-```js
-const obs$ = new Observable((observer) => {
-  observer.next(Math.random());
-});
-obs$.subscribe((val) => console.log("Subscriber 1:", val));
-obs$.subscribe((val) => console.log("Subscriber 2:", val));
-// Each subscriber gets a **different random number**
-```
-
-**Subject:**
-
-- A special type of Observable that is also an observer — it can emit values manually using next().
-- Hot by default, meaning multiple subscribers share the same execution.
-- Useful for multicasting values to multiple subscribers.
-- Commonly used for event buses, shared state, or bridging imperative code with Observables.
-
-```js
-const subject = new Subject<number>();
-subject.subscribe(val => console.log('Subscriber 1:', val));
-subject.subscribe(val => console.log('Subscriber 2:', val));
-subject.next(Math.random());
-// Both subscribers receive the **same value**
-```
-
-**Cold vs Hot Observables**
-
-- Cold Observable
-  - Starts execution for each subscriber
-  - Example: HTTP request
-- Hot Observable
-  - Shared execution
-  - Example: Subject, WebSocket
+- Observable → Produces data → Best for HTTP calls and asynchronous data streams.
+- Subject → Produces + Emits data (next()) → Best for sharing data between components.
+- Key Difference → Observable is Unicast (one execution per subscriber), while Subject is Multicast (one emission shared with all subscribers).
 
 <div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
 
-### Q 37. What are the difference between Subject, Behavior subject, Replay subject, and AsyncSubject?
+### Q 39. Cold vs Hot Observables?
+
+- A Cold Observable starts producing data only when a subscriber subscribes. Each subscriber gets its own independent execution and receives its own set of emitted values. Most Angular Observables, such as HttpClient, are Cold Observables.
+
+- A Hot Observable starts producing data regardless of whether anyone is subscribed. All subscribers share the same execution and receive the same emitted values from the point they subscribe. Subjects are the most common example of Hot Observables.
+
+| Feature         | Cold Observable                | Hot Observable                           |
+| --------------- | ------------------------------ | ---------------------------------------- |
+| Starts Emitting | On `subscribe()`               | Immediately / Independently              |
+| Execution       | Separate for each subscriber   | Shared among all subscribers             |
+| Data Sharing    | ❌ No                          | ✅ Yes                                   |
+| Example         | HTTP API, `of()`, `interval()` | `Subject`, `BehaviorSubject`, DOM Events |
+| Best For        | API Calls                      | Event Broadcasting, Shared State         |
+
+**Quick Memory Trick**
+
+- Cold Observable → Starts on Subscribe → Each subscriber gets a new execution → Best for HTTP APIs.
+- Hot Observable → Already Running → All subscribers share the same execution → Best for Events, WebSockets, and Subjects.
+- Key Difference → Cold = Individual Stream, Hot = Shared Stream.
+
+<div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
+
+### Q 40. What are the difference between Subject, Behavior subject, Replay subject, and AsyncSubject?
 
 **1. Subject:**
 
@@ -1618,11 +1767,91 @@ A: 3
 
 <div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
 
-### Q 38. What is NGRX?
+### Q 41. What are signal and its types?
+
+Signals are Angular's built-in reactive state management mechanism introduced in Angular 16. They automatically notify Angular when their value changes, without needing RxJS or manual subscriptions.
+
+```js
+// Component
+import { signal } from '@angular/core';
+
+count = signal(0);
+
+increment() {
+  this.count.set(this.count() + 1);
+}
+
+// HTML
+<p>{{ count() }}</p>
+```
+
+**Types of Signals**
+
+**1. Writable Signal:** A signal whose value can be changed manually using set() or update(). Used for state management (like counter, form state, UI state). Real use case: Counter, toggle button, form inputs, UI state updates.
+
+```js
+import { signal } from "@angular/core";
+
+const count = signal(0); // writable signal
+count.set(5); // update value
+console.log(count()); // read value -> 5
+```
+
+**2. Computed Signal:** A signal that is derived from other signals and automatically updates when dependencies change. Real use case: Cart total price, filtered lists, derived UI values.
+
+```js
+import { computed } from "@angular/core";
+
+const a = signal(2);
+const b = signal(3);
+
+const sum = computed(() => a() + b());
+console.log(sum()); // 5
+
+a.set(5);
+console.log(sum()); // 8 (auto-updated)
+```
+
+**3. Effect Signal:** Used to perform side effects whenever a signal changes (like logging, API calls, or syncing data). Real use case: Logging, saving to localStorage, triggering API calls.
+
+```js
+import { effect } from "@angular/core";
+
+effect(() => {
+  console.log(`The sum is ${sum()}`);
+});
+// Automatically logs whenever `sum` changes
+```
+
+| Type            | Purpose                  | Writable | Example Use          |
+| --------------- | ------------------------ | -------- | -------------------- |
+| Writable Signal | Store and update value   | ✅ Yes   | Counter, form state  |
+| Computed Signal | Derived/calculated value | ❌ No    | Total price, filters |
+| Effect Signal   | Side effects on change   | ❌ No    | Logging, API sync    |
+
+<div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
+
+### Q 42. What is difference between observable, subject and signal?
+
+Observable is used to handle asynchronous data streams, Subject is a multicast Observable used for sharing events or data, and Signal is Angular's built-in reactive state mechanism for managing UI state without subscriptions.
+
+| Feature              | Observable              | Subject                  | Signal                              |
+| -------------------- | ----------------------- | ------------------------ | ----------------------------------- |
+| Introduced By        | RxJS                    | RxJS                     | Angular 16                          |
+| Purpose              | Async data streams      | Shared async data/events | Reactive state management           |
+| Subscribe Required   | ✅ Yes                  | ✅ Yes                   | ❌ No                               |
+| Can Emit Values      | Produces values         | `next()` emits values    | `set()` / `update()` changes value  |
+| Async                | ✅ Yes                  | ✅ Yes                   | Primarily synchronous state updates |
+| Best For             | HTTP, WebSocket, Timers | Component communication  | Local UI state                      |
+| Multiple Subscribers | ✅ Yes                  | ✅ Yes (Shared)          | Components automatically react      |
+
+<div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
+
+### Q 43. What is NGRX?
 
 **NGRX** is a state management library for Angular applications, inspired by Redux. It provides a centralized store to manage the state of an application and facilitates predictable state management by enforcing unidirectional data flow.
 
-Here's a brief overview of NGRX concepts with an example:
+**Core Building Blocks of NgRx**
 
 **1. Store:** The central repository for application state. It holds the entire state of the application as a single immutable object.
 
@@ -1831,241 +2060,7 @@ export class PostComponent implements OnInit {
 
 <div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
 
-### Q 39. What is a standalone component?
-
-Standalone components are a new feature in Angular that allows you to create reusable components that can be used without the need for an NgModule. This can make your code more modular, efficient, and easier to share. Angular 14+ Standalone Components. If playback doesn't begin shortly, try restarting your device.
-
-```typescript
-@Component({
-  standalone: true,
-  selector: "photo-gallery",
-  imports: [ImageGridComponent],
-  template: ` ... <image-grid [images]="imageList"></image-grid> `,
-})
-export class PhotoGalleryComponent {
-  // component logic
-}
-```
-
-<div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
-
-### Q 40. What is Async/await?
-
-Async/await is a feature in JavaScript that allows you to write asynchronous code in a synchronous-looking manner. It provides a more readable and understandable way to work with asynchronous operations, such as fetching data from a server, reading files, or making network requests.
-
-_Here's a brief overview of how async/await works:_
-
-**Async Functions:** An async function is a function that operates asynchronously via the event loop, and it always returns a promise. You declare an async function using the async keyword before the function declaration.
-
-**Await Operator:** Inside an async function, you can use the await keyword before an expression that returns a promise. The await keyword pauses the execution of the async function until the promise is resolved, and then it returns the resolved value.
-
-_**Example:**_
-
-```javascript
-// Example asynchronous function
-function fetchData() {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      resolve("Data fetched successfully");
-    }, 2000);
-  });
-}
-
-// Async function using async/await
-async function getData() {
-  try {
-    console.log("--- Start ---");
-    const result = await fetchData();
-    console.log(result);
-    console.log("--- End ---");
-  } catch (error) {
-    console.error("Error fetching data:", error);
-  }
-}
-
-// Calling the async function
-getData();
-```
-
-<div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
-
-### Q 41. What are Template and Reactive forms?
-
-**Template forms:** Template-Driven Forms define form logic in the HTML template using directives like ngModel, making them simple and suitable for small forms.
-
-```html
-<h2>Template-driven Form</h2>
-
-<form #regForm="ngForm" (ngSubmit)="onSubmit(regForm)">
-  <!-- Name -->
-  <div>
-    <label>Name</label>
-    <input
-      type="text"
-      name="name"
-      ngModel
-      required
-      minlength="3"
-      #name="ngModel"
-    />
-    <div *ngIf="name.invalid && name.touched">
-      Name is required (min 3 characters)
-    </div>
-  </div>
-
-  <!-- Email -->
-  <div>
-    <label>Email</label>
-    <input type="email" name="email" ngModel required email #email="ngModel" />
-    <div *ngIf="email.invalid && email.touched">Enter a valid email</div>
-  </div>
-
-  <!-- Password -->
-  <div>
-    <label>Password</label>
-    <input
-      type="password"
-      name="password"
-      ngModel
-      required
-      minlength="6"
-      #password="ngModel"
-    />
-    <div *ngIf="password.invalid && password.touched">
-      Password must be at least 6 characters
-    </div>
-  </div>
-
-  <button type="submit" [disabled]="regForm.invalid">Register</button>
-</form>
-```
-
-**Reactive forms:** Reactive Forms define the form model in TypeScript using FormControl and FormGroup, giving better scalability, validation control, and testability. They follow a model-driven approach.
-
-| Feature       | Template Forms      | Reactive Forms      |
-| ------------- | ------------------- | ------------------- |
-| Setup         | HTML                | TypeScript          |
-| Data flow     | Two-way binding     | Reactive streams    |
-| Validation    | Template directives | Validators in TS    |
-| Testing       | Harder              | Easier              |
-| Scalability   | Small forms         | Large/complex forms |
-| Dynamic forms | Difficult           | Easy                |
-
-### Q 42. Write a code to submit a form by using the Reactive form?
-
-```js
-import { Component } from '@angular/core';
-import { FormBuilder, Validators, FormArray } from '@angular/forms';
-
-@Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html'
-})
-export class AppComponent {
-
-  constructor(private fb: FormBuilder) {}
-
-  // Main Form
-  employeeForm = this.fb.group({
-    name: ['', [Validators.required, Validators.minLength(3)]],
-    email: ['', [Validators.required, Validators.email]],
-    department: ['', Validators.required],
-
-    // Dynamic skills list
-    skills: this.fb.array([])
-  });
-
-  // Getter for skills FormArray
-  get skills(): FormArray {
-    return this.employeeForm.get('skills') as FormArray;
-  }
-
-  // Add new skill
-  addSkill() {
-    this.skills.push(
-      this.fb.control('', Validators.required)
-    );
-  }
-
-  // Remove skill
-  removeSkill(index: number) {
-    this.skills.removeAt(index);
-  }
-
-  // Submit form
-  onSubmit() {
-    console.log('Employee Data:', this.employeeForm.value);
-
-    if (this.employeeForm.valid) {
-      // Here you would call API
-      alert('Employee Registered Successfully!');
-    } else {
-      alert('Form is invalid');
-    }
-  }
-}
-```
-
-```html
-<h2>Employee Registration Form</h2>
-
-<form [formGroup]="employeeForm" (ngSubmit)="onSubmit()">
-  <!-- Name -->
-  <div>
-    <label>Name</label>
-    <input type="text" formControlName="name" />
-    <div
-      *ngIf="employeeForm.get('name')?.invalid && employeeForm.get('name')?.touched"
-    >
-      Name is required (min 3 characters)
-    </div>
-  </div>
-
-  <!-- Email -->
-  <div>
-    <label>Email</label>
-    <input type="email" formControlName="email" />
-    <div
-      *ngIf="employeeForm.get('email')?.invalid && employeeForm.get('email')?.touched"
-    >
-      Enter valid email
-    </div>
-  </div>
-
-  <!-- Department -->
-  <div>
-    <label>Department</label>
-    <select formControlName="department">
-      <option value="">Select</option>
-      <option value="IT">IT</option>
-      <option value="HR">HR</option>
-      <option value="Finance">Finance</option>
-    </select>
-  </div>
-
-  <!-- Skills (Dynamic FormArray) -->
-  <div>
-    <h4>Skills</h4>
-
-    <button type="button" (click)="addSkill()">+ Add Skill</button>
-
-    <div formArrayName="skills">
-      <div *ngFor="let skill of skills.controls; let i = index">
-        <input [formControlName]="i" placeholder="Enter skill" />
-
-        <button type="button" (click)="removeSkill(i)">Remove</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Submit -->
-  <button type="submit" [disabled]="employeeForm.invalid">Submit</button>
-</form>
-```
-
-<div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
-
-### Q 43. What is NgZone?
+### Q 44. What is NgZone?
 
 `NgZone` is a service in Angular that helps manage change detection automatically or manually when async operations happen (like setTimeout, API calls, WebSocket, etc.). In simple terms: `NgZone` tells Angular when to update the UI after async work.
 
@@ -2102,18 +2097,21 @@ ngOnInit() {
 
 <div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
 
-### Q 44. What is angular change detection?
+### Q 45. What is change detection?
 
 Change Detection is Angular's mechanism for synchronizing component data with the DOM. By default, Angular checks the entire component tree using Zone.js-triggered cycles, while OnPush reduces checks by reacting only to input reference changes, events, and observable emissions. In Angular 16+, Signals provide fine-grained reactivity and further improve performance by updating only affected UI parts.
 
 There are two types of change detection:
 
-- **Default change detection:** Angular decides if the view needs to be updated by comparing all the template expression values before and after the occurrence of an event, for all components of the component tree
-- **OnPush change detection:** this works by detecting if some new data has been explicitly pushed into the component, either via a component input or an Observable subscribed to using the async pipe
+- **Default change detection:** Angular checks all components in the component tree whenever a change detection cycle is triggered. It is simple to use but can become less efficient in large applications.
+- **OnPush change detection:** Angular checks a component only when its inputs change, an event occurs inside the component, a Signal changes, or an Observable emits through the async pipe. This reduces unnecessary checks and improves performance.
 
-ApplicationRef.tick(): Invoke this method to explicitly process change detection and its side-effects. It check the full component tree.
-NgZone.run(callback): It evaluate the callback function inside the Angular zone.
-ChangeDetectorRef.detectChanges(): It detects only the components and it's children.
+| Feature            | Default    | OnPush                    |
+| ------------------ | ---------- | ------------------------- |
+| Components Checked | All        | Only when required        |
+| Performance        | Moderate   | Better                    |
+| Automatic Updates  | ✅ Yes     | Only on specific triggers |
+| Best For           | Small Apps | Large Enterprise Apps     |
 
 **Follow-Up Questions**
 
@@ -2121,422 +2119,17 @@ ChangeDetectorRef.detectChanges(): It detects only the components and it's child
    - Angular uses Zone.js to patch async APIs such as: setTimeout, Promise, HTTP requests,DOM events. When an async operation completes, Zone.js notifies Angular, which triggers a Change Detection cycle.
 2. Why is OnPush faster than Default Change Detection?
    Default strategy checks the entire component tree whenever Change Detection runs. OnPush limits checks to: Input reference changes, Events, Observable emissions, Manual triggers. This reduces unnecessary component evaluations and improves performance.
+3. What triggers Change Detection?
+   - User events (click, input)
+   - HTTP API responses
+   - Timers (setTimeout, setInterval)
+   - Observable emissions (async pipe)
+   - Signal updates
+   - Manual calls (markForCheck(), detectChanges())
 
 <div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
 
-### Q 45. What is Ivy?
-
-Ivy is Angular’s next-generation compilation and rendering engine, introduced in Angular 9.
-It improves bundle size, build speed, tree shaking, debugging, and incremental compilation.
-It replaced the older View Engine with a more optimized and efficient architecture.
-
-**Why Ivy Was Introduced**
-
-- Before Ivy (View Engine):
-- Large bundle sizes
-- Slower builds
-- Harder debugging
-- Poor tree shaking
-
-**Ivy solved these problems by:**
-
-- Generating less and more optimized code
-- Making Angular more modular
-- Improving incremental builds
-
-<div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
-
-### Q 46. What is difference between observable, subject and signal?
-
-**Real-World Analogy**
-
-- Observable → A newspaper subscription: each subscriber gets their own copy independently.
-- Subject → A live TV broadcast: everyone watching sees the same program at the same time.
-- Signal → A thermostat reading: any component depending on it automatically updates when the temperature changes.
-
-**Interview-Ready Answer**
-
-Observable is a cold, lazy stream where each subscriber executes independently.
-Subject is a hot stream that can emit values manually to multiple subscribers simultaneously.
-Signal is a reactive value container with auto-tracked dependencies and computed derivations, ideal for state management.
-
-| Feature                | **Observable**                             | **Subject**                                        | **Signal**                                                          |
-| ---------------------- | ------------------------------------------ | -------------------------------------------------- | ------------------------------------------------------------------- |
-| **Nature**             | Lazy stream of values (cold by default)    | Hot stream, can emit values manually               | Reactive value container                                            |
-| **Emissions**          | Controlled by producer                     | Controlled manually via `.next()`                  | Controlled by `set()` or derived automatically                      |
-| **Subscribers**        | Each subscriber gets independent execution | Subscribers share same stream (multicast)          | Subscribers read value directly, auto-tracked dependencies          |
-| **Reactivity**         | Requires `.subscribe()` to get values      | Multicast to multiple subscribers                  | Automatically notifies dependents when value changes                |
-| **Derived / Computed** | Use operators like `map`, `combineLatest`  | Can use operators on the Subject stream            | Use `computed()` to derive reactive values automatically            |
-| **Side-effects**       | Can use `tap()` inside pipeline            | Can use `tap()` or emit manually                   | Use `effect()` for side-effects                                     |
-| **Use Case**           | Async streams like HTTP requests, timers   | Event buses, shared state, component communication | State management, reactive UI, derived values                       |
-| **Memory Management**  | Need to unsubscribe or use `async` pipe    | Need to unsubscribe if long-lived                  | Tracks dependencies automatically, no manual subscriptions required |
-
-<div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
-
-### Q 47. What is Resolvers?
-
-Resolvers in Angular are router services that fetch data before a route is activated, ensuring components have all required data at load.
-
-**Conceptual Explanation**
-
-- A Resolver is essentially a service that implements the Resolve interface.
-- It runs before navigation to a route is completed.
-- The route waits for the resolver to complete, and the data returned is injected into the component via ActivatedRoute.
-
-**Use Case / Why We Need It**
-
-- Prevents the component from rendering without the necessary data.
-- Useful when loading data from APIs before showing the page.
-- Keeps routing logic and data fetching separate from the component, improving maintainability.
-
-**Common Pitfalls**
-
-- Resolver must return an Observable or Promise, otherwise routing fails.
-- Long-running HTTP calls can delay navigation, so use caching if necessary.
-
-**Example:** Imagine a User Profile page where you need the user data before showing the UI.
-
-**Resolver Service**
-
-```js
-import { Injectable } from '@angular/core';
-import { Resolve } from '@angular/router';
-import { Observable } from 'rxjs';
-import { UserService } from './user.service';
-
-@Injectable({ providedIn: 'root' })
-export class UserResolver implements Resolve<any> {
-  constructor(private userService: UserService) {}
-
-  resolve(): Observable<any> {
-    return this.userService.getUserProfile(); // fetches user data
-  }
-}
-```
-
-**Routing Module**
-
-```js
-const routes = [
-  {
-    path: "profile",
-    component: ProfileComponent,
-    resolve: { user: UserResolver }, // key: 'user' will hold the resolved data
-  },
-];
-```
-
-**Component Usage**
-
-```js
-import { ActivatedRoute } from '@angular/router';
-
-export class ProfileComponent {
-  user: any;
-
-  constructor(private route: ActivatedRoute) {
-    this.user = this.route.snapshot.data['user']; // access resolver data
-  }
-}
-```
-
-<div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
-
-### Q 48. what is Tree Shaking?
-
-Tree Shaking is a build-time optimization that removes unused code from the final Angular bundle, reducing size and improving performance. Angular CLI automatically applies it during production builds using ES Modules.
-
-**Conceptual Explanation**
-
-- During build, Angular (via Webpack and the CLI) analyzes which functions, classes, modules, and imports are actually used.
-- Anything not referenced anywhere is eliminated from the final JavaScript bundle.
-- This helps reduce bundle size, improve loading time, and enhance performance.
-
-**Why Angular Uses Tree Shaking**
-
-- Smaller bundle size → faster downloads.
-- Faster execution → fewer unused functions in memory.
-- Optimized production builds → Angular CLI automatically applies it during ng build --prod.
-
-<div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
-
-### Q 49. What are Web Vitals?
-
-Core Web Vitals are user-centric performance metrics defined by Google to measure page loading, responsiveness, and visual stability.
-
-The three key metrics are LCP (Largest Contentful Paint) for loading performance, INP (Interaction to Next Paint) for responsiveness, and CLS (Cumulative Layout Shift) for visual stability.
-
-**Largest Contentful Paint(LCP):** Measures how long it takes for the largest visible content element to appear.
-
-**Interaction to Next Paint(INP):** Measures how quickly the UI responds after a user interaction. **Good Score ≤ 200ms**
-
-**Cumulative Layout Shift(CLS):** Measures unexpected movement of page elements. **Good Score ≤ 0.1**
-
-| Metric | Measures            | Good Score |
-| ------ | ------------------- | ---------- |
-| LCP    | Loading Performance | ≤ 2.5s     |
-| INP    | Interactivity       | ≤ 200ms    |
-| CLS    | Visual Stability    | ≤ 0.1      |
-
-In Angular applications, these can be improved through lazy loading, code splitting, OnPush change detection, virtual scrolling, image optimization, caching, and SSR.
-
-<div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
-
-### Q 50. How would you architect a large Angular application?
-
-I would organize the application into Core, Shared, and Feature modules. Core contains singleton services, interceptors, and guards. Shared contains reusable components, directives, and pipes. Business domains are separated into feature modules with lazy loading to improve performance. I would keep business logic in services, use smart and dumb component patterns, implement centralized error handling through interceptors, and choose state management based on complexity, using services for smaller applications and NgRx for larger ones. For enterprise-scale systems, I would also consider micro frontends, reusable component libraries, and modern Angular features like standalone components and signals to improve maintainability and scalability.
-
-<div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
-
-### Q 51. How do you optimize a 100k-row grid?
-
-For a 100k-row grid, I would never render all rows at once because the DOM becomes too large and impacts memory, rendering, and change detection performance. Instead, I would use virtual scrolling to render only the visible rows, implement pagination or server-side paging if appropriate, use OnPush change detection, trackBy in ngFor, optimize API calls, and avoid expensive calculations inside templates.
-
-<div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
-
-### Q 52. What causes memory leaks?
-
-Memory leaks occur when objects remain referenced and cannot be garbage collected. In Angular, the most common causes are unsubscribed Observables, event listeners, timers, and retained object references. I prevent them using AsyncPipe, takeUntil/takeUntilDestroyed, proper cleanup in ngOnDestroy, and regular memory profiling with browser DevTools.
-
-**Common Causes:**
-
-- Unsubscribed Observables (`Subject`, `BehaviorSubject`, `interval`, `valueChanges`)
-- Event listeners not removed
-- `setInterval` or long-running timers not cleared
-- Closures holding references to large objects
-- Detached DOM elements still referenced
-- Global variables
-- Misuse of `shareReplay()` or cached data
-
-**Prevention:**
-
-- Use `AsyncPipe`
-- Use `takeUntil()` or `takeUntilDestroyed()`
-- Remove event listeners in `ngOnDestroy`
-- Clear intervals/timeouts
-- Avoid unnecessary global references
-
-- How Would You Detect a Memory Leak?
-  - Using browser DevTools: Chrome DevTools -> Memory Tab -> Heap Snapshot
-
-<div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
-
-### Q 53. What is circular dependencies and how do you avoid ?
-
-Circular dependency occurs when two or more modules, services, or components depend on each other directly or indirectly. It can lead to runtime errors, unexpected behavior, and make the code difficult to maintain. I avoid it by maintaining clear separation of responsibilities, using interfaces/abstractions, introducing mediator services, and following a layered architecture.
-
-Circular dependencies are avoided by enforcing one-way dependency flow, extracting shared logic, and using a mediator service or state management instead of direct service-to-service coupling.
-
-How to Detect Circular Dependencies?
-
-```js
-npm install madge -g
-madge --circular src
-```
-
-Angular build warnings and dependency graph tools can also help identify them.
-
-<div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
-
-### Q 54. How would you reduce initial bundle size?
-
-To reduce the initial bundle size, I focus on loading only the code required for the first screen. I use lazy loading for feature modules, remove unused dependencies, optimize third-party libraries, enable tree shaking, use standalone components where appropriate, and optimize images and assets. The goal is to improve load time and Core Web Vitals such as LCP.
-
-**Key Techniques:**
-
-- **Lazy Loading:** Load feature modules only when users navigate to them.
-- **Code Splitting:** Split large bundles into smaller chunks.
-- **Tree Shaking:** Remove unused code during production builds.
-- **Optimize Third-Party Libraries:** Import only required modules/functions.
-- **Standalone Components:** Reduce module overhead and improve route-level loading.
-- **Image Optimization:** Compress and lazy-load images.
-- **Avoid Large Dependencies:** Replace heavy libraries with lighter alternatives when possible.
-- **Production Build Optimizations:** AOT compilation, minification, compression (Gzip/Brotli).
-
-<div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
-
-### Q 55. What is template lazy loading?
-
-Yes, Angular supports template-level lazy loading. In Angular 17+, I can use `@defer` blocks to lazy load components based on conditions such as viewport visibility, user interaction, or idle time. This reduces the initial bundle size and improves page load performance because heavy components are downloaded only when required. Additionally, for images I use the browser's native `loading="lazy"` attribute.
-
-**Load on Viewport:** Downloads when the component scrolls into view.
-
-```js
-@defer (on viewport) {
-  <app-heavy-chart />
-}
-```
-
-**Load on Interaction:** Downloads when the user interacts.
-
-```js
-@defer (on interaction) {
-  <app-user-details />
-}
-```
-
-<div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
-
-### Q 56. What is Web Security and how do you handle it?
-
-1. **XSS (Cross-Site Scripting):** XSS occurs when malicious scripts are injected into a webpage and executed in a user's browser. Angular helps prevent XSS through built-in sanitization, but developers should avoid unsafe DOM manipulation and validate user input.
-
-   **Prevention:**
-   - Angular automatically sanitizes HTML.
-   - Avoid direct DOM manipulation.
-   - Use Angular bindings instead of innerHTML.
-   - Use Content Security Policy (CSP).
-
-2. **CORS:** CORS is a browser security mechanism that restricts cross-origin requests unless explicitly allowed by the server.
-   - Why does the API work in Postman but fail in the browser?
-     - Because browsers enforce CORS.
-
-     ```js
-     Frontend: app.company.com;
-
-     Backend: api.company.com;
-
-     // Backend must allow:
-     Access - Control - Allow - Origin;
-     ```
-
-3. **CSRF (Cross-Site Request Forgery):** CSRF attacks force authenticated users to perform unintended actions. Common protections include CSRF tokens and SameSite cookie settings.
-
-4. **Authentication vs Authorization:** Authentication verifies identity, while authorization determines what resources a user can access.
-
-5. **JWT Security:** Access Token and Refresh Token. Access Token and Refresh Token. Store in: Secure HttpOnly Cookies
-
-<div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
-
-### Q 57. What design patterns do you follow?
-
-In Angular, the most common design patterns I use are Singleton for services, Observer through RxJS, Factory via dependency injection, Facade for NgRx state management, Strategy for dynamic business rules, and Decorator through Angular decorators like `@Component` and `@Injectable`. These patterns help build scalable, maintainable, and loosely coupled enterprise applications.
-
-1. **Singleton Pattern:** Only one instance of a class exists throughout the application.
-
-   Angular services provided at the root level are examples of the Singleton pattern because only one instance is shared across the application.
-
-2. **Observer Pattern:** One object notifies multiple subscribers when data changes.
-
-   Angular heavily uses the Observer pattern through RxJS Observables and Subjects, where multiple subscribers react to emitted values.
-
-3. **Factory Pattern:** Create objects without exposing creation logic.
-
-   Angular's dependency injection system internally follows the Factory pattern to create and provide service instances.
-
-4. **Facade Pattern:** I frequently use the Facade pattern with NgRx to hide state management complexity and provide a simple API for components.
-
-5. **Strategy Pattern:** Switch behavior dynamically without changing the client code.
-   The Strategy pattern allows different algorithms or behaviors to be selected at runtime without modifying the calling code.
-
-6. **Decorator Pattern:** Angular extensively uses the Decorator pattern through decorators such as `@Component`, `@Injectable`, and `@Directive`.
-
-| Pattern   | Angular Example         |
-| --------- | ----------------------- |
-| Singleton | Services                |
-| Observer  | RxJS Observables        |
-| Factory   | Dependency Injection    |
-| Facade    | NgRx Facade Services    |
-| Strategy  | Dynamic Business Logic  |
-| Adapter   | API Response Mapping    |
-| Decorator | @Component, @Injectable |
-
-<div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
-
-### Q 58 What is loosely and tight coupled in angular?
-
-Tight Coupling: Components or services directly depend on concrete implementations, making code difficult to modify, test, and maintain.
-
-Loose Coupling: Components or services interact through Angular Dependency Injection, interfaces, inputs/outputs, and observables, reducing dependencies and making the application more flexible, testable, and maintainable.
-
-Angular is designed to encourage loose coupling through its Dependency Injection framework.
-
-<div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
-
-### Q 59. What is Hydration?
-
-Hydration allows Angular to reuse server-rendered HTML and make it interactive without re-rendering the entire page.
-
-It works with SSR to improve performance, reduce rendering work, improve Core Web Vitals such as LCP, and provide a better user experience.
-
-- When Is Hydration Used?
-  - Typically with: Angular Universal (SSR) + Hydration. SSR renders the page on the server. Hydration activates it on the client.
-
-```html
-<!-- Without Hydration -->
-Server ↓ HTML Sent to Browser ↓ Browser Displays HTML ↓ Angular Bootstraps ↓
-Destroys Existing DOM ↓ Recreates DOM
-
-<!-- This causes extra work and slower page rendering. -->
-
----
-
-<!-- With Hydration -->
-Server ↓ HTML Sent to Browser ↓ Browser Displays HTML ↓ Angular Bootstraps ↓
-Reuses Existing DOM ↓ Attaches Events
-
-<!-- No unnecessary DOM recreation. -->
-```
-
-<div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
-
-### Q 60. What is New Control Flow (`@if`,` @for`, `@switch`),
-
-Angular 17 introduced built-in control flow syntax such as `@if`, `@for`, and `@switch` to replace structural directives like `*ngIf` and `*ngFor`. The new syntax is more readable, easier to maintain, and provides better performance, especially with `@for`, which includes an improved diffing mechanism and built-in tracking support.
-
-**`@if`**
-
-```html
-<!-- Before -->
-<div *ngIf="isLoggedIn">Welcome User</div>
-
-<!-- After -->
-@if (isLoggedIn) {
-<div>Welcome User</div>
-}
-
-<!-- Else Block -->
-
-<!-- Before -->
-<div *ngIf="isLoggedIn; else login">Welcome User</div>
-
-<ng-template #login> Please Login </ng-template>
-
-<!-- After -->
-@if (isLoggedIn) {
-<div>Welcome User</div>
-} @else {
-<div>Please Login</div>
-}
-```
-
-**`@for`**
-
-```html
-<!-- Before -->
-<div *ngFor="let user of users">{{ user.name }}</div>
-
-<!-- After -->
-@for (user of users; track user.id) {
-<div>{{ user.name }}</div>
-}
-
-<!-- Empty State -->
-
-<!-- Before -->
-<div *ngIf="users.length === 0">No Users Found</div>
-
-<!-- After -->
-@for (user of users; track user.id) {
-<div>{{ user.name }}</div>
-} @empty {
-<div>No Users Found</div>
-}
-```
-
-<div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
-
-### Q 61. What is HostBinding vs HostListener, viewChild vs viewChildren, and ViewChild vs ContentChild?
+### Q 46. What is HostBinding vs HostListener, viewChild vs viewChildren, and ViewChild vs ContentChild?
 
 **`@HostBinding`** is used to bind properties, classes, styles, or attributes to the host element.
 
@@ -2554,7 +2147,7 @@ Angular 17 introduced built-in control flow syntax such as `@if`, `@for`, and `@
 
 <div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
 
-### Q 62. What are `@Injectable()`, `@Inject()`, `inject()`?
+### Q 47. What are `@Injectable()`, `@Inject()`, `inject()`?
 
 1. `@Injectable()` marks a class as injectable and allows Angular to create it through the DI system.
 
@@ -2615,17 +2208,14 @@ Angular 17 introduced built-in control flow syntax such as `@if`, `@for`, and `@
    - **Real Use Case:** Standalone Components, Functional Guards, Interceptors.
 
 ```js
-Step 1
-
+// Step 1
 @Injectable()
 class UserService
 
 ↓
 
-Angular can create it
-
-
-Step 2
+// Angular can create it
+// Step 2
 
 constructor(
   private userService: UserService
@@ -2633,12 +2223,10 @@ constructor(
 
 ↓
 
-Angular injects it automatically
+// Angular injects it automatically
+// Step 3
 
-
-Step 3
-
-Need primitive value?
+// Need primitive value?
 
 constructor(
   @Inject(API_URL)
@@ -2647,12 +2235,10 @@ constructor(
 
 ↓
 
-Tell Angular exactly which token
+// Tell Angular exactly which token
+// Step 4
 
-
-Step 4
-
-No constructor?
+// No constructor?
 
 const userService =
   inject(UserService)
@@ -2675,7 +2261,7 @@ Get dependency directly
 
 <div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
 
-### Q 64. Guard vs Resolver vs Interceptor?
+### Q 48. Guard vs Resolver vs Interceptor?
 
 1. **Guard:** Guard is used to allow or block route navigation based on conditions such as authentication, authorization, or permissions.
 
@@ -2758,7 +2344,462 @@ Component Loads
 
 <div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
 
-### Q 63. Coding Standards & Code Quality Tools?
+### Q 49. What is New Control Flow (`@if`,` @for`, `@switch`),
+
+Angular 17 introduced built-in control flow syntax such as `@if`, `@for`, and `@switch` to replace structural directives like `*ngIf` and `*ngFor`. The new syntax is more readable, easier to maintain, and provides better performance, especially with `@for`, which includes an improved diffing mechanism and built-in tracking support.
+
+**`@if`**
+
+```html
+<!-- Before -->
+<div *ngIf="isLoggedIn">Welcome User</div>
+
+<!-- After -->
+@if (isLoggedIn) {
+<div>Welcome User</div>
+}
+
+<!-- Else Block -->
+
+<!-- Before -->
+<div *ngIf="isLoggedIn; else login">Welcome User</div>
+
+<ng-template #login> Please Login </ng-template>
+
+<!-- After -->
+@if (isLoggedIn) {
+<div>Welcome User</div>
+} @else {
+<div>Please Login</div>
+}
+```
+
+**`@for`**
+
+```html
+<!-- Before -->
+<div *ngFor="let user of users">{{ user.name }}</div>
+
+<!-- After -->
+@for (user of users; track user.id) {
+<div>{{ user.name }}</div>
+}
+
+<!-- Empty State -->
+
+<!-- Before -->
+<div *ngIf="users.length === 0">No Users Found</div>
+
+<!-- After -->
+@for (user of users; track user.id) {
+<div>{{ user.name }}</div>
+} @empty {
+<div>No Users Found</div>
+}
+```
+
+<div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
+
+### Q 50. What is Async/await?
+
+Async/await is a feature in JavaScript that allows you to write asynchronous code in a synchronous-looking manner. It provides a more readable and understandable way to work with asynchronous operations, such as fetching data from a server, reading files, or making network requests.
+
+_Here's a brief overview of how async/await works:_
+
+**Async Functions:** An async function is a function that operates asynchronously via the event loop, and it always returns a promise. You declare an async function using the async keyword before the function declaration.
+
+**Await Operator:** Inside an async function, you can use the await keyword before an expression that returns a promise. The await keyword pauses the execution of the async function until the promise is resolved, and then it returns the resolved value.
+
+_**Example:**_
+
+```javascript
+// Example asynchronous function
+function fetchData() {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      resolve("Data fetched successfully");
+    }, 2000);
+  });
+}
+
+// Async function using async/await
+async function getData() {
+  try {
+    console.log("--- Start ---");
+    const result = await fetchData();
+    console.log(result);
+    console.log("--- End ---");
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  }
+}
+
+// Calling the async function
+getData();
+```
+
+<div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
+
+### Q 51. What are `takeUntil()` and `takeUntilDestroyed()`?
+
+Both are used to automatically unsubscribe from Observables to prevent memory leaks. The main difference is how they manage the component's lifecycle.
+
+- `takeUntil()` is an RxJS operator used to automatically unsubscribe from an Observable when a notifier Observable emits a value. It requires a Subject and is typically used with ngOnDestroy(). It is the traditional approach used before Angular 16 to prevent memory leaks.
+
+- `takeUntilDestroyed()` is an Angular 16+ operator that automatically unsubscribes when a component, directive, or service is destroyed. It removes the need for a Subject and ngOnDestroy(), resulting in cleaner and less error-prone code. It is the recommended approach for modern Angular applications.
+
+| Feature                  | `takeUntil()` | `takeUntilDestroyed()` |
+| ------------------------ | ------------- | ---------------------- |
+| Introduced               | RxJS          | Angular 16             |
+| Requires `Subject`       | ✅ Yes        | ❌ No                  |
+| Requires `ngOnDestroy()` | ✅ Yes        | ❌ No                  |
+| Recommended for New Apps | ❌ No         | ✅ Yes                 |
+
+<div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
+
+### Q 52. What are SSR vs CSR vs SSG?
+
+- `SSR (Server-Side Rendering)` renders the Angular application on the server for every incoming request and sends a fully rendered HTML page to the browser. This improves SEO, faster initial page load, and better performance on slow devices. After the page loads, Angular hydrates it to make it fully interactive. It is ideal for e-commerce, blogs, news websites, and public-facing applications.
+
+- `CSR (Client-Side Rendering)` sends a minimal HTML page to the browser, and Angular downloads the JavaScript bundles to render the application on the client. The first page load is usually slower, but subsequent navigation is very fast because routing happens in the browser. It is best suited for admin dashboards, internal tools, and authenticated Single Page Applications (SPAs).
+
+- `SSG (Static Site Generation)` generates the HTML pages during the build process and serves them as static files through a web server or CDN. Since no server-side rendering happens at runtime, it provides excellent performance, low hosting cost, and great SEO. It is ideal for documentation sites, blogs, landing pages, and marketing websites where content changes infrequently.
+
+| Feature         | SSR                       | CSR                      | SSG                    |
+| --------------- | ------------------------- | ------------------------ | ---------------------- |
+| Rendering       | On Server (Every Request) | In Browser               | At Build Time          |
+| Initial Load    | Fast                      | Slower                   | Fastest                |
+| SEO             | ✅ Excellent              | ❌ Poor                  | ✅ Excellent           |
+| Interactivity   | After Hydration           | Immediate after JS Loads | After Hydration        |
+| Server Required | ✅ Yes                    | ❌ No                    | ❌ No (Static Hosting) |
+| Best For        | E-commerce, News          | Admin Dashboards         | Blogs, Documentation   |
+
+<div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
+
+### Q 53. Difference between `package.json` and `package-lock.json`?
+
+`package.json` defines the project's metadata, scripts, and dependency version ranges. is automatically generated by npm and records the exact versions of all installed dependencies, including transitive dependencies. Committing `package-lock.json` ensures consistent and reproducible installations across development, testing, and production environments.
+
+| `package.json`                                            | `package-lock.json`                                              |
+| --------------------------------------------------------- | ---------------------------------------------------------------- |
+| Created and maintained by developers.                     | Automatically generated by npm.                                  |
+| Can contain version ranges (e.g., `^18.2.0`, `~4.17.21`). | Contains exact versions (e.g., `18.2.3`).                        |
+| Used when adding or updating dependencies.                | Used to ensure consistent installations across all environments. |
+| Can be edited manually.                                   | Generally should not be edited manually.                         |
+
+<div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
+
+### Q 54. What is Micro Frontend with Module Federation?
+
+Micro Frontends is an architectural approach where a large frontend application is divided into independent, smaller applications, each owned by a separate team. Every micro frontend can be developed, tested, deployed, and maintained independently, while appearing as a single application to the user.
+
+Module Federation is a Webpack 5 feature that enables multiple independent applications to share and load modules at runtime without rebuilding or redeploying the entire application. In Angular, it is commonly used to implement Micro Frontends, where a Host (Shell) application dynamically loads Remote applications when required.
+
+- Shell (Host): Main application responsible for navigation and loading remotes.
+- Remote: Independent Angular applications loaded on demand.
+- Each remote can be deployed separately without affecting others.
+
+<div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
+
+### Q 55. How do Micro Frontends communicate?
+
+- **Shared Service:** When all Micro Frontends are Angular applications, they can share a common library or service using Module Federation. Components communicate through shared services using RxJS Subject or BehaviorSubject.
+
+- **Custom Events:** One Micro Frontend dispatches a browser event, and another listens for it using the browser's event system. This works even if the applications use different frameworks.
+
+  ```js
+  // Sender
+  window.dispatchEvent(
+    new CustomEvent("userLoggedIn", {
+      detail: user,
+    }),
+  );
+
+  // Receiver
+  window.addEventListener("userLoggedIn", (event) => {
+    console.log(event.detail);
+  });
+  ```
+
+- **URL / Query Parameters:** Data is passed through the URL or query parameters during navigation. `/products?id=101`.
+
+- **Shared State Management (NgRx / Signals):** A shared state library can be used when multiple Angular Micro Frontends need access to common application state.
+
+- **Local Storage / Session Storage:** Data is stored in browser storage and accessed by other Micro Frontends.
+
+- **Backend/API Communication:** Instead of communicating directly, multiple Micro Frontends interact through the same backend APIs or backend services.
+
+| Method         | Best For                                          |
+| -------------- | ------------------------------------------------- |
+| Shared Service | Angular Micro Frontends using Module Federation   |
+| Custom Events  | Cross-framework communication                     |
+| URL Parameters | Navigation and routing data                       |
+| NgRx / Signals | Shared application state                          |
+| Local Storage  | Small persistent data (theme, language, token)    |
+| Backend APIs   | Business data and cross-application communication |
+
+<div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
+
+### Q 56. What is the difference between Monolithic and Micro Frontends?
+
+| Monolithic                     | Micro Frontend                       |
+| ------------------------------ | ------------------------------------ |
+| Single application             | Multiple independent applications    |
+| Single deployment              | Independent deployments              |
+| One team often owns everything | Multiple teams own different modules |
+| Harder to scale                | Easier to scale                      |
+
+<div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
+
+### Q 57. What is Ivy?
+
+Ivy is Angular’s next-generation compilation and rendering engine, introduced in Angular 9.
+It improves bundle size, build speed, tree shaking, debugging, and incremental compilation.
+It replaced the older View Engine with a more optimized and efficient architecture.
+
+**Why Ivy Was Introduced**
+
+- Before Ivy (View Engine):
+- Large bundle sizes
+- Slower builds
+- Harder debugging
+- Poor tree shaking
+
+**Ivy solved these problems by:**
+
+- Generating less and more optimized code
+- Making Angular more modular
+- Improving incremental builds
+
+<div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
+
+### Q 58. What is AOT and JIT?
+
+- **JIT:** Just-in-Time (JIT) is a type of compilation that compiles your app in the browser at runtime, as the application is being loaded. .
+- **AOT:** Ahead-of-Time (AOT) is a type of compilation that compiles your app at build time, before the application is deployed to the client's browser.
+
+_AOT compilation offers better performance, smaller bundle sizes, and improved error detection compared to JIT compilation. It is the recommended compilation mode for production deployments of Angular applications. JIT compilation, on the other hand, provides faster development cycles and is suitable for development and testing environments._
+
+> _**NOTE: JIT** compilation was the default until **Angular 8**, now default is **AOT**_
+
+<div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
+
+### Q 59. what is Tree Shaking?
+
+Tree Shaking is a build-time optimization that removes unused code from the final Angular bundle, reducing size and improving performance. Angular CLI automatically applies it during production builds using ES Modules.
+
+**Conceptual Explanation**
+
+- During build, Angular (via Webpack and the CLI) analyzes which functions, classes, modules, and imports are actually used.
+- Anything not referenced anywhere is eliminated from the final JavaScript bundle.
+- This helps reduce bundle size, improve loading time, and enhance performance.
+
+**Why Angular Uses Tree Shaking**
+
+- Smaller bundle size → faster downloads.
+- Faster execution → fewer unused functions in memory.
+- Optimized production builds → Angular CLI automatically applies it during ng build --prod.
+
+<div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
+
+### Q 60. What is Hydration?
+
+Hydration allows Angular to reuse server-rendered HTML and make it interactive without re-rendering the entire page.
+
+It works with SSR to improve performance, reduce rendering work, improve Core Web Vitals such as LCP, and provide a better user experience.
+
+- When Is Hydration Used?
+  - Typically with: Angular Universal (SSR) + Hydration. SSR renders the page on the server. Hydration activates it on the client.
+
+```html
+<!-- Without Hydration -->
+Server ↓ HTML Sent to Browser ↓ Browser Displays HTML ↓ Angular Bootstraps ↓
+Destroys Existing DOM ↓ Recreates DOM
+
+<!-- This causes extra work and slower page rendering. -->
+
+---
+
+<!-- With Hydration -->
+Server ↓ HTML Sent to Browser ↓ Browser Displays HTML ↓ Angular Bootstraps ↓
+Reuses Existing DOM ↓ Attaches Events
+
+<!-- No unnecessary DOM recreation. -->
+```
+
+<div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
+
+### Q 61. What are Web Vitals?
+
+Core Web Vitals are user-centric performance metrics defined by Google to measure page loading, responsiveness, and visual stability.
+
+The three key metrics are LCP (Largest Contentful Paint) for loading performance, INP (Interaction to Next Paint) for responsiveness, and CLS (Cumulative Layout Shift) for visual stability.
+
+**Largest Contentful Paint(LCP):** Measures how long it takes for the largest visible content element to appear.
+
+**Interaction to Next Paint(INP):** Measures how quickly the UI responds after a user interaction. **Good Score ≤ 200ms**
+
+**Cumulative Layout Shift(CLS):** Measures unexpected movement of page elements. **Good Score ≤ 0.1**
+
+| Metric | Measures            | Good Score |
+| ------ | ------------------- | ---------- |
+| LCP    | Loading Performance | ≤ 2.5s     |
+| INP    | Interactivity       | ≤ 200ms    |
+| CLS    | Visual Stability    | ≤ 0.1      |
+
+In Angular applications, these can be improved through lazy loading, code splitting, OnPush change detection, virtual scrolling, image optimization, caching, and SSR.
+
+<div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
+
+### Q 62. How do you optimize a 100k-row grid?
+
+For a 100k-row grid, I would never render all rows at once because the DOM becomes too large and impacts memory, rendering, and change detection performance. Instead, I would use virtual scrolling to render only the visible rows, implement pagination or server-side paging if appropriate, use OnPush change detection, trackBy in ngFor, optimize API calls, and avoid expensive calculations inside templates.
+
+<div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
+
+### Q 63. What causes memory leaks?
+
+Memory leaks occur when objects remain referenced and cannot be garbage collected. In Angular, the most common causes are unsubscribed Observables, event listeners, timers, and retained object references. I prevent them using AsyncPipe, takeUntil/takeUntilDestroyed, proper cleanup in ngOnDestroy, and regular memory profiling with browser DevTools.
+
+**Common Causes:**
+
+- Unsubscribed Observables (`Subject`, `BehaviorSubject`, `interval`, `valueChanges`)
+- Event listeners not removed
+- `setInterval` or long-running timers not cleared
+- Closures holding references to large objects
+- Detached DOM elements still referenced
+- Global variables
+- Misuse of `shareReplay()` or cached data
+
+**Prevention:**
+
+- Use `AsyncPipe`
+- Use `takeUntil()` or `takeUntilDestroyed()`
+- Remove event listeners in `ngOnDestroy`
+- Clear intervals/timeouts
+- Avoid unnecessary global references
+
+- How Would You Detect a Memory Leak?
+  - Using browser DevTools: Chrome DevTools -> Memory Tab -> Heap Snapshot
+
+<div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
+
+### Q 64. What is circular dependencies and how do you avoid ?
+
+Circular dependency occurs when two or more modules, services, or components depend on each other directly or indirectly. It can lead to runtime errors, unexpected behavior, and make the code difficult to maintain. I avoid it by maintaining clear separation of responsibilities, using interfaces/abstractions, introducing mediator services, and following a layered architecture.
+
+Circular dependencies are avoided by enforcing one-way dependency flow, extracting shared logic, and using a mediator service or state management instead of direct service-to-service coupling.
+
+How to Detect Circular Dependencies?
+
+```js
+npm install madge -g
+madge --circular src
+```
+
+Angular build warnings and dependency graph tools can also help identify them.
+
+<div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
+
+### Q 65. How would you reduce initial bundle size?
+
+To reduce the initial bundle size, I focus on loading only the code required for the first screen. I use lazy loading for feature modules, remove unused dependencies, optimize third-party libraries, enable tree shaking, use standalone components where appropriate, and optimize images and assets. The goal is to improve load time and Core Web Vitals such as LCP.
+
+**Key Techniques:**
+
+- **Lazy Loading:** Load feature modules only when users navigate to them.
+- **Code Splitting:** Split large bundles into smaller chunks.
+- **Tree Shaking:** Remove unused code during production builds.
+- **Optimize Third-Party Libraries:** Import only required modules/functions.
+- **Standalone Components:** Reduce module overhead and improve route-level loading.
+- **Image Optimization:** Compress and lazy-load images.
+- **Avoid Large Dependencies:** Replace heavy libraries with lighter alternatives when possible.
+- **Production Build Optimizations:** AOT compilation, minification, compression (Gzip/Brotli).
+
+<div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
+
+### Q 66. What is Web Security and how do you handle it?
+
+1. **Authentication (JWT / OAuth):** Verify the identity of users using JWT, OAuth, or OpenID Connect. Store JWT tokens securely in HttpOnly cookies instead of Local Storage to reduce XSS risks.
+
+2. **Authorization (RBAC):** Restrict access based on user roles and permissions using Role-Based Access Control (RBAC). Protect Angular routes with Route Guards and validate permissions again on the backend.
+
+3. **XSS (Cross-Site Scripting):** XSS occurs when malicious scripts are injected into a webpage and executed in a user's browser. Angular helps prevent XSS through built-in sanitization, but developers should avoid unsafe DOM manipulation and validate user input.
+
+   **Prevention:**
+   - Angular automatically sanitizes HTML.
+   - Avoid direct DOM manipulation.
+   - Use Angular bindings instead of innerHTML.
+
+4. **CORS:** CORS is a browser security mechanism that restricts cross-origin requests unless explicitly allowed by the server.
+   - Why does the API work in Postman but fail in the browser?
+     - Because browsers enforce CORS.
+
+     ```js
+     Frontend: app.company.com;
+
+     Backend: api.company.com;
+
+     // Backend must allow:
+     Access - Control - Allow - Origin;
+     ```
+
+5. **CSRF (Cross-Site Request Forgery):** CSRF attacks force authenticated users to perform unintended actions. Common protections include CSRF tokens and SameSite cookie settings.
+
+<div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
+
+### Q 67. What design patterns do you follow?
+
+In Angular, the most common design patterns I use are Singleton for services, Observer through RxJS, Factory via dependency injection, Facade for NgRx state management, Strategy for dynamic business rules, and Decorator through Angular decorators like `@Component` and `@Injectable`. These patterns help build scalable, maintainable, and loosely coupled enterprise applications.
+
+1. **Singleton Pattern:** Only one instance of a class exists throughout the application.
+
+   Angular services provided at the root level are examples of the Singleton pattern because only one instance is shared across the application.
+
+2. **Observer Pattern:** One object notifies multiple subscribers when data changes.
+
+   Angular heavily uses the Observer pattern through RxJS Observables and Subjects, where multiple subscribers react to emitted values.
+
+3. **Factory Pattern:** Create objects without exposing creation logic.
+
+   Angular's dependency injection system internally follows the Factory pattern to create and provide service instances.
+
+4. **Facade Pattern:** I frequently use the Facade pattern with NgRx to hide state management complexity and provide a simple API for components.
+
+5. **Strategy Pattern:** Switch behavior dynamically without changing the client code.
+   The Strategy pattern allows different algorithms or behaviors to be selected at runtime without modifying the calling code.
+
+6. **Decorator Pattern:** Angular extensively uses the Decorator pattern through decorators such as `@Component`, `@Injectable`, and `@Directive`.
+
+| Pattern   | Angular Example         |
+| --------- | ----------------------- |
+| Singleton | Services                |
+| Observer  | RxJS Observables        |
+| Factory   | Dependency Injection    |
+| Facade    | NgRx Facade Services    |
+| Strategy  | Dynamic Business Logic  |
+| Adapter   | API Response Mapping    |
+| Decorator | @Component, @Injectable |
+
+<div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
+
+### Q 68 What is loosely and tight coupled in angular?
+
+Tight Coupling: Components or services directly depend on concrete implementations, making code difficult to modify, test, and maintain.
+
+Loose Coupling: Components or services interact through Angular Dependency Injection, interfaces, inputs/outputs, and observables, reducing dependencies and making the application more flexible, testable, and maintainable.
+
+Angular is designed to encourage loose coupling through its Dependency Injection framework.
+
+<div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
+
+### Q 69. How would you architect a large Angular application?
+
+I would organize the application into Core, Shared, and Feature modules. Core contains singleton services, interceptors, and guards. Shared contains reusable components, directives, and pipes. Business domains are separated into feature modules with lazy loading to improve performance. I would keep business logic in services, use smart and dumb component patterns, implement centralized error handling through interceptors, and choose state management based on complexity, using services for smaller applications and NgRx for larger ones. For enterprise-scale systems, I would also consider micro frontends, reusable component libraries, and modern Angular features like standalone components and signals to improve maintainability and scalability.
+
+<div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
+
+### Q 70. Coding Standards & Code Quality Tools?
 
 - **Angular Style Guide:** Follow Angular's recommended folder structure, naming conventions, component architecture, and best practices to maintain consistency across the application.
 
@@ -2784,7 +2825,27 @@ Component Loads
 
 <div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
 
-### Q 64. How do you deploy the build?
+### Q 71. How to optimize loading large data in angular?
+
+1. Use Server-Side Pagination instead of loading all records at once.
+2. Implement Virtual Scrolling (Angular CDK) to render only visible rows.
+3. Use Infinite Scrolling for large lists and feeds.
+4. Enable Lazy Loading for feature modules.
+5. Use OnPush Change Detection to reduce unnecessary checks.
+6. Implement `trackBy` with `*ngFor` to avoid recreating DOM elements.
+7. Cache API responses using `shareReplay()`.
+8. Use Debounce and `distinctUntilChanged()` for search inputs.
+9. Prefer Async Pipe over manual subscriptions.
+10. Avoid fetching unnecessary fields from APIs.
+11. Use Skeleton Loaders instead of blocking spinners for better UX.
+12. Implement SSR/Hydration for faster initial page load.
+13. Use Tree Shaking and Code Splitting to reduce bundle size.
+14. Load images lazily using `loading="lazy"`.
+15. Profile performance using Lighthouse, Angular DevTools, and Chrome Performance Tab.
+
+<div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
+
+### Q 72. How do you deploy the build?
 
 **CI/CD Deployment Flow**
 
