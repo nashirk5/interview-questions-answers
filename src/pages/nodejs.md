@@ -22,420 +22,7 @@ Node.js Platform does not follow Request/Response Multi-Threaded Stateless Model
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 3. Create a simple server?
-
-Step 1: Initialize project and Install ExpressJS
-
-```js
-  npm init -y
-  npm install express
-```
-
-Step 2: Now create a file `server.js`
-
-```js
-const express = require("express");
-const app = express();
-
-const PORT = 3000;
-
-// Basic route
-app.get("/", (req, res) => {
-  res.send("Hello, World!");
-});
-
-// Start server
-app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
-});
-```
-
-Step 4: Run the app
-
-```js
-  node app.js
-```
-
-<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
-
-### Q 4. What are some commonly used timing features of Node.js?
-
-**1️⃣ `setTimeout()`:** Executes a callback after a minimum delay (exact timing is not guaranteed). Runs in the Timers phase of the event loop.
-
-```js
-setTimeout(() => {
-  console.log("Runs after ~1000ms");
-}, 1000);
-```
-
-**2️⃣ `setInterval()`:** Executes a callback repeatedly at a fixed interval. Also runs in the Timers phase.
-
-```js
-setInterval(() => {
-  console.log("Runs every 2 seconds");
-}, 2000);
-```
-
-**3️⃣ `setImmediate()`:** Executes a callback after the current I/O cycle completes. Runs in the Check phase.
-
-```js
-setImmediate(() => {
-  console.log("Runs in check phase");
-});
-```
-
-**4️⃣ `process.nextTick()`:** Executes a callback immediately after the current operation, before the event loop continues, and before Promises. Runs in the microtask queue.
-
-```js
-process.nextTick(() => {
-  console.log("Runs before next event loop phase");
-});
-```
-
-| Timing Feature                           | When to Use                                                                          | Real-World Example                                          | Event Loop Phase |
-| ---------------------------------------- | ------------------------------------------------------------------------------------ | ----------------------------------------------------------- | ---------------- |
-| `setTimeout()`                           | Delay a task                                                                         | Retry an HTTP request after 2 seconds if it fails           | Timers           |
-| `setInterval()`                          | Run recurring tasks                                                                  | Poll a database every 5 minutes for updates                 | Timers           |
-| `setImmediate()`                         | Defer until after current I/O                                                        | Log request metrics right after handling an HTTP request    | Check            |
-| `process.nextTick()`                     | Run immediately after current operation                                              | Validate input or update internal state before continuing   | Microtask queue  |
-| `Promise.then()` / async                 | Run lightweight async tasks after current operation but before next event loop phase | Update cache or internal counters after an async operation  | Microtask queue  |
-| `timers/promises` (`await setTimeout()`) | Async/await-friendly delays                                                          | Wait before retrying a failed API call in an async function | Timers           |
-
-<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
-
-### Q 5. What is the difference between process.nextTick() and setImmediate()?
-
-| Feature                | `process.nextTick()`            | `setImmediate()`                     |
-| ---------------------- | ------------------------------- | ------------------------------------ |
-| Execution timing       | Before the event loop continues | On the next event loop iteration     |
-| Priority               | Very high                       | Lower than nextTick                  |
-| Use case               | Defer execution but run ASAP    | Defer execution without blocking I/O |
-| Can starve event loop? | Yes, if abused                  | No                                   |
-
-<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
-
-### Q 6. What is EventEmitter and how does it works?
-
-The EventEmitter is a class that provides communication/interaction between objects in Node.js. That allows objects to emit events and listen for events.
-
-**How EventEmitter works**
-
-- Event Emitter emits the data in an event called message
-- A Listened is registered on the event message
-- when the message event emits some data, the listener will get the data
-
-**Building Blocks:**
-
-- `.emit()` - This method in event emitter is to emit an event in module
-- `.on()` - This method is to listen to data on a registered event in node.js
-- `.once()` - It listen to data on a registered event only once.
-- `.addListener()` - it checks if the listener is registered for an event.
-- `.removeListener()` - It removes the listener for an event.
-
-**Example 1: Basic EventEmitter**
-
-```js
-const EventEmitter = require("events");
-const myEmitter = new EventEmitter();
-
-// Add listener
-myEmitter.on("greet", () => {
-  console.log("Hello World!");
-});
-
-// Emit event
-myEmitter.emit("greet"); // Output: Hello World!
-```
-
-**Example 2: Real use case**
-
-```js
-const EventEmitter = require("events");
-
-class ChatApp extends EventEmitter {}
-
-const chat = new ChatApp();
-
-// Listener for new message
-chat.on("message", (from, to, text) => {
-  console.log(`[Message] ${from} → ${to}: ${text}`);
-});
-
-// Listener for user login
-chat.on("login", (username) => {
-  console.log(`[Login] ${username} joined the chat`);
-});
-
-// Listener for user logout
-chat.on("logout", (username) => {
-  console.log(`[Logout] ${username} left the chat`);
-});
-
-// Simulate events
-chat.emit("login", "Alice");
-chat.emit("login", "Bob");
-
-chat.emit("message", "Alice", "Bob", "Hi Bob!");
-chat.emit("message", "Bob", "Alice", "Hello Alice!");
-
-chat.emit("logout", "Alice");
-chat.emit("logout", "Bob");
-```
-
-<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
-
-### Q 7. What is Streams and Backpressure.?
-
-**Streams** is a way to process data piece by piece (chunks) instead of loading the entire data into memory at once.
-
-**Backpressure** is a flow-control mechanism in streams. For example, during a 2GB file upload, if data arrives faster than the disk can write it, Node automatically pauses the incoming stream and resumes it when the disk catches up. This prevents excessive memory usage and keeps the application stable.
-
-**Follow-Up Questions**
-
-1. Does Node handle backpressure automatically?
-   - Yes. When using streams with pipe(), Node automatically manages backpressure by pausing and resuming the flow of data.
-
-**Types of Streams**
-
-| Type          | Description                                                            | Example                            |
-| ------------- | ---------------------------------------------------------------------- | ---------------------------------- |
-| **Readable**  | Used to **read data** from a source                                    | `fs.createReadStream('file.txt')`  |
-| **Writable**  | Used to **write data** to a destination                                | `fs.createWriteStream('file.txt')` |
-| **Duplex**    | Can **read and write** data                                            | `net.Socket`                       |
-| **Transform** | A special duplex stream that can **modify data while reading/writing** | `zlib.createGzip()`                |
-
-<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
-
-### Q 8. What buffers?
-
-A Buffer is a temporary memory allocation used to store raw binary data. It is mainly used when handling files, streams, or network data. Buffers allow Node.js to efficiently process binary data outside the JavaScript engine.
-
-**Example 1: Creating a Buffer from a String**
-
-```js
-const buf = Buffer.from("Hello Node.js");
-console.log(buf);
-console.log(buf.toString());
-
-// Output
-<Buffer 48 65 6c 6c 6f 20 4e 6f 64 65 2e 6a 73>
-Hello Node.js
-```
-
-**Example 2: Reading from a File Using Buffers**
-
-```js
-const data = fs.readFileSync("example.txt");
-console.log(data);           // Shows binary buffer
-console.log(data.toString()); // Converts to readable string
-
-// Output
-<Buffer 54 68 69 73 20 69 73 20 61 20 62 75 66 66 65 72 20 65 78 61 6d 70 6c 65 21>
-This is a buffer example!
-```
-
-Buffer.from() converts a string to binary data, and toString() converts it back to a readable string.
-
-<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
-
-### Q 9. What is REPL?
-
-**REPL stands for Read–Eval–Print–Loop**
-
-It is an interactive Node.js shell that reads user input, evaluates the JavaScript code, prints the result, and then loops back to wait for the next command. It is mainly used for quick testing, debugging.
-
-**Example:**
-
-**Step 1: Start REPL**
-
-```js
-// Open terminal and type:
-node;
-
-// You will see:
->
-
-> 5 + 5
-10
-```
-
-- Read → 5 + 5
-- Evaluate → Calculates result
-- Print → 10
-- Loop → Waits for next input
-
-<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
-
-### Q 10. What is a stub?
-
-A stub is a fake implementation used in testing to replace a real function. It is mainly used in unit testing to avoid calling real databases, APIs, or external services. Using sinon, we replace the HTTP method with a fake response.
-
-**🔹 Example: Actual Function Without Stub (api.js)**
-
-```js
-// api.js
-const axios = require("axios");
-
-const getUser = async (id) => {
-  const response = await axios.get(`https://api.example.com/users/${id}`);
-  return response.data;
-};
-
-module.exports = getUser;
-```
-
-**Unit Test With Stub (api.test.js)**
-
-```js
-const sinon = require("sinon");
-const axios = require("axios");
-const { expect } = require("chai");
-const getUser = require("./api");
-
-describe("getUser - with Stub", () => {
-  before(() => {
-    sinon.stub(axios, "get").resolves({
-      data: {
-        id: 1,
-        name: "John Doe",
-        email: "john@example.com",
-      },
-    });
-  });
-
-  after(() => {
-    axios.get.restore();
-  });
-
-  it("should return user data", async () => {
-    const user = await getUser(1);
-
-    expect(user).to.have.property("id");
-    expect(user.name).to.equal("John Doe");
-    expect(user.email).to.equal("john@example.com");
-  });
-});
-```
-
-Here, we replace the real DB function with a fake one.
-
-<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
-
-### Q 11. What is a test pyramid?
-
-The Test Pyramid is a testing strategy that recommends having many unit tests, fewer integration tests, and very few end-to-end tests. It ensures fast, reliable, and maintainable testing.
-
-<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
-
-### Q 12. What Control Flow?
-
-Control flow is the order in which statements, functions, or instructions are executed in a program. In Node.js, it includes handling both synchronous and asynchronous operations.
-
-**🔹 Examples of Control Flow in Node.js**
-
-**Sequential Execution (Synchronous)**
-
-```js
-console.log("Start");
-console.log("Middle");
-console.log("End");
-
-Output: Start;
-Middle;
-End;
-```
-
-**Conditional Execution**
-
-```js
-const x = 10;
-if (x > 5) {
-  console.log("x is greater than 5");
-} else {
-  console.log("x is 5 or less");
-}
-```
-
-**Asynchronous Control Flow**
-
-```js
-setTimeout(() => {
-  console.log("Async operation done");
-}, 1000);
-
-console.log("This runs first");
-
-Output:
-
-This runs first
-Async operation done
-```
-
-Here, the event loop handles the asynchronous control flow.
-
-<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
-
-### Q 13. What is `spawn()` and `fork()` and difference?
-
-**`spawn()`:** It is a method in Node.js’s child_process module. It is used to creates a child process to run any OS command and streams output via `stdout`/`stderr`
-
-**Example:**
-
-```js
-const { spawn } = require("child_process");
-
-// Run the 'ls' command (list files in current directory)
-const ls = spawn("ls", ["-l"]);
-
-ls.stdout.on("data", (data) => {
-  console.log(`Output:\n${data}`);
-});
-
-ls.stderr.on("data", (err) => {
-  console.error(`Error: ${err}`);
-});
-
-ls.on("close", (code) => {
-  console.log(`Child process exited with code ${code}`);
-});
-```
-
-**`fork()`:** It is a special case of `spawn()` used only to create Node.js child processes with a built-in IPC channel for parent-child communication. Used when you want multiple Node.js scripts to run in parallel and communicate.
-
-**Example:**
-
-```js
-//child.js
-
-process.on("message", (msg) => {
-  console.log("Child received:", msg);
-  process.send(`Hello from child!`);
-});
-
-//parent.js
-
-const { fork } = require("child_process");
-const child = fork("child.js");
-
-child.on("message", (msg) => {
-  console.log("Parent received:", msg);
-});
-
-child.send("Hello from parent!");
-```
-
-**Key Differences Between spawn() and fork()**
-| Feature | `spawn()` | `fork()` |
-| ------------- | -------------------------------------- | ------------------------------------------------- |
-| Purpose | Run **any command** as child process | Run **Node.js scripts** as child process |
-| Communication | Uses **stdout/stderr streams** | Built-in **IPC channel** (`send` / `message`) |
-| Usage | `spawn(command, args, options)` | `fork(modulePath, args, options)` |
-| Return Type | ChildProcess object | ChildProcess object with **IPC support** |
-| Suitable for | Long-running processes, shell commands | Parallel Node.js scripts that need to communicate |
-
-<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
-
-### Q 14. What is the event loop in Node.js, and how is it handled in depth?
+### Q 3. What is the event loop?
 
 Event-loop is a mechanism that handles asynchronous operations by continuos checking in the call stack and the task queue. When the call stack is empty, it pushes the tasks from the task queue to the call stack, enabling non-blocking, asynchronous execution.
 
@@ -741,7 +328,7 @@ If you have any block level code then the event loop cannot move while the call 
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 15. What libuv?
+### Q 4. What libuv?
 
 libuv is a C library used by Node.js to handle asynchronous I/O operations and implement the event loop. It interacts with the OS (operating system) and manages a thread pool for tasks like file system access and networking. It plays a role similar to Web APIs in the browser, but it’s a lower-level system library used in server-side environments.
 
@@ -749,7 +336,54 @@ libuv is a C library used by Node.js to handle asynchronous I/O operations and i
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 16. What is a Callback Function?
+### Q 5. How does Node.js handle concurrency?
+
+Node.js handles concurrency using the Event Loop, libuv, and non-blocking I/O. When an operation like a database query, file read, or external API call is made, Node doesn't wait for it to complete. Instead, it delegates the work to libuv and continues processing other requests. Once the operation finishes, the callback is placed back in the Event Loop for execution. This enables a single Node.js process to handle thousands of concurrent connections efficiently.
+
+<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
+
+### Q 6. What are synchronous vs asynchronous APIs?
+
+- Synchronous (Sync), Blocking functions API functions
+  - These block the execution until the operation completes.
+  - Example: fs.readFileSync()
+- Asynchronous (Async), Non-blocking API functions
+  - These don’t block the execution. They take a callback to handle the result when the operation completes.
+  - Example: fs.readFile()
+
+<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
+
+### Q 7. What is the difference between Asynchronous and Non-blocking?
+
+Asynchronous means a task executes separately and completes later using callbacks or promises.
+Non-blocking means the system does not stop execution while waiting for a task, especially I/O operations.
+All non-blocking operations are asynchronous, but not all asynchronous operations are non-blocking.
+
+**Example for Asynchronous:**
+
+```js
+setTimeout(() => {
+  console.log("Done");
+}, 2000);
+
+console.log("Start");
+```
+
+**Example for Non-blocking:**
+
+```js
+const fs = require("fs");
+
+fs.readFile("file.txt", "utf8", (err, data) => {
+  console.log(data);
+});
+
+console.log("Reading file...");
+```
+
+<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
+
+### Q 8. What is a Callback Function?
 
 A callback function is a function passed as an argument to another function and is executed later after a task is completed.
 
@@ -795,7 +429,7 @@ fs.readFile("example.txt", "utf8", (err, data) => {
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 17. What is an error-first callback?
+### Q 9. What is an error-first callback?
 
 An error-first callback is a standard pattern in Node.js for handling `asynchronous` operations.
 
@@ -848,7 +482,7 @@ Error: Division by zero
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 18. What is a callback hell and how to avoid it?
+### Q 10. What is a callback hell and how to avoid it?
 
 Callback Hell happens when you have multiple nested callbacks which makes code hard to read and debug when dealing with asynchronous logic. The callback hell usually looks like a pyramid of doom.
 
@@ -920,7 +554,416 @@ doSomething(function(err, result1) {
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 19. What is load balancer and how it works?
+### Q 11. What is Control Flow?
+
+Control flow is the order in which statements, functions, or instructions are executed in a program. In Node.js, it includes handling both synchronous and asynchronous operations.
+
+**🔹 Examples of Control Flow in Node.js**
+
+**Sequential Execution (Synchronous)**
+
+```js
+console.log("Start");
+console.log("Middle");
+console.log("End");
+
+Output: Start;
+Middle;
+End;
+```
+
+**Conditional Execution**
+
+```js
+const x = 10;
+if (x > 5) {
+  console.log("x is greater than 5");
+} else {
+  console.log("x is 5 or less");
+}
+```
+
+**Asynchronous Control Flow**
+
+```js
+setTimeout(() => {
+  console.log("Async operation done");
+}, 1000);
+
+console.log("This runs first");
+
+Output:
+
+This runs first
+Async operation done
+```
+
+Here, the event loop handles the asynchronous control flow.
+
+<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
+
+### Q 12. What are Node.js timing functions?
+
+**1️⃣ `setTimeout()`:** Executes a callback after a minimum delay (exact timing is not guaranteed). Runs in the Timers phase of the event loop.
+
+```js
+setTimeout(() => {
+  console.log("Runs after ~1000ms");
+}, 1000);
+```
+
+**2️⃣ `setInterval()`:** Executes a callback repeatedly at a fixed interval. Also runs in the Timers phase.
+
+```js
+setInterval(() => {
+  console.log("Runs every 2 seconds");
+}, 2000);
+```
+
+**3️⃣ `setImmediate()`:** Executes a callback after the current I/O cycle completes. Runs in the Check phase.
+
+```js
+setImmediate(() => {
+  console.log("Runs in check phase");
+});
+```
+
+**4️⃣ `process.nextTick()`:** Executes a callback immediately after the current operation, before the event loop continues, and before Promises. Runs in the microtask queue.
+
+```js
+process.nextTick(() => {
+  console.log("Runs before next event loop phase");
+});
+```
+
+| Timing Feature                           | When to Use                                                                          | Real-World Example                                          | Event Loop Phase |
+| ---------------------------------------- | ------------------------------------------------------------------------------------ | ----------------------------------------------------------- | ---------------- |
+| `setTimeout()`                           | Delay a task                                                                         | Retry an HTTP request after 2 seconds if it fails           | Timers           |
+| `setInterval()`                          | Run recurring tasks                                                                  | Poll a database every 5 minutes for updates                 | Timers           |
+| `setImmediate()`                         | Defer until after current I/O                                                        | Log request metrics right after handling an HTTP request    | Check            |
+| `process.nextTick()`                     | Run immediately after current operation                                              | Validate input or update internal state before continuing   | Microtask queue  |
+| `Promise.then()` / async                 | Run lightweight async tasks after current operation but before next event loop phase | Update cache or internal counters after an async operation  | Microtask queue  |
+| `timers/promises` (`await setTimeout()`) | Async/await-friendly delays                                                          | Wait before retrying a failed API call in an async function | Timers           |
+
+<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
+
+### Q 13. What is the difference between process.nextTick() and setImmediate()?
+
+| Feature                | `process.nextTick()`            | `setImmediate()`                     |
+| ---------------------- | ------------------------------- | ------------------------------------ |
+| Execution timing       | Before the event loop continues | On the next event loop iteration     |
+| Priority               | Very high                       | Lower than nextTick                  |
+| Use case               | Defer execution but run ASAP    | Defer execution without blocking I/O |
+| Can starve event loop? | Yes, if abused                  | No                                   |
+
+<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
+
+### Q 14. What is REPL?
+
+**REPL stands for Read–Eval–Print–Loop**
+
+It is an interactive Node.js shell that reads user input, evaluates the JavaScript code, prints the result, and then loops back to wait for the next command. It is mainly used for quick testing, debugging.
+
+**Example:**
+
+**Step 1: Start REPL**
+
+```js
+// Open terminal and type:
+node;
+
+// You will see:
+>
+
+> 5 + 5
+10
+```
+
+- Read → 5 + 5
+- Evaluate → Calculates result
+- Print → 10
+- Loop → Waits for next input
+
+<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
+
+### Q 15. What buffers?
+
+A Buffer is a temporary memory allocation used to store raw binary data. It is mainly used when handling files, streams, or network data. Buffers allow Node.js to efficiently process binary data outside the JavaScript engine.
+
+**Example 1: Creating a Buffer from a String**
+
+```js
+const buf = Buffer.from("Hello Node.js");
+console.log(buf);
+console.log(buf.toString());
+
+// Output
+<Buffer 48 65 6c 6c 6f 20 4e 6f 64 65 2e 6a 73>
+Hello Node.js
+```
+
+**Example 2: Reading from a File Using Buffers**
+
+```js
+const data = fs.readFileSync("example.txt");
+console.log(data);           // Shows binary buffer
+console.log(data.toString()); // Converts to readable string
+
+// Output
+<Buffer 54 68 69 73 20 69 73 20 61 20 62 75 66 66 65 72 20 65 78 61 6d 70 6c 65 21>
+This is a buffer example!
+```
+
+Buffer.from() converts a string to binary data, and toString() converts it back to a readable string.
+
+<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
+
+### Q 16. What are Streams and Backpressure?
+
+**Streams** is a way to process data piece by piece (chunks) instead of loading the entire data into memory at once.
+
+**Backpressure** is a flow-control mechanism in streams. For example, during a 2GB file upload, if data arrives faster than the disk can write it, Node automatically pauses the incoming stream and resumes it when the disk catches up. This prevents excessive memory usage and keeps the application stable.
+
+**Follow-Up Questions**
+
+1. Does Node handle backpressure automatically?
+   - Yes. When using streams with pipe(), Node automatically manages backpressure by pausing and resuming the flow of data.
+
+**Types of Streams**
+
+| Type          | Description                                                            | Example                            |
+| ------------- | ---------------------------------------------------------------------- | ---------------------------------- |
+| **Readable**  | Used to **read data** from a source                                    | `fs.createReadStream('file.txt')`  |
+| **Writable**  | Used to **write data** to a destination                                | `fs.createWriteStream('file.txt')` |
+| **Duplex**    | Can **read and write** data                                            | `net.Socket`                       |
+| **Transform** | A special duplex stream that can **modify data while reading/writing** | `zlib.createGzip()`                |
+
+<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
+
+### Q 17. What is EventEmitter and how does it works?
+
+The EventEmitter is a class that provides communication/interaction between objects in Node.js. That allows objects to emit events and listen for events.
+
+**How EventEmitter works**
+
+- Event Emitter emits the data in an event called message
+- A Listened is registered on the event message
+- when the message event emits some data, the listener will get the data
+
+**Building Blocks:**
+
+- `.emit()` - This method in event emitter is to emit an event in module
+- `.on()` - This method is to listen to data on a registered event in node.js
+- `.once()` - It listen to data on a registered event only once.
+- `.addListener()` - it checks if the listener is registered for an event.
+- `.removeListener()` - It removes the listener for an event.
+
+**Example 1: Basic EventEmitter**
+
+```js
+const EventEmitter = require("events");
+const myEmitter = new EventEmitter();
+
+// Add listener
+myEmitter.on("greet", () => {
+  console.log("Hello World!");
+});
+
+// Emit event
+myEmitter.emit("greet"); // Output: Hello World!
+```
+
+**Example 2: Real use case**
+
+```js
+const EventEmitter = require("events");
+
+class ChatApp extends EventEmitter {}
+
+const chat = new ChatApp();
+
+// Listener for new message
+chat.on("message", (from, to, text) => {
+  console.log(`[Message] ${from} → ${to}: ${text}`);
+});
+
+// Listener for user login
+chat.on("login", (username) => {
+  console.log(`[Login] ${username} joined the chat`);
+});
+
+// Listener for user logout
+chat.on("logout", (username) => {
+  console.log(`[Logout] ${username} left the chat`);
+});
+
+// Simulate events
+chat.emit("login", "Alice");
+chat.emit("login", "Bob");
+
+chat.emit("message", "Alice", "Bob", "Hi Bob!");
+chat.emit("message", "Bob", "Alice", "Hello Alice!");
+
+chat.emit("logout", "Alice");
+chat.emit("logout", "Bob");
+```
+
+<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
+
+### Q 18. What is crypto in Node.js?
+
+The crypto module in Node.js is a built-in module used for cryptographic operations like hashing, encryption, decryption, and generating secure random data. It is commonly used for password hashing, tokens, and data security.
+
+**🔹 Example 1: Hashing a Password**
+
+```js
+const crypto = require("crypto");
+
+const hash = crypto.createHash("sha256").update("mypassword").digest("hex");
+
+console.log(hash);
+```
+
+This converts a password into a secure hash.
+
+```js
+🔹 Example 2: Generate Random Token
+const crypto = require("crypto");
+
+const token = crypto.randomBytes(16).toString("hex");
+console.log(token);
+```
+
+Used for: Password reset tokens, API keys & Session IDs
+
+**🔹 Common Methods**
+
+- `createHash()` → Create hash (SHA256, MD5, etc.)
+- `createCipheriv()` → Encrypt data
+- `createDecipheriv()` → Decrypt data
+- `randomBytes()` → Generate secure random values
+
+<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
+
+### Q 19. What is `spawn()` and `fork()` and difference?
+
+**`spawn()`:** It is a method in Node.js’s child_process module. It is used to creates a child process to run any OS command and streams output via `stdout`/`stderr`
+
+**Example:**
+
+```js
+const { spawn } = require("child_process");
+
+// Run the 'ls' command (list files in current directory)
+const ls = spawn("ls", ["-l"]);
+
+ls.stdout.on("data", (data) => {
+  console.log(`Output:\n${data}`);
+});
+
+ls.stderr.on("data", (err) => {
+  console.error(`Error: ${err}`);
+});
+
+ls.on("close", (code) => {
+  console.log(`Child process exited with code ${code}`);
+});
+```
+
+**`fork()`:** It is a special case of `spawn()` used only to create Node.js child processes with a built-in IPC channel for parent-child communication. Used when you want multiple Node.js scripts to run in parallel and communicate.
+
+**Example:**
+
+```js
+//child.js
+
+process.on("message", (msg) => {
+  console.log("Child received:", msg);
+  process.send(`Hello from child!`);
+});
+
+//parent.js
+
+const { fork } = require("child_process");
+const child = fork("child.js");
+
+child.on("message", (msg) => {
+  console.log("Parent received:", msg);
+});
+
+child.send("Hello from parent!");
+```
+
+**Key Differences Between spawn() and fork()**
+| Feature | `spawn()` | `fork()` |
+| ------------- | -------------------------------------- | ------------------------------------------------- |
+| Purpose | Run **any command** as child process | Run **Node.js scripts** as child process |
+| Communication | Uses **stdout/stderr streams** | Built-in **IPC channel** (`send` / `message`) |
+| Usage | `spawn(command, args, options)` | `fork(modulePath, args, options)` |
+| Return Type | ChildProcess object | ChildProcess object with **IPC support** |
+| Suitable for | Long-running processes, shell commands | Parallel Node.js scripts that need to communicate |
+
+<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
+
+### Q 20. What are Worker Threads, Cluster, and Child Process?
+
+**Worker Threads** are used when your Node application has CPU-intensive work such as image processing, PDF generation, encryption, or large calculations. They create additional JavaScript threads within the same process.
+
+When to Use: Image processing, Video processing, PDF generation, Data transformation, Encryption, and CPU-heavy calculations.
+
+```javascript
+const worker = new Worker("./imageProcessor.js");
+```
+
+_A user uploads a large image and resizing it takes 5 seconds. Running this in the main thread would block all requests. A Worker Thread prevents that._
+
+**Cluster** is used when you want to scale your Node server across multiple CPU cores. Each cluster worker is a separate Node process that can handle incoming requests independently.
+
+When to Use: Running Express APIs, High traffic applications, and Multiple CPU cores available.
+
+```javascript
+const cluster = require("cluster");
+const os = require("os");
+
+if (cluster.isPrimary) {
+  for (let i = 0; i < os.cpus().length; i++) {
+    cluster.fork();
+  }
+}
+```
+
+_If a server has 8 cores, cluster can create 8 Node processes so all cores are utilized._
+
+**Child Process** is used when you need to execute an external process or program such as Python scripts, shell commands, FFmpeg, Git commands, or another Node application.
+
+When to Use: Running Python scripts, Executing shell commands, Using FFmpeg, and Calling external tools.
+
+```javascript
+const { spawn } = require("child_process");
+
+spawn("python", ["predict.py"]);
+```
+
+_A Node API receives an image and sends it to a Python AI model for prediction._
+
+> _**👉 Note:** All three help Node.js perform work outside the main Event Loop, but they solve different problems.._
+
+**Think of it like this:**
+
+- Worker Thread → "Help me do heavy calculations."
+- Cluster → "Help me serve more users."
+- Child Process → "Help me run another application."
+
+**Follow-Up Questions**
+
+- Why not use Worker Threads for database queries?
+  - Database queries are I/O operations. Node already handles I/O asynchronously through the Event Loop and libuv. Using Worker Threads adds unnecessary overhead.
+- What is the difference between Cluster and Worker Threads?
+  - Cluster creates multiple Node processes, each with its own memory and Event Loop. Worker Threads create multiple threads inside the same Node process and can share memory using SharedArrayBuffer.Cluster is for scaling servers. Worker Threads are for CPU-intensive tasks.
+
+<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
+
+### Q 21. What is load balancer and how it works?
 
 A load balancer distributes incoming client requests across multiple servers to improve: Performance, Availability & Scalability.
 
@@ -996,7 +1039,7 @@ For balancing across multiple servers, you need tools like Nginx or cloud load b
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 20. Difference Between Cluster and PM2?
+### Q 22. Difference Between Cluster and PM2?
 
 | Feature          | Cluster                 | PM2                       |
 | ---------------- | ----------------------- | ------------------------- |
@@ -1008,7 +1051,43 @@ For balancing across multiple servers, you need tools like Nginx or cloud load b
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 21. What is middleware?
+### Q 23. Create a simple server?
+
+Step 1: Initialize project and Install ExpressJS
+
+```js
+  npm init -y
+  npm install express
+```
+
+Step 2: Now create a file `server.js`
+
+```js
+const express = require("express");
+const app = express();
+
+const PORT = 3000;
+
+// Basic route
+app.get("/", (req, res) => {
+  res.send("Hello, World!");
+});
+
+// Start server
+app.listen(PORT, () => {
+  console.log(`Server is running on http://localhost:${PORT}`);
+});
+```
+
+Step 4: Run the app
+
+```js
+  node app.js
+```
+
+<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
+
+### Q 24. What is middleware?
 
 Middleware is a function that runs between the request and response cycle. It can perform tasks like authentication, validation, logging, and error handling. It uses the `next()` function to pass control to the next middleware.
 
@@ -1051,132 +1130,48 @@ app.listen(3000);
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 22. What are the security mechanisms available in Node.js?
+### Q 15. What is the difference between req.params and req.query?
 
-**1️⃣ Authentication & Authorization**
+- `req.params` is used to get route parameters defined in the URL path, like `/users/:id`.
+- `req.query` is used to get query string values after the `?`, like `/users?age=25`.
+- Params identify a specific resource, while query is mainly used for filtering or searching.
 
-- What it protects against:
-  - Unauthorized access
-  - Privilege escalation
-- Common methods:
-  - JWT (JSON Web Token)
-  - OAuth
-  - Sessions
-  - Role-based access control (RBAC)
-
-**Example (JWT Authentication Middleware)**
+**Example for `req.params`:**
 
 ```js
-const jwt = require("jsonwebtoken");
-
-function authMiddleware(req, res, next) {
-  const token = req.headers.authorization;
-
-  if (!token) {
-    return res.status(401).json({ message: "Unauthorized" });
-  }
-
-  try {
-    const decoded = jwt.verify(token, "secretKey");
-    req.user = decoded;
-    next();
-  } catch (err) {
-    return res.status(403).json({ message: "Invalid token" });
-  }
-}
-```
-
-**2️⃣ Input Validation & Sanitization**
-
-- What it protects against:
-  - SQL Injection
-  - NoSQL Injection
-  - XSS attacks
-
-**Example using validation:**
-
-```js
-const { body, validationResult } = require("express-validator");
-
-app.post("/user", body("email").isEmail(), (req, res) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
-  }
-  res.send("Valid input");
-});
-```
-
-Never trust user input.
-
-**3️⃣ HTTP Security Headers (Helmet):** This automatically sets secure HTTP headers.
-
-- Prevents:
-  - Clickjacking
-  - XSS
-  - MIME sniffing
-  - Content injection
-
-**Example:**
-
-```js
-const helmet = require("helmet");
-app.use(helmet());
-```
-
-**4️⃣ Protection Against Common Attacks**
-
-**🔹 CORS Protection** Prevents unauthorized cross-origin requests.
-
-```js
-const cors = require("cors");
-app.use(cors({ origin: "https://yourdomain.com" }));
-```
-
-**🔹 Rate Limiting (Prevent Brute Force & DDoS)** Limits repeated requests.
-
-```js
-const rateLimit = require("express-rate-limit");
-
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000,
-  max: 100,
+app.get("/users/:id", (req, res) => {
+  console.log(req.params.id);
+  res.send("User ID received");
 });
 
-app.use(limiter);
+// GET /users/10
+// 10
 ```
 
-**5️⃣ Secure Communication (HTTPS / TLS)**
-
-Use HTTPS instead of HTTP:
+**Example for `req.query`:**
 
 ```js
-const https = require("https");
-const fs = require("fs");
+app.get("/users", (req, res) => {
+  console.log(req.query.age);
+  res.send("Query received");
+});
 
-https
-  .createServer(
-    {
-      key: fs.readFileSync("key.pem"),
-      cert: fs.readFileSync("cert.pem"),
-    },
-    app,
-  )
-  .listen(443);
+// GET /users?age=25
+// 25
 ```
 
-**6️⃣ Environment Variable Security**
+**Comparison**
 
-Never store secrets in code:
-
-```js
-require("dotenv").config();
-const dbPassword = process.env.DB_PASSWORD;
-```
+| Feature   | req.params        | req.query        |
+| --------- | ----------------- | ---------------- |
+| Location  | URL path          | After `?` in URL |
+| Used For  | Specific resource | Filters/search   |
+| Required? | Usually required  | Optional         |
+| Example   | `/users/5`        | `/users?age=25`  |
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 23. Explain the terms body-parser, cookie-parser, morgan, nodemon, pm2, serve-favicon, cors, dotenv, fs-extra, moment in Express.js??
+### Q 26. Common Express packages?
 
 **1️⃣ body-parser:** Parses incoming request bodies so you can access req.body.
 
@@ -1322,42 +1317,7 @@ console.log(moment().format("YYYY-MM-DD"));
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 24. What is crypto in Node.js?
-
-The crypto module in Node.js is a built-in module used for cryptographic operations like hashing, encryption, decryption, and generating secure random data. It is commonly used for password hashing, tokens, and data security.
-
-**🔹 Example 1: Hashing a Password**
-
-```js
-const crypto = require("crypto");
-
-const hash = crypto.createHash("sha256").update("mypassword").digest("hex");
-
-console.log(hash);
-```
-
-This converts a password into a secure hash.
-
-```js
-🔹 Example 2: Generate Random Token
-const crypto = require("crypto");
-
-const token = crypto.randomBytes(16).toString("hex");
-console.log(token);
-```
-
-Used for: Password reset tokens, API keys & Session IDs
-
-**🔹 Common Methods**
-
-- `createHash()` → Create hash (SHA256, MD5, etc.)
-- `createCipheriv()` → Encrypt data
-- `createDecipheriv()` → Decrypt data
-- `randomBytes()` → Generate secure random values
-
-<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
-
-### Q 25. What are RESTful Web Services?
+### Q 27. What are RESTful Web Services?
 
 RESTful web services in Node.js are APIs that follow REST principles using resource-based URLs and standard HTTP methods like GET, POST, PUT, and DELETE. They are stateless and typically return JSON responses with proper HTTP status codes.
 
@@ -1467,7 +1427,7 @@ If you send the same request multiple times and the result remains the same → 
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 26. Difference Between PUT and PATCH?
+### Q 28. Difference Between PUT and PATCH?
 
 PUT replaces the entire resource on the server and requires the full payload. PATCH updates only specified fields and requires a partial payload. Use PUT for complete replacement and PATCH for partial modifications.
 
@@ -1480,20 +1440,7 @@ PUT replaces the entire resource on the server and requires the full payload. PA
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 27. GraphQL vs REST API?
-
-`REST` uses multiple endpoints and returns predefined responses, making it simple and suitable for most CRUD applications. `GraphQL` uses a single endpoint and lets clients request specific fields, reducing unnecessary data transfer. I choose REST for simple APIs and GraphQL for data-heavy, complex frontend applications.
-
-| Criteria          | REST API                                 | GraphQL                                 |
-| ----------------- | ---------------------------------------- | --------------------------------------- |
-| **Endpoints**     | Multiple endpoints (`/users`, `/orders`) | Single endpoint (`/graphql`)            |
-| **Data Fetching** | Server decides response structure        | Client chooses required fields          |
-| **Network Calls** | May require multiple API calls           | Often a single query fetches everything |
-| **Best For**      | Simple CRUD applications and public APIs | Complex UIs, dashboards, mobile apps    |
-
-<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
-
-### Q 28. What is GraphQL?
+### Q 29. What is GraphQL?
 
 GraphQL is a query language for APIs that allows clients to request exactly the data they need, no more and no less.
 
@@ -1507,7 +1454,20 @@ GraphQL is a query language for APIs that allows clients to request exactly the 
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 59. What is N+1 Query Problem?
+### Q 30. GraphQL vs REST API?
+
+`REST` uses multiple endpoints and returns predefined responses, making it simple and suitable for most CRUD applications. `GraphQL` uses a single endpoint and lets clients request specific fields, reducing unnecessary data transfer. I choose REST for simple APIs and GraphQL for data-heavy, complex frontend applications.
+
+| Criteria          | REST API                                 | GraphQL                                 |
+| ----------------- | ---------------------------------------- | --------------------------------------- |
+| **Endpoints**     | Multiple endpoints (`/users`, `/orders`) | Single endpoint (`/graphql`)            |
+| **Data Fetching** | Server decides response structure        | Client chooses required fields          |
+| **Network Calls** | May require multiple API calls           | Often a single query fetches everything |
+| **Best For**      | Simple CRUD applications and public APIs | Complex UIs, dashboards, mobile apps    |
+
+<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
+
+### Q 31. What is N+1 Query Problem?
 
 The N+1 problem occurs when an application executes 1 query to fetch a list of records and then N additional queries to fetch related data for each record.
 
@@ -1575,7 +1535,7 @@ ON u.id = o.user_id;
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 30. What is Federation?
+### Q 32. What is Federation?
 
 GraphQL Federation is a GraphQL architecture pattern that allows multiple GraphQL services (subgraphs) to be combined into a single GraphQL API.
 
@@ -1623,487 +1583,277 @@ query {
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 31. How many types of API functions are there?
+### Q 33. How to use JSON Web Token (JWT) for authentication?
 
-There are two types of API functions in Node.js:
+JWT is a secure token-based authentication mechanism.
+Users log in and receive a signed JWT, which they send in request headers to access protected routes.
+The server verifies the token on each request, allowing stateless, scalable authentication without storing sessions.
 
-- Synchronous (Sync), Blocking functions API functions
-  - These block the execution until the operation completes.
-  - Example: fs.readFileSync()
-- Asynchronous (Async), Non-blocking API functions
-  - These don’t block the execution. They take a callback to handle the result when the operation completes.
-  - Example: fs.readFile()
+**🔹 How It Works**
+
+- Login: User sends credentials → Server verifies → Generates JWT → Returns token.
+- Access protected route: Client sends token in Authorization: Bearer <token> → Server verifies token → Grants access if valid.
+  -Token expires automatically based on the expiresIn setting.
+
+**Example**
+
+```js
+const express = require("express");
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
+
+const app = express();
+app.use(express.json());
+
+const SECRET_KEY = "mysecretkey"; // In production, store securely
+
+// Mock user database
+const users = [
+  { id: 1, username: "john", password: "$2b$10$k4mN..." }, // hashed password
+];
+
+// Login route
+app.post("/login", async (req, res) => {
+  const { username, password } = req.body;
+  const user = users.find((u) => u.username === username);
+  if (!user) return res.status(401).json({ message: "Invalid credentials" });
+
+  const valid = await bcrypt.compare(password, user.password);
+  if (!valid) return res.status(401).json({ message: "Invalid credentials" });
+
+  // Generate JWT token
+  const token = jwt.sign({ id: user.id, username: user.username }, SECRET_KEY, {
+    expiresIn: "1h",
+  });
+  res.json({ token });
+});
+
+// Protected route
+app.get("/profile", (req, res) => {
+  const authHeader = req.headers["authorization"];
+  if (!authHeader)
+    return res.status(401).json({ message: "No token provided" });
+
+  const token = authHeader.split(" ")[1];
+  try {
+    const user = jwt.verify(token, SECRET_KEY);
+    res.json({ message: "Profile data", user });
+  } catch (err) {
+    res.status(403).json({ message: "Invalid token" });
+  }
+});
+
+app.listen(3000, () => console.log("Server running on http://localhost:3000"));
+```
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 32. What is the difference between req.params and req.query?
+### Q 34. In a large application with around 100 protected APIs, would you perform JWT authentication and RBAC authorization checks on every request?
 
-- `req.params` is used to get route parameters defined in the URL path, like `/users/:id`.
-- `req.query` is used to get query string values after the `?`, like `/users?age=25`.
-- Params identify a specific resource, while query is mainly used for filtering or searching.
+Yes, every protected API verifies the access token because JWT authentication is stateless.
 
-**Example for `req.params`:**
+We use short-lived access tokens(15 - 30min) and validate them on every protected request. To keep users logged in, we use refresh tokens(7 - 15days) to generate new access tokens when they expire. This approach provides better security while avoiding frequent logins and reducing the impact of stale permissions.
 
-```js
-app.get("/users/:id", (req, res) => {
-  console.log(req.params.id);
-  res.send("User ID received");
-});
-
-// GET /users/10
-// 10
-```
-
-**Example for `req.query`:**
-
-```js
-app.get("/users", (req, res) => {
-  console.log(req.query.age);
-  res.send("Query received");
-});
-
-// GET /users?age=25
-// 25
-```
-
-**Comparison**
-
-| Feature   | req.params        | req.query        |
-| --------- | ----------------- | ---------------- |
-| Location  | URL path          | After `?` in URL |
-| Used For  | Specific resource | Filters/search   |
-| Required? | Usually required  | Optional         |
-| Example   | `/users/5`        | `/users?age=25`  |
+We validate JWT on every protected request because authentication is stateless. For RBAC, we typically store role information in the token to avoid database lookups. If permissions must take effect immediately, I use token versioning, where the token version is stored in both the JWT and Redis. When roles or permissions change, the version is incremented, causing all previously issued tokens to become invalid instantly.
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 33. What is the difference between Asynchronous and Non-blocking?
+### Q 35. You have implemented JWT authentication in your application. If an attacker steals a valid JWT token from a user's browser and uses it from Postman or another machine, how would you detect and prevent unauthorized access?
 
-Asynchronous means a task executes separately and completes later using callbacks or promises.
-Non-blocking means the system does not stop execution while waiting for a task, especially I/O operations.
-All non-blocking operations are asynchronous, but not all asynchronous operations are non-blocking.
-
-**Example for Asynchronous:**
+JWT alone cannot detect whether a stolen token is being used from Postman or another device. In enterprise applications, we store session metadata such as `IP, browser, device fingerprint, and location` in Redis or a database and validate it on every request. If significant mismatches are detected, we trigger re-authentication, MFA, or session revocation.
 
 ```js
-setTimeout(() => {
-  console.log("Done");
-}, 2000);
+// User Login
+{
+  "sessionId": "S123",
+  "userId": 100,
+  "ip": "49.205.x.x",
+  "browser": "Chrome",
+  "fingerprint": "3a7f9e1c8d",
+  "country": "India"
+}
+// Stored in Redis
 
-console.log("Start");
+// JWT:
+{
+  "userId": 100,
+  "sessionId": "S123"
+}
 ```
 
-**Example for Non-blocking:**
+**Fingerprint:** A device fingerprint is a unique identifier generated from browser and device characteristics such as OS, browser version, screen resolution, timezone, and language settings. It helps identify a device across requests and is commonly used as an additional security signal to detect suspicious activity or stolen tokens. However, it should be combined with IP, session tracking, and refresh token rotation rather than used alone.
+
+<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
+
+### Q 36. What are the security mechanisms available in Node.js?
+
+**1️⃣ Authentication & Authorization**
+
+- What it protects against:
+  - Unauthorized access
+  - Privilege escalation
+- Common methods:
+  - JWT (JSON Web Token)
+  - OAuth
+  - Sessions
+  - Role-based access control (RBAC)
+
+**Example (JWT Authentication Middleware)**
 
 ```js
+const jwt = require("jsonwebtoken");
+
+function authMiddleware(req, res, next) {
+  const token = req.headers.authorization;
+
+  if (!token) {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
+
+  try {
+    const decoded = jwt.verify(token, "secretKey");
+    req.user = decoded;
+    next();
+  } catch (err) {
+    return res.status(403).json({ message: "Invalid token" });
+  }
+}
+```
+
+**2️⃣ Input Validation & Sanitization**
+
+- What it protects against:
+  - SQL Injection
+  - NoSQL Injection
+  - XSS attacks
+
+**Example using validation:**
+
+```js
+const { body, validationResult } = require("express-validator");
+
+app.post("/user", body("email").isEmail(), (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+  res.send("Valid input");
+});
+```
+
+Never trust user input.
+
+**3️⃣ HTTP Security Headers (Helmet):** This automatically sets secure HTTP headers.
+
+- Prevents:
+  - Clickjacking
+  - XSS
+  - MIME sniffing
+  - Content injection
+
+**Example:**
+
+```js
+const helmet = require("helmet");
+app.use(helmet());
+```
+
+**4️⃣ Protection Against Common Attacks**
+
+**🔹 CORS Protection** Prevents unauthorized cross-origin requests.
+
+```js
+const cors = require("cors");
+app.use(cors({ origin: "https://yourdomain.com" }));
+```
+
+**🔹 Rate Limiting (Prevent Brute Force & DDoS)** Limits repeated requests.
+
+```js
+const rateLimit = require("express-rate-limit");
+
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 100,
+});
+
+app.use(limiter);
+```
+
+**5️⃣ Secure Communication (HTTPS / TLS)**
+
+Use HTTPS instead of HTTP:
+
+```js
+const https = require("https");
 const fs = require("fs");
 
-fs.readFile("file.txt", "utf8", (err, data) => {
-  console.log(data);
+https
+  .createServer(
+    {
+      key: fs.readFileSync("key.pem"),
+      cert: fs.readFileSync("cert.pem"),
+    },
+    app,
+  )
+  .listen(443);
+```
+
+**6️⃣ Environment Variable Security**
+
+Never store secrets in code:
+
+```js
+require("dotenv").config();
+const dbPassword = process.env.DB_PASSWORD;
+```
+
+<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
+
+### Q 37. What is Connection pooling?
+
+Connection pooling is a mechanism that maintains a reusable set of database connections. Instead of creating and closing a connection for every request, the application borrows a connection from the pool, executes the query, and returns it back. This reduces connection overhead, improves response time, and helps applications handle high traffic efficiently.
+
+In Node.js, libraries like MySQL2 and PostgreSQL provide built-in connection pooling support. While configuring pools, I ensure the total number of connections across all application instances stays within the database server's connection limit.
+
+**Real-World Analogy**
+
+Imagine a company has 100 employees and only 10 meeting rooms. Employees don't build a new meeting room every time they need one.
+
+- Take an available room.
+- Conduct the meeting.
+- Leave the room.
+- The room becomes available for others.
+
+A connection pool works the same way.
+
+```javascript
+// Node.js Example (MySQL)
+
+const mysql = require("mysql2");
+
+const pool = mysql.createPool({
+  host: "localhost",
+  user: "root",
+  password: "password",
+  database: "testdb",
+  connectionLimit: 10,
 });
 
-console.log("Reading file...");
-```
-
-<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
-
-### Q 34. What is Garbage collection and how it works?
-
-Garbage collection is the automatic process of freeing unused memory in Node.js. Node.js memory is divided into code segment, stack, and heap. Garbage collection only works on heap memory where objects are stored. The V8 engine uses a mark-and-sweep algorithm to remove unreachable objects from memory.
-
-- **Code Segment:** Stores the program’s instructions and function definitions. This memory is static and does not change during execution.
-- **Stack:** Holds function calls, local variables, and execution contexts in LIFO order. It is automatically cleared when functions finish executing.
-- **Heap:** Stores objects, arrays, and dynamic data. Garbage collection works here to remove unreachable objects and free memory.
-
-**🔹 How Garbage Collection Works in Node.js**
-
-Node.js uses the V8 engine’s garbage collector, which mainly follows a Mark-and-Sweep algorithm.
-
-- **Memory Allocation:** When you create variables, objects, or functions. Memory is allocated in the heap.
-- **Mark Phase:** The garbage collector starts from the root object (global scope) and marks all objects that are still reachable (in use). If an object can be accessed, it is marked as active.
-- **Sweep Phase:** After marking, V8 removes all unmarked (unreachable) objects from memory. Now the original object is unreachable → GC will remove it.
-
-<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
-
-### Q 35. How to debug an application in Node.js?
-
-Node.js applications can be debugged using console logs, the built-in Node inspector, or IDE debuggers like VS Code.
-
-In production, tools like PM2 logs and debugging libraries help track errors and performance issues.
-
-**🔹 1️⃣ Using console.log() (Basic Debugging)**
-
-The simplest way:
-
-```js
-console.log("Value of x:", x);
-```
-
-Used to: Check variable values, Verify execution flow.
-
-**🔹 2️⃣ Using Node.js Built-in Debugger**
-
-Run your app with:
-
-```js
-node inspect app.js
-
-// Or:
-
-node --inspect app.js
-
-// Then open:
-
-chrome://inspect
-```
-
-**🔹 3️⃣ Using VS Code Debugger (Most Common)**
-
-- Steps:
-  - Open project in VS Code
-  - Go to Run & Debug
-  - Click Add Configuration
-  - Select Node.js
-  - Set breakpoints
-  - Press ▶️ Run
-- You can:
-  - Pause execution
-  - Step over / into functions
-  - Inspect variables
-  - Watch expressions
-
-**🔹 4️⃣ Using debug Module (Advanced Logging)**
-
-Install:
-
-```js
-npm install debug
-
-// Example:
-
-const debug = require("debug")("app");
-
-debug("Server started");
-
-// Run with:
-
-DEBUG=app node app.js
-```
-
-Used for controlled logging in production.
-
-**🔹 5️⃣ Using PM2 Logs (Production Debugging)**
-
-If running with PM2:
-
-```js
-pm2 logs
-```
-
-Used to monitor: Errors, Crashes & Performance
-
-<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
-
-### Q 36. What memory leaks and its types?
-
-A memory leak occurs when unused memory is not released and heap usage keeps increasing.
-
-It usually happens due to global variables, unremoved listeners, timers, or retained references. It can be prevented by proper cleanup, limiting cache, and monitoring memory usage.
-
-**🔹 How to Prevent Memory Leaks**
-
-- Avoid Global Variables
-- Remove Event Listeners
-- Clear Timers
-- Limit Cache Size
-- Close Database Connections
-- Use WeakMap / WeakSet for temporary references
-- Monitor Memory Usage (`process.memoryUsage()`)
-
-**🔹 Types of Memory Leaks in Node.js**
-
-**1️⃣ Global Variables:** Objects stored in global scope are never garbage collected. Since it’s globally referenced, GC cannot remove it.
-
-**2️⃣ Unused References (Forgot to Nullify):** If references are not removed, memory stays allocated. If not set to null or removed, GC won’t clean it.
-
-```js
-let data = { name: "John" };
-data = null; // Proper cleanup
-```
-
-**3️⃣ Closures Holding Memory:** Closures can unintentionally retain large objects. `largeData` remains in memory due to closure reference.
-
-```js
-function outer() {
-  const largeData = new Array(1000000);
-  return function inner() {
-    console.log("Using closure");
-  };
-}
-```
-
-**4️⃣ Unremoved Event Listeners:** If listeners are not removed, they keep references alive.
-
-```js
-emitter.on("data", handler);
-
-// Remove
-emitter.removeListener("data", handler);
-```
-
-**5️⃣ Timers Not Cleared:** Uncleared intervals keep running and holding memory.
-
-```js
-const interval = setInterval(() => {
-  console.log("Running");
-}, 1000);
-
-// clearInterval(interval);
-```
-
-<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
-
-### Q 37. How do you identify and debug memory leaks?
-
-I first monitor heap memory usage. If memory continuously grows and doesn't reduce after garbage collection, I suspect a memory leak. Then I take heap snapshots using Chrome DevTools or Node Inspector, compare snapshots over time, identify growing objects, and trace why references to those objects are not being released.
-
-**How to Debug It?**
-
-1. Monitor Memory
-
-   ```js
-   setInterval(() => {
-     console.log(process.memoryUsage());
-   }, 5000);
-
-   heapUsed;
-   heapTotal;
-   rss;
-
-   // If heapUsed continuously grows, investigate further.
-   ```
-
-2. Take Heap Snapshots
-
-   ```js
-   node --inspect app.js
-
-    // Open Chrome:
-    chrome://inspect
-
-    // Then:
-
-    Memory Tab
-    ↓
-    Take Heap Snapshot
-
-    // Take:
-
-    Snapshot 1
-    ↓
-    Generate Traffic
-    ↓
-    Snapshot 2
-
-    // Compare both snapshots.
-   ```
-
-3. Monitor Using PM2
-
-   ```js
-   // Start application:
-
-   pm2 start app.js
-
-   // Monitor:
-
-   pm2 monit
-
-   // Look for:
-
-   Memory: 200 MB
-   Memory: 400 MB
-   Memory: 800 MB
-   Memory: 1.5 GB
-
-   // If memory continuously grows, investigate further.
-   ```
-
-<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
-
-### Q 38. Explain Error Handling approaches in Node.js?
-
-**1. Using try-catch block:**
-
-```js
-function square(num) {
-  if (typeof num !== "number")
-    throw new TypeError(`Expected number but got: ${typeof num}`);
-
-  return num * num;
-}
-
-try {
-  square("10");
-} catch (err) {
-  console.log(err.message); // Expected number but got: string
-}
-```
-
-**2. Error-First Callbacks (Classic Node.js):** The traditional Node.js pattern passes error as the first argument to a callback.
-
-```js
-fs.readFile("file.txt", (err, data) => {
-  if (err) {
-    console.error("Error reading file:", err);
-    return;
-  }
-  console.log("File data:", data.toString());
+// Using the pool:
+pool.query("SELECT * FROM users", (err, results) => {
+  console.log(results);
 });
 ```
 
-**3. Promises:** Promises allow handling errors using .catch() while keeping code readable.
+**Interview Follow-Up**
 
-```js
-const fs = require("fs").promises;
-
-fs.readFile("file.txt")
-  .then((data) => console.log("File data:", data.toString()))
-  .catch((err) => console.error("Error reading file:", err));
-```
-
-**4. Async / Await:** With async/await, errors can be handled using try/catch blocks, making asynchronous code look synchronous.
-
-```js
-const fs = require("fs").promises;
-
-async function readFile() {
-  try {
-    const data = await fs.readFile("file.txt");
-    console.log("File data:", data.toString());
-  } catch (err) {
-    console.error("Error reading file:", err);
-  }
-}
-
-readFile();
-```
-
-**5. Using Error Middleware (Express.js):** In Express.js apps, use a middleware to catch errors:
-
-```js
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).send("Something broke!");
-});
-```
+1. What happens if all connections are busy?
+   - First 10 requests get connections. Remaining 40 requests wait in a queue. As connections are released, waiting requests receive them. If the wait exceeds the configured timeout, an error may occur.
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 39. How to improve Node.js performance?
-
-**1. Use Asynchronous & Non-Blocking Code**
-
-- Avoid blocking the event loop with synchronous operations like fs.readFileSync or heavy loops.
-- Use async APIs, Promises, or async/await for I/O and database calls.
-
-  ```js
-  // Bad: blocking
-  const data = fs.readFileSync("file.txt");
-
-  // Good: non-blocking
-  fs.readFile("file.txt", (err, data) => { ... });
-  ```
-
-**2. Query Optimization**
-
-Basic tips to improve your database performance/optimization overview
-
-- Indexing - Indexing is an approach to optimize the performance of a database by minimizing the number of disk accesses required when a query is processed.
-- Avoid SELECT - Use the SELECT statement to query only the data you need and avoid extra fetching loads to your database.
-
-  ```js
-  -- query1
-  SELECT * FROM Customers
-
-  -- query2 (optimized)
-  SELECT FirstName, LastName, Address, City, State, Zip FROM Customers
-  ```
-
-- Use LIMIT - LIMIT will return only the specified number of records.
-
-  ```js
-  SELECT FirstName, LastName, Address, City, State, Zip FROM Customers LIMIT 100
-  ```
-
-- Wildcard (%) - Use wildcard (%) character appropriately
-
-  ```js
-  -- SELECT customers whose first names start with "Avi"
-
-  -- query1
-  SELECT FirstName from Customers where FirstName like '%avi%'
-
-  -- query2 (optimized)
-  SELECT FirstName from Customers where FirstName like 'avi%'
-  ```
-
-**3. Implement Caching**
-
-- Use Redis or in-memory caches for frequently accessed data to reduce database calls.
-- Cache API responses, computed values, or session data.
-
-**4. Load Balancing:**
-
-The cluster module to allow load balancing and distribute incoming connections across all workers in an environment's numerous CPU cores using a round-robin technique.
-
-Using the PM2 process manager to keep applications alive indefinitely is another option. PM2 includes a cluster feature that allows you to run numerous processes over all cores without having to worry about changing the code to use the native cluster module.
-
-**5. Gzip Compression**
-
-Gzip compresses HTTP requests and responses.
-Gzip compresses responses before sending them to the browser, thus, the browser takes a shorter time to fetch them. Gzip also compresses the request to the remote server, which significantly increases web performance.
-
-<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
-
-### Q 40. How does Node handle concurrency?
-
-Node.js handles concurrency using the Event Loop, libuv, and non-blocking I/O. When an operation like a database query, file read, or external API call is made, Node doesn't wait for it to complete. Instead, it delegates the work to libuv and continues processing other requests. Once the operation finishes, the callback is placed back in the Event Loop for execution. This enables a single Node.js process to handle thousands of concurrent connections efficiently.
-
-<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
-
-### Q 41. How do you scale a Node.js application?
-
-I scale Node.js applications both vertically and horizontally. For a single server, I use Cluster to utilize all CPU cores, and for larger systems, I deploy multiple instances behind a load balancer. I also use Redis, connection pooling, and database optimization to eliminate backend bottlenecks.
-
-There are two main ways to scale a Node.js application:
-
-1. **Vertical Scaling (Scale Up):** Increase server resources:
-
-   ```js
-   2 CPU → 8 CPU
-   4 GB RAM → 16 GB RAM
-   ```
-
-   - **Pros:** Simple and No code changes.
-   - **Cons:** Hardware limit exists and Expensive
-
-2. **Horizontal Scaling (Scale Out):** Run multiple application instances.
-
-   ```js
-          Load Balancer
-                ↓
-     ┌──────────┼──────────┐
-     ↓          ↓          ↓
-   Node 1     Node 2     Node 3
-   ```
-
-   - **Pros:** Better scalability and High availability
-   - **Cons:** More infrastructure complexity
-
-<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
-
-### Q 42. What is Redis and how to implement it?
+### Q 38. What is Redis and how to implement it?
 
 Redis is an open-source, in-memory data store used as a database, cache, and message broker. It follows a key-value storage model, allowing data to be stored and retrieved directly from RAM using commands like `SET` and `GET`. It supports data types like strings, lists, sets, sorted sets, and hashes.
 
@@ -2232,238 +1982,7 @@ app.listen(PORT, async () => {
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 43. How to use JSON Web Token (JWT) for authentication?
-
-JWT is a secure token-based authentication mechanism.
-Users log in and receive a signed JWT, which they send in request headers to access protected routes.
-The server verifies the token on each request, allowing stateless, scalable authentication without storing sessions.
-
-**🔹 How It Works**
-
-- Login: User sends credentials → Server verifies → Generates JWT → Returns token.
-- Access protected route: Client sends token in Authorization: Bearer <token> → Server verifies token → Grants access if valid.
-  -Token expires automatically based on the expiresIn setting.
-
-**Example**
-
-```js
-const express = require("express");
-const jwt = require("jsonwebtoken");
-const bcrypt = require("bcrypt");
-
-const app = express();
-app.use(express.json());
-
-const SECRET_KEY = "mysecretkey"; // In production, store securely
-
-// Mock user database
-const users = [
-  { id: 1, username: "john", password: "$2b$10$k4mN..." }, // hashed password
-];
-
-// Login route
-app.post("/login", async (req, res) => {
-  const { username, password } = req.body;
-  const user = users.find((u) => u.username === username);
-  if (!user) return res.status(401).json({ message: "Invalid credentials" });
-
-  const valid = await bcrypt.compare(password, user.password);
-  if (!valid) return res.status(401).json({ message: "Invalid credentials" });
-
-  // Generate JWT token
-  const token = jwt.sign({ id: user.id, username: user.username }, SECRET_KEY, {
-    expiresIn: "1h",
-  });
-  res.json({ token });
-});
-
-// Protected route
-app.get("/profile", (req, res) => {
-  const authHeader = req.headers["authorization"];
-  if (!authHeader)
-    return res.status(401).json({ message: "No token provided" });
-
-  const token = authHeader.split(" ")[1];
-  try {
-    const user = jwt.verify(token, SECRET_KEY);
-    res.json({ message: "Profile data", user });
-  } catch (err) {
-    res.status(403).json({ message: "Invalid token" });
-  }
-});
-
-app.listen(3000, () => console.log("Server running on http://localhost:3000"));
-```
-
-<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
-
-### Q 44. In a large application with around 100 protected APIs, would you perform JWT authentication and RBAC authorization checks on every request?
-
-Yes, every protected API verifies the access token because JWT authentication is stateless.
-
-We use short-lived access tokens(15 - 30min) and validate them on every protected request. To keep users logged in, we use refresh tokens(7 - 15days) to generate new access tokens when they expire. This approach provides better security while avoiding frequent logins and reducing the impact of stale permissions.
-
-We validate JWT on every protected request because authentication is stateless. For RBAC, we typically store role information in the token to avoid database lookups. If permissions must take effect immediately, I use token versioning, where the token version is stored in both the JWT and Redis. When roles or permissions change, the version is incremented, causing all previously issued tokens to become invalid instantly.
-
-<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
-
-### Q 45. How did you implement logging in your project and its types?
-
-We used Winston for structured JSON logging. We logged API requests, responses, errors, and audit events. Each request was assigned a correlation ID to trace it across services. Logs were centralized in ELK/CloudWatch for monitoring and troubleshooting.
-
-ELK and CloudWatch are centralized logging platforms used to collect, store, and analyze application logs. ELK consists of Elasticsearch, Logstash, and Kibana, while CloudWatch is AWS's managed logging service. They help teams search logs, trace requests using correlation IDs, monitor errors, and create alerts.
-
-1. Application Logs: Normal application activity. Used for monitoring and debugging. Logs will store 30-90 Days.
-2. Error Logs: When something fails. Used for troubleshooting. Logs will store 90 Days.
-3. Audit Logs: Tracks who did what. Used for compliance and security. Logs will store 1-7 Years.
-
-<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
-
-### Q 46. How microservices communicate with each other?
-
-Microservices can communicate synchronously using REST, GraphQL, or gRPC, and asynchronously using message brokers like Kafka or RabbitMQ.
-
-I use synchronous communication when an immediate response is needed and asynchronous communication for scalable event-driven workflows.
-
-<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
-
-### Q 47. RabbitMQ and Kafka in Node.js?
-
-RabbitMQ is a message broker primarily used for task queues and reliable message delivery. Once a message is consumed, it is typically removed from the queue. Kafka is an event streaming platform where events are stored for a configurable retention period and can be consumed by multiple services independently. I generally use RabbitMQ for background jobs and Kafka for event-driven architectures, analytics, and high-throughput systems.
-
-**Follow-Up Questions**
-
-1. What happens if a consumer is down?
-   - **RabbitMQ:** Message stays in the queue until a consumer processes it.
-   - **Kafk:** Message remains in the topic and can be consumed later.
-
-2. Can multiple consumers read the same message?
-   - **RabbitMQ:** Typically one message is processed by one consumer (within a consumer group/queue pattern).
-   - **Kafka** Many independent consumer groups can read the same event.
-
-<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
-
-### Q 48. What is Connection pooling?
-
-Connection pooling is a mechanism that maintains a reusable set of database connections. Instead of creating and closing a connection for every request, the application borrows a connection from the pool, executes the query, and returns it back. This reduces connection overhead, improves response time, and helps applications handle high traffic efficiently.
-
-In Node.js, libraries like MySQL2 and PostgreSQL provide built-in connection pooling support. While configuring pools, I ensure the total number of connections across all application instances stays within the database server's connection limit.
-
-**Real-World Analogy**
-
-Imagine a company has 100 employees and only 10 meeting rooms. Employees don't build a new meeting room every time they need one.
-
-- Take an available room.
-- Conduct the meeting.
-- Leave the room.
-- The room becomes available for others.
-
-A connection pool works the same way.
-
-```javascript
-// Node.js Example (MySQL)
-
-const mysql = require("mysql2");
-
-const pool = mysql.createPool({
-  host: "localhost",
-  user: "root",
-  password: "password",
-  database: "testdb",
-  connectionLimit: 10,
-});
-
-// Using the pool:
-pool.query("SELECT * FROM users", (err, results) => {
-  console.log(results);
-});
-```
-
-**Interview Follow-Up**
-
-1. What happens if all connections are busy?
-   - First 10 requests get connections. Remaining 40 requests wait in a queue. As connections are released, waiting requests receive them. If the wait exceeds the configured timeout, an error may occur.
-
-<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
-
-### Q 49. What is Worker Threads vs Cluster vs Child Process, difference, and when to use?
-
-**Worker Threads** are used when your Node application has CPU-intensive work such as image processing, PDF generation, encryption, or large calculations. They create additional JavaScript threads within the same process.
-
-When to Use: Image processing, Video processing, PDF generation, Data transformation, Encryption, and CPU-heavy calculations.
-
-```javascript
-const worker = new Worker("./imageProcessor.js");
-```
-
-_A user uploads a large image and resizing it takes 5 seconds. Running this in the main thread would block all requests. A Worker Thread prevents that._
-
-**Cluster** is used when you want to scale your Node server across multiple CPU cores. Each cluster worker is a separate Node process that can handle incoming requests independently.
-
-When to Use: Running Express APIs, High traffic applications, and Multiple CPU cores available.
-
-```javascript
-const cluster = require("cluster");
-const os = require("os");
-
-if (cluster.isPrimary) {
-  for (let i = 0; i < os.cpus().length; i++) {
-    cluster.fork();
-  }
-}
-```
-
-_If a server has 8 cores, cluster can create 8 Node processes so all cores are utilized._
-
-**Child Process** is used when you need to execute an external process or program such as Python scripts, shell commands, FFmpeg, Git commands, or another Node application.
-
-When to Use: Running Python scripts, Executing shell commands, Using FFmpeg, and Calling external tools.
-
-```javascript
-const { spawn } = require("child_process");
-
-spawn("python", ["predict.py"]);
-```
-
-_A Node API receives an image and sends it to a Python AI model for prediction._
-
-> _**👉 Note:** All three help Node.js perform work outside the main Event Loop, but they solve different problems.._
-
-**Think of it like this:**
-
-- Worker Thread → "Help me do heavy calculations."
-- Cluster → "Help me serve more users."
-- Child Process → "Help me run another application."
-
-**When to Use**
-
-<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
-
-**Worker Threads**
-**Cluster**
-**Child Process**
-
-**Follow-Up Questions**
-
-- Why not use Worker Threads for database queries?
-  - Database queries are I/O operations. Node already handles I/O asynchronously through the Event Loop and libuv. Using Worker Threads adds unnecessary overhead.
-- What is the difference between Cluster and Worker Threads?
-  - Cluster creates multiple Node processes, each with its own memory and Event Loop. Worker Threads create multiple threads inside the same Node process and can share memory using SharedArrayBuffer.Cluster is for scaling servers. Worker Threads are for CPU-intensive tasks.
-
-### Q 50. How to Handle a 2GB File Upload in Node.js?
-
-For large files such as 2GB, I would implement chunked uploads where the file is split into smaller pieces, typically 5MB each. The backend stores each chunk and merges them after all chunks are received. In production, I would use parallel uploads, streaming, and resumable uploads with metadata stored in Redis or a database.
-
-**Follow-Up Questions**
-
-- Why use chunk upload instead of a single upload?
-  - If the network fails at 95%, only the failed chunk needs to be retried instead of uploading the entire 2GB file again.
-- How would you implement resumable uploads?
-  - Generate an uploadId, store uploaded chunk numbers in Redis or a database, and when the user reconnects, upload only the missing chunks.
-
-<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
-
-### Q 51. Database Scaling?
+### Q 39. Database Scaling?
 
 I usually start database scaling with query optimization, indexing, and connection pooling. If traffic continues to grow, I introduce Redis caching and read replicas to reduce database load. For very large systems, I consider sharding and horizontal database scaling.
 
@@ -2491,7 +2010,7 @@ I usually start database scaling with query optimization, indexing, and connecti
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 52. MySQL vs PostgreSQL vs MongoDB?
+### Q 40. MySQL vs PostgreSQL vs MongoDB?
 
 **MySQL:** MySQL is an open-source relational database management system (RDBMS) that stores data in tables consisting of rows and columns and uses SQL (Structured Query Language) to manage and query data.
 
@@ -2525,7 +2044,7 @@ I usually start database scaling with query optimization, indexing, and connecti
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 53. TypeORM vs Prisma?
+### Q 41. TypeORM vs Prisma?
 
 **TypeORM:** TypeORM is a traditional ORM (Object Relational Mapper) that maps database tables directly to TypeScript/JavaScript classes using decorators.
 
@@ -2558,52 +2077,286 @@ const users = await prisma.user.findMany();
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 54. Design Patterns?
+### Q 42. How to improve Node.js performance?
 
-Design patterns are reusable solutions to common software design problems. In backend development, I frequently use Singleton for database connections, Strategy for payment processing, Observer for event-driven systems, Factory for object creation, and Repository to separate business logic from data access.
+**1. Use Asynchronous & Non-Blocking Code**
 
-1. **Singleton Pattern:** Ensures only one instance of a class exists throughout the application. Used For Database connections and Redis clients.
+- Avoid blocking the event loop with synchronous operations like fs.readFileSync or heavy loops.
+- Use async APIs, Promises, or async/await for I/O and database calls.
 
-2. **Factory Pattern:** Creates objects without exposing the creation logic. Used For Payment gateways and Notification providers
+  ```js
+  // Bad: blocking
+  const data = fs.readFileSync("file.txt");
 
-3. **Strategy Pattern:** Allows switching algorithms or behaviors at runtime. Used For
-   Payment systems, Discount calculations, and Tax calculations
+  // Good: non-blocking
+  fs.readFile("file.txt", (err, data) => { ... });
+  ```
 
-4. **Observer Pattern:** One object notifies multiple objects when an event occurs. Used For
-   Event-driven architecture, Notifications, and Microservices events
+**2. Query Optimization**
 
-5. **Repository Pattern:** Separates database access from business logic.
+Basic tips to improve your database performance/optimization overview
+
+- Indexing - Indexing is an approach to optimize the performance of a database by minimizing the number of disk accesses required when a query is processed.
+- Avoid SELECT - Use the SELECT statement to query only the data you need and avoid extra fetching loads to your database.
+
+  ```js
+  -- query1
+  SELECT * FROM Customers
+
+  -- query2 (optimized)
+  SELECT FirstName, LastName, Address, City, State, Zip FROM Customers
+  ```
+
+- Use LIMIT - LIMIT will return only the specified number of records.
+
+  ```js
+  SELECT FirstName, LastName, Address, City, State, Zip FROM Customers LIMIT 100
+  ```
+
+- Wildcard (%) - Use wildcard (%) character appropriately
+
+  ```js
+  -- SELECT customers whose first names start with "Avi"
+
+  -- query1
+  SELECT FirstName from Customers where FirstName like '%avi%'
+
+  -- query2 (optimized)
+  SELECT FirstName from Customers where FirstName like 'avi%'
+  ```
+
+**3. Implement Caching**
+
+- Use Redis or in-memory caches for frequently accessed data to reduce database calls.
+- Cache API responses, computed values, or session data.
+
+**4. Load Balancing:**
+
+The cluster module to allow load balancing and distribute incoming connections across all workers in an environment's numerous CPU cores using a round-robin technique.
+
+Using the PM2 process manager to keep applications alive indefinitely is another option. PM2 includes a cluster feature that allows you to run numerous processes over all cores without having to worry about changing the code to use the native cluster module.
+
+**5. Gzip Compression**
+
+Gzip compresses HTTP requests and responses.
+Gzip compresses responses before sending them to the browser, thus, the browser takes a shorter time to fetch them. Gzip also compresses the request to the remote server, which significantly increases web performance.
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 55. You have implemented JWT authentication in your application. If an attacker steals a valid JWT token from a user's browser and uses it from Postman or another machine, how would you detect and prevent unauthorized access?
+### Q 43. How do you scale a Node.js application?
 
-JWT alone cannot detect whether a stolen token is being used from Postman or another device. In enterprise applications, we store session metadata such as `IP, browser, device fingerprint, and location` in Redis or a database and validate it on every request. If significant mismatches are detected, we trigger re-authentication, MFA, or session revocation.
+I scale Node.js applications both vertically and horizontally. For a single server, I use Cluster to utilize all CPU cores, and for larger systems, I deploy multiple instances behind a load balancer. I also use Redis, connection pooling, and database optimization to eliminate backend bottlenecks.
+
+There are two main ways to scale a Node.js application:
+
+1. **Vertical Scaling (Scale Up):** Increase server resources:
+
+   ```js
+   2 CPU → 8 CPU
+   4 GB RAM → 16 GB RAM
+   ```
+
+   - **Pros:** Simple and No code changes.
+   - **Cons:** Hardware limit exists and Expensive
+
+2. **Horizontal Scaling (Scale Out):** Run multiple application instances.
+
+   ```js
+          Load Balancer
+                ↓
+     ┌──────────┼──────────┐
+     ↓          ↓          ↓
+   Node 1     Node 2     Node 3
+   ```
+
+   - **Pros:** Better scalability and High availability
+   - **Cons:** More infrastructure complexity
+
+<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
+
+### Q 44. What memory leaks and its types?
+
+A memory leak occurs when unused memory is not released and heap usage keeps increasing.
+
+It usually happens due to global variables, unremoved listeners, timers, or retained references. It can be prevented by proper cleanup, limiting cache, and monitoring memory usage.
+
+**🔹 How to Prevent Memory Leaks**
+
+- Avoid Global Variables
+- Remove Event Listeners
+- Clear Timers
+- Limit Cache Size
+- Close Database Connections
+- Use WeakMap / WeakSet for temporary references
+- Monitor Memory Usage (`process.memoryUsage()`)
+
+**🔹 Types of Memory Leaks in Node.js**
+
+**1️⃣ Global Variables:** Objects stored in global scope are never garbage collected. Since it’s globally referenced, GC cannot remove it.
+
+**2️⃣ Unused References (Forgot to Nullify):** If references are not removed, memory stays allocated. If not set to null or removed, GC won’t clean it.
 
 ```js
-// User Login
-{
-  "sessionId": "S123",
-  "userId": 100,
-  "ip": "49.205.x.x",
-  "browser": "Chrome",
-  "fingerprint": "3a7f9e1c8d",
-  "country": "India"
-}
-// Stored in Redis
+let data = { name: "John" };
+data = null; // Proper cleanup
+```
 
-// JWT:
-{
-  "userId": 100,
-  "sessionId": "S123"
+**3️⃣ Closures Holding Memory:** Closures can unintentionally retain large objects. `largeData` remains in memory due to closure reference.
+
+```js
+function outer() {
+  const largeData = new Array(1000000);
+  return function inner() {
+    console.log("Using closure");
+  };
 }
 ```
 
-**Fingerprint:** A device fingerprint is a unique identifier generated from browser and device characteristics such as OS, browser version, screen resolution, timezone, and language settings. It helps identify a device across requests and is commonly used as an additional security signal to detect suspicious activity or stolen tokens. However, it should be combined with IP, session tracking, and refresh token rotation rather than used alone.
+**4️⃣ Unremoved Event Listeners:** If listeners are not removed, they keep references alive.
+
+```js
+emitter.on("data", handler);
+
+// Remove
+emitter.removeListener("data", handler);
+```
+
+**5️⃣ Timers Not Cleared:** Uncleared intervals keep running and holding memory.
+
+```js
+const interval = setInterval(() => {
+  console.log("Running");
+}, 1000);
+
+// clearInterval(interval);
+```
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 56. What is Circuit Breaker?
+### Q 45. How do you identify and debug memory leaks?
+
+I first monitor heap memory usage. If memory continuously grows and doesn't reduce after garbage collection, I suspect a memory leak. Then I take heap snapshots using Chrome DevTools or Node Inspector, compare snapshots over time, identify growing objects, and trace why references to those objects are not being released.
+
+**How to Debug It?**
+
+1. Monitor Memory
+
+   ```js
+   setInterval(() => {
+     console.log(process.memoryUsage());
+   }, 5000);
+
+   heapUsed;
+   heapTotal;
+   rss;
+
+   // If heapUsed continuously grows, investigate further.
+   ```
+
+2. Take Heap Snapshots
+
+   ```js
+   node --inspect app.js
+
+    // Open Chrome:
+    chrome://inspect
+
+    // Then:
+
+    Memory Tab
+    ↓
+    Take Heap Snapshot
+
+    // Take:
+
+    Snapshot 1
+    ↓
+    Generate Traffic
+    ↓
+    Snapshot 2
+
+    // Compare both snapshots.
+   ```
+
+3. Monitor Using PM2
+
+   ```js
+   // Start application:
+
+   pm2 start app.js
+
+   // Monitor:
+
+   pm2 monit
+
+   // Look for:
+
+   Memory: 200 MB
+   Memory: 400 MB
+   Memory: 800 MB
+   Memory: 1.5 GB
+
+   // If memory continuously grows, investigate further.
+   ```
+
+<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
+
+### Q 46. What is Garbage collection and how it works?
+
+Garbage collection is the automatic process of freeing unused memory in Node.js. Node.js memory is divided into code segment, stack, and heap. Garbage collection only works on heap memory where objects are stored. The V8 engine uses a mark-and-sweep algorithm to remove unreachable objects from memory.
+
+- **Code Segment:** Stores the program’s instructions and function definitions. This memory is static and does not change during execution.
+- **Stack:** Holds function calls, local variables, and execution contexts in LIFO order. It is automatically cleared when functions finish executing.
+- **Heap:** Stores objects, arrays, and dynamic data. Garbage collection works here to remove unreachable objects and free memory.
+
+**🔹 How Garbage Collection Works in Node.js**
+
+Node.js uses the V8 engine’s garbage collector, which mainly follows a Mark-and-Sweep algorithm.
+
+- **Memory Allocation:** When you create variables, objects, or functions. Memory is allocated in the heap.
+- **Mark Phase:** The garbage collector starts from the root object (global scope) and marks all objects that are still reachable (in use). If an object can be accessed, it is marked as active.
+- **Sweep Phase:** After marking, V8 removes all unmarked (unreachable) objects from memory. Now the original object is unreachable → GC will remove it.
+
+<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
+
+### Q 47. How to Handle a 2GB File Upload in Node.js?
+
+For large files such as 2GB, I would implement chunked uploads where the file is split into smaller pieces, typically 5MB each. The backend stores each chunk and merges them after all chunks are received. In production, I would use parallel uploads, streaming, and resumable uploads with metadata stored in Redis or a database.
+
+**Follow-Up Questions**
+
+- Why use chunk upload instead of a single upload?
+  - If the network fails at 95%, only the failed chunk needs to be retried instead of uploading the entire 2GB file again.
+- How would you implement resumable uploads?
+  - Generate an uploadId, store uploaded chunk numbers in Redis or a database, and when the user reconnects, upload only the missing chunks.
+
+<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
+
+### Q 48. How microservices communicate with each other?
+
+Microservices can communicate synchronously using REST, GraphQL, or gRPC, and asynchronously using message brokers like Kafka or RabbitMQ.
+
+I use synchronous communication when an immediate response is needed and asynchronous communication for scalable event-driven workflows.
+
+<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
+
+### Q 49. RabbitMQ and Kafka in Node.js?
+
+RabbitMQ is a message broker primarily used for task queues and reliable message delivery. Once a message is consumed, it is typically removed from the queue. Kafka is an event streaming platform where events are stored for a configurable retention period and can be consumed by multiple services independently. I generally use RabbitMQ for background jobs and Kafka for event-driven architectures, analytics, and high-throughput systems.
+
+**Follow-Up Questions**
+
+1. What happens if a consumer is down?
+   - **RabbitMQ:** Message stays in the queue until a consumer processes it.
+   - **Kafk:** Message remains in the topic and can be consumed later.
+
+2. Can multiple consumers read the same message?
+   - **RabbitMQ:** Typically one message is processed by one consumer (within a consumer group/queue pattern).
+   - **Kafka** Many independent consumer groups can read the same event.
+
+<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
+
+### Q 50. What is Circuit Breaker?
 
 A Circuit Breaker is a design pattern that prevents your application from continuously calling a failing service.
 
@@ -2645,7 +2398,7 @@ Request 3 → Timeout ❌
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
-### Q 57. What is Saga Pattern?
+### Q 51. What is Saga Pattern?
 
 Saga Pattern is a way to manage transactions across multiple microservices without using a single database transaction.
 
@@ -2653,6 +2406,245 @@ Saga Pattern is a way to manage transactions across multiple microservices witho
 
 1. **Choreography:** Services communicate through events like Kafka. No central coordinator.
 2. **Orchestration:** One Saga Coordinator controls the workflow.
+
+<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
+
+### Q 52. Explain Error Handling approaches in Node.js?
+
+**1. Using try-catch block:**
+
+```js
+function square(num) {
+  if (typeof num !== "number")
+    throw new TypeError(`Expected number but got: ${typeof num}`);
+
+  return num * num;
+}
+
+try {
+  square("10");
+} catch (err) {
+  console.log(err.message); // Expected number but got: string
+}
+```
+
+**2. Error-First Callbacks (Classic Node.js):** The traditional Node.js pattern passes error as the first argument to a callback.
+
+```js
+fs.readFile("file.txt", (err, data) => {
+  if (err) {
+    console.error("Error reading file:", err);
+    return;
+  }
+  console.log("File data:", data.toString());
+});
+```
+
+**3. Promises:** Promises allow handling errors using .catch() while keeping code readable.
+
+```js
+const fs = require("fs").promises;
+
+fs.readFile("file.txt")
+  .then((data) => console.log("File data:", data.toString()))
+  .catch((err) => console.error("Error reading file:", err));
+```
+
+**4. Async / Await:** With async/await, errors can be handled using try/catch blocks, making asynchronous code look synchronous.
+
+```js
+const fs = require("fs").promises;
+
+async function readFile() {
+  try {
+    const data = await fs.readFile("file.txt");
+    console.log("File data:", data.toString());
+  } catch (err) {
+    console.error("Error reading file:", err);
+  }
+}
+
+readFile();
+```
+
+**5. Using Error Middleware (Express.js):** In Express.js apps, use a middleware to catch errors:
+
+```js
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send("Something broke!");
+});
+```
+
+<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
+
+### Q 53. How did you implement logging in your project and its types?
+
+We used Winston for structured JSON logging. We logged API requests, responses, errors, and audit events. Each request was assigned a correlation ID to trace it across services. Logs were centralized in ELK/CloudWatch for monitoring and troubleshooting.
+
+ELK and CloudWatch are centralized logging platforms used to collect, store, and analyze application logs. ELK consists of Elasticsearch, Logstash, and Kibana, while CloudWatch is AWS's managed logging service. They help teams search logs, trace requests using correlation IDs, monitor errors, and create alerts.
+
+1. Application Logs: Normal application activity. Used for monitoring and debugging. Logs will store 30-90 Days.
+2. Error Logs: When something fails. Used for troubleshooting. Logs will store 90 Days.
+3. Audit Logs: Tracks who did what. Used for compliance and security. Logs will store 1-7 Years.
+
+<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
+
+### Q 54. How to debug an application in Node.js?
+
+Node.js applications can be debugged using console logs, the built-in Node inspector, or IDE debuggers like VS Code.
+
+In production, tools like PM2 logs and debugging libraries help track errors and performance issues.
+
+**🔹 1️⃣ Using console.log() (Basic Debugging)**
+
+The simplest way:
+
+```js
+console.log("Value of x:", x);
+```
+
+Used to: Check variable values, Verify execution flow.
+
+**🔹 2️⃣ Using Node.js Built-in Debugger**
+
+Run your app with:
+
+```js
+node inspect app.js
+
+// Or:
+
+node --inspect app.js
+
+// Then open:
+
+chrome://inspect
+```
+
+**🔹 3️⃣ Using VS Code Debugger (Most Common)**
+
+- Steps:
+  - Open project in VS Code
+  - Go to Run & Debug
+  - Click Add Configuration
+  - Select Node.js
+  - Set breakpoints
+  - Press ▶️ Run
+- You can:
+  - Pause execution
+  - Step over / into functions
+  - Inspect variables
+  - Watch expressions
+
+**🔹 4️⃣ Using debug Module (Advanced Logging)**
+
+Install:
+
+```js
+npm install debug
+
+// Example:
+
+const debug = require("debug")("app");
+
+debug("Server started");
+
+// Run with:
+
+DEBUG=app node app.js
+```
+
+Used for controlled logging in production.
+
+**🔹 5️⃣ Using PM2 Logs (Production Debugging)**
+
+If running with PM2:
+
+```js
+pm2 logs
+```
+
+Used to monitor: Errors, Crashes & Performance
+
+<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
+
+### Q 55. Design Patterns?
+
+Design patterns are reusable solutions to common software design problems. In backend development, I frequently use Singleton for database connections, Strategy for payment processing, Observer for event-driven systems, Factory for object creation, and Repository to separate business logic from data access.
+
+1. **Singleton Pattern:** Ensures only one instance of a class exists throughout the application. Used For Database connections and Redis clients.
+
+2. **Factory Pattern:** Creates objects without exposing the creation logic. Used For Payment gateways and Notification providers
+
+3. **Strategy Pattern:** Allows switching algorithms or behaviors at runtime. Used For
+   Payment systems, Discount calculations, and Tax calculations
+
+4. **Observer Pattern:** One object notifies multiple objects when an event occurs. Used For
+   Event-driven architecture, Notifications, and Microservices events
+
+5. **Repository Pattern:** Separates database access from business logic.
+
+<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
+
+### Q 56. What is a stub?
+
+A stub is a fake implementation used in testing to replace a real function. It is mainly used in unit testing to avoid calling real databases, APIs, or external services. Using sinon, we replace the HTTP method with a fake response.
+
+**🔹 Example: Actual Function Without Stub (api.js)**
+
+```js
+// api.js
+const axios = require("axios");
+
+const getUser = async (id) => {
+  const response = await axios.get(`https://api.example.com/users/${id}`);
+  return response.data;
+};
+
+module.exports = getUser;
+```
+
+**Unit Test With Stub (api.test.js)**
+
+```js
+const sinon = require("sinon");
+const axios = require("axios");
+const { expect } = require("chai");
+const getUser = require("./api");
+
+describe("getUser - with Stub", () => {
+  before(() => {
+    sinon.stub(axios, "get").resolves({
+      data: {
+        id: 1,
+        name: "John Doe",
+        email: "john@example.com",
+      },
+    });
+  });
+
+  after(() => {
+    axios.get.restore();
+  });
+
+  it("should return user data", async () => {
+    const user = await getUser(1);
+
+    expect(user).to.have.property("id");
+    expect(user.name).to.equal("John Doe");
+    expect(user.email).to.equal("john@example.com");
+  });
+});
+```
+
+Here, we replace the real DB function with a fake one.
+
+<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
+
+### Q 57. What is a test pyramid?
+
+The Test Pyramid is a testing strategy that recommends having many unit tests, fewer integration tests, and very few end-to-end tests. It ensures fast, reliable, and maintainable testing.
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
