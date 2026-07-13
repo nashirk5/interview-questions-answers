@@ -2553,25 +2553,7 @@ function findMax(arr) {
 console.log(findMax([10, 5, 30, 20]));
 ```
 
-### 6. Find the Maximum Number in an Array
-
-```js
-function findMax(arr) {
-  let max = arr[0];
-
-  for (let num of arr) {
-    if (num > max) {
-      max = num;
-    }
-  }
-
-  return max;
-}
-
-console.log(findMax([10, 5, 30, 20]));
-```
-
-### 7. Count Character Occurrences
+### 6. Count Character Occurrences
 
 ```js
 function countChars(str) {
@@ -2595,7 +2577,7 @@ console.log(countChars("hello"));
 }
 ```
 
-### 8. Debounce
+### 7. Debounce
 
 ```js
 function debounce(fn, delay) {
@@ -2615,7 +2597,7 @@ const search = debounce((value) => {
 }, 500);
 ```
 
-### 9. Polyfill for map, filter, reduce
+### 8. Polyfill for map, filter, reduce
 
 ```js
 // Polyfill for map
@@ -2654,7 +2636,7 @@ Array.prototype.myReduce = function (callback, initialValue) {
 };
 ```
 
-### 10. Flatten Array
+### 9. Flatten Array
 
 ```js
 function flatten(arr) {
@@ -2674,7 +2656,7 @@ function flatten(arr) {
 // Output: [1,2,3,4,5]
 ```
 
-### 11. Fizz Buzz
+### 10. Fizz Buzz
 
 ```js
 function fizzBuzz(num) {
@@ -2691,7 +2673,7 @@ function fizzBuzz(num) {
 // fizzBuzz(15);
 ```
 
-### 12. Format number
+### 11. Format number
 
 ```js
 function formatNumber(input) {
@@ -2728,7 +2710,7 @@ console.log(formatNumber("10xyz")); // Invalid input
 console.log(formatNumber("10.5k")); // 10500
 ```
 
-### 13. Game data
+### 12. Game data
 
 ```js
 // Solve the problem.
