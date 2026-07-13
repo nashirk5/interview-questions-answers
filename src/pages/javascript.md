@@ -2476,7 +2476,7 @@ function reverseString(str) {
   return result;
 }
 
-console.log(reverseString("hello"));
+console.log(reverseString("hello")); // false
 ```
 
 ### 2. Check if Two Strings are Anagrams
@@ -2488,7 +2488,7 @@ function isAnagram(str1, str2) {
   return normalize(str1) === normalize(str2);
 }
 
-console.log(isAnagram("listen", "silent"));
+console.log(isAnagram("listen", "silent")); // true
 ```
 
 ### 3. Find Duplicate Elements in an Array
@@ -2508,7 +2508,7 @@ function findDuplicates(arr) {
   return [...duplicates];
 }
 
-console.log(findDuplicates([1, 2, 3, 2, 4, 1]));
+console.log(findDuplicates([1, 2, 3, 2, 4, 1])); // [2, 1]
 ```
 
 ### 4. Remove Duplicates from an Array
@@ -2531,6 +2531,8 @@ function removeDuplicates(arr) {
 
   return result;
 }
+
+console.log(removeDuplicates([1, 2, 3, 2, 4, 1])); // [1, 2, 3, 4]
 ```
 
 ### 5. Find the Maximum Number in an Array
@@ -2551,24 +2553,22 @@ function findMax(arr) {
 console.log(findMax([10, 5, 30, 20]));
 ```
 
-### 6. Flatten a Nested Array
+### 6. Find the Maximum Number in an Array
 
 ```js
-function flatten(arr) {
-  const result = [];
+function findMax(arr) {
+  let max = arr[0];
 
-  for (const item of arr) {
-    if (Array.isArray(item)) {
-      result.push(...flatten(item));
-    } else {
-      result.push(item);
+  for (let num of arr) {
+    if (num > max) {
+      max = num;
     }
   }
 
-  return result;
+  return max;
 }
 
-console.log(flatten([1, [2, [3, 4]], 5]));
+console.log(findMax([10, 5, 30, 20]));
 ```
 
 ### 7. Count Character Occurrences
@@ -2728,7 +2728,7 @@ console.log(formatNumber("10xyz")); // Invalid input
 console.log(formatNumber("10.5k")); // 10500
 ```
 
-### 13. Fizz Buzz
+### 13. Game data
 
 ```js
 // Solve the problem.
