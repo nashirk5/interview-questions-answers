@@ -2580,21 +2580,26 @@ console.log(countChars("hello"));
 ### 7. Debounce
 
 ```js
-function debounce(fn, delay) {
-  let timer;
-
+// Debounce function
+function debounce(func, delay) {
+  let timeout;
   return function (...args) {
-    clearTimeout(timer);
-
-    timer = setTimeout(() => {
-      fn.apply(this, args);
+    clearTimeout(timeout);
+    timeout = setTimeout(() => {
+      func.apply(this, args);
     }, delay);
   };
 }
 
+// Create a debounced version of the search function
 const search = debounce((value) => {
   console.log(value);
-}, 500);
+}, 100);
+
+// Simulate typing with multiple calls to the debounced function
+search("Hello");
+search("Hello, ");
+search("Hello, World!"); // Only this call will trigger after 100ms
 ```
 
 ### 8. Polyfill for map, filter, reduce
