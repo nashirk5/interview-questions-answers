@@ -8,6 +8,12 @@
 
 Node.js is an open-source JavaScript runtime environment which is built on Chrome’s V8 engine. That uses a single-threaded, event-driven, non-blocking I/O model, where the event loop, powered by libuv, efficiently handles asynchronous operations. This architecture enables highly scalable server-side and real-time applications.
 
+- Why Node. js was Created?
+  - Traditional servers ( like Apache ) create a new thread for every request.
+  - This leads to high memory usage and low performance.
+  - Node.js was created to handle multiple requests using a single thread with non - blocking I/O.
+  - It is lightweight and highly efficient.
+
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
 ### Q 2. How does NodeJs work?
@@ -17,6 +23,12 @@ Node.js is single-threaded, event-driven, non-blocking I/O model.
 A new request coming in is one kind of event. The server starts processing it and when there is a blocking IO operation, it does not wait until it completes and instead registers a callback function. The server then immediately starts to process another event ( maybe another request ). When the IO operation is finished, that is another kind of event, and the server will process it ( i.e. continue working on the request ) by executing the callback as soon as it has time.
 
 Node.js Platform does not follow Request/Response Multi-Threaded Stateless Model. It follows Single Threaded with Event Loop Model. Node.js Processing model mainly based on Javascript Event based model with Javascript callback mechanism.
+
+- V8 Engine : Compiles JavaScript code into machine code.
+- Node. js Runtime : Provides the environment to execute JavaScript code.
+- Libuv : C library that provides non-blocking I/O operations.
+- Event Loop : Handles asynchronous operations and callbacks.
+- OS (Operating System) : Performs actual I/O operations (file, network, database itc.).
 
 ![css_box_model](../assets/images/nodejs_execution.png)
 
