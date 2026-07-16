@@ -12,7 +12,7 @@ JavaScript is a dynamically typed, single-threaded language used for building we
 
 <div align="right"><b><a href="#javascript">↥ Back to top</a></b></div>
 
-### Q 41. How JavaSCript works?
+### Q 2. How JavaSCript works?
 
 JavaScript is a single-threaded, interpreted language that runs in a browser or Node.js using a JIT compiler. It handles asynchronous tasks via the event loop and Web APIs, keeping the main thread non-blocking. Understanding execution context, call stack, and async behavior is key to writing efficient, bug-free code.
 
@@ -30,7 +30,7 @@ JavaScript is a single-threaded, interpreted language that runs in a browser or 
 
 <div align="right"><b><a href="#javascript">↥ Back to top</a></b></div>
 
-### Q 51. What is Execution Context?
+### Q 3. What is Execution Context?
 
 Execution Context is the environment where JavaScript code is executed. It stores variables, functions, and the value of this. JavaScript creates an execution context whenever code runs.
 
@@ -82,7 +82,7 @@ Execution Context is the environment where JavaScript code is executed. It store
 
 <div align="right"><b><a href="#javascript">↥ Back to top</a></b></div>
 
-### Q 2. What are the data types?
+### Q 4. What are the data types?
 
 In JavaScript, data types are divided into primitive and non-primitive data type.
 
@@ -105,7 +105,7 @@ In JavaScript, data types are divided into primitive and non-primitive data type
 
 <div align="right"><b><a href="#javascript">↥ Back to top</a></b></div>
 
-### Q 3. What are difference between var, let and const?
+### Q 5. What are difference between var, let and const?
 
 | Feature        | `var`                               | `let`                                | `const`                              |
 | -------------- | ----------------------------------- | ------------------------------------ | ------------------------------------ |
@@ -116,7 +116,9 @@ In JavaScript, data types are divided into primitive and non-primitive data type
 
 > _**👉 Note:** let and const are hoisted, but due to the Temporal Dead Zone (TDZ) and cannot be accessed before declaration._
 
-### Q 4. What is hoisting?
+<div align="right"><b><a href="#javascript">↥ Back to top</a></b></div>
+
+### Q 6. What is hoisting?
 
 Hoisting is JavaScript’s behavior of moving variable and function declarations to the top of their scope during compilation. Function declarations are fully hoisted, while variables declared with var are hoisted with an initial value of undefined. let and const are hoisting but due to the temporal dead zone, throws a ReferenceError.
 
@@ -137,7 +139,7 @@ function sayHi() {
 
 <div align="right"><b><a href="#javascript">↥ Back to top</a></b></div>
 
-### Q 46. What is Temporal Dead Zone for let/const?
+### Q 7. What is Temporal Dead Zone for let/const?
 
 The Temporal Dead Zone (TDZ) is the period between entering a scope and declaring a let or const variable, during which accessing it causes a ReferenceError. It ensures variables aren’t used before initialization, unlike var which is hoisted and initialized with undefined.
 
@@ -157,7 +159,7 @@ The Temporal Dead Zone (TDZ) is the period between entering a scope and declarin
 
 <div align="right"><b><a href="#javascript">↥ Back to top</a></b></div>
 
-### Q 14. What is the difference between null and undefined?
+### Q 8. What is the difference between null and undefined?
 
 | Null                                                                                | Undefined                                                                                      |
 | ----------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
@@ -166,7 +168,7 @@ The Temporal Dead Zone (TDZ) is the period between entering a scope and declarin
 
 <div align="right"><b><a href="#javascript">↥ Back to top</a></b></div>
 
-### Q 16. What is the difference between == and === operators?
+### Q 9. What is the difference between == and === operators?
 
 In JavaScript, the `==` and `===` operators are used for comparison and `===` checks both the values and the types, and only returns true if both are the same.
 
@@ -187,7 +189,7 @@ null === undefined // false
 
 <div align="right"><b><a href="#javascript">↥ Back to top</a></b></div>
 
-### Q 18. What is isNaN?
+### Q 10. What is isNaN?
 
 `isNaN()` is a global JavaScript function used to check whether a value is **Not-a-Number**. It returns true for invalid numeric values like "abc" and false for valid numbers like "123".
 
@@ -204,7 +206,7 @@ Number.isNaN("Hello"); // false
 
 <div align="right"><b><a href="#javascript">↥ Back to top</a></b></div>
 
-### Q 17. What are typeOf, delete, void, and ternary operators?
+### Q 11. What are typeOf, delete, void, and ternary operators?
 
 1. **`typeof` Operator:** This is used to determine the type of a value or expression
    _**Example:**_
@@ -241,7 +243,7 @@ Number.isNaN("Hello"); // false
 
 <div align="right"><b><a href="#javascript">↥ Back to top</a></b></div>
 
-### Q 6. What is passed by value and passed by reference?
+### Q 12. What is passed by value and passed by reference?
 
 In JavaScript, primitives are passed by value, while objects are pass-by-reference.
 Pass by value means a copy of the value is passed, so changes don’t affect the original. Pass by reference means a reference is passed, so changes affect the original object.
@@ -269,7 +271,7 @@ console.log(user); // Output: { name: 'John' } (original object is modified)
 
 <div align="right"><b><a href="#javascript">↥ Back to top</a></b></div>
 
-### Q 36. What are the difference between mutable and immutable objects?
+### Q 13. What are the difference between mutable and immutable objects?
 
 A mutable object is an object whose state can be modified after it is created. An immutable object is an object whose state cannot be modified after it is created.
 
@@ -277,7 +279,7 @@ A mutable object is an object whose state can be modified after it is created. A
 
 <div align="right"><b><a href="#javascript">↥ Back to top</a></b></div>
 
-### Q 37. What is shallow copy and deep copy?
+### Q 14. What is shallow copy and deep copy?
 
 Shallow copy copies only the first level of an object, while nested objects are still referenced. Deep copy creates a completely independent copy including all nested objects. Shallow copy can be done using spread operator, while deep copy requires techniques like JSON methods.
 
@@ -322,7 +324,7 @@ Shallow copy copies only the first level of an object, while nested objects are 
 
 <div align="right"><b><a href="#javascript">↥ Back to top</a></b></div>
 
-### Q 45. What is Garbage collection and how it works?.
+### Q 15. What is Garbage collection and how it works?.
 
 Garbage collection is an automatic process that frees up memory by removing unreachable objects. JavaScript identifies unused objects based on reachability from the root scope. It mainly uses the mark-and-sweep algorithm to clean up memory automatically.
 
@@ -379,7 +381,7 @@ objB = null; // Both objects collected despite circular reference
 
 <div align="right"><b><a href="#javascript">↥ Back to top</a></b></div>
 
-### Q 50. What is Lexical scope?
+### Q 16. What is Lexical scope?
 
 Lexical scope in JavaScript means a function can access variables from the scope in which it was defined, not where it is called. This allows inner functions to “remember” outer variables, forming the basis for closures. Lexical scoping is static and applies to var, let, and const.
 
@@ -423,7 +425,7 @@ console.log(increment()); // 2
 
 <div align="right"><b><a href="#javascript">↥ Back to top</a></b></div>
 
-### Q 5. What is closure?
+### Q 17. What is closure?
 
 A closure is a function that remembers the variables from its outer scope, even after the outer function has finished executing. This allows the inner function to access and manipulate those variables whenever it’s called.
 
@@ -452,7 +454,7 @@ console.log(counter()); // 3
 
 <div align="right"><b><a href="#javascript">↥ Back to top</a></b></div>
 
-### Q 47. What is Functions and its types?
+### Q 18. What is Functions and its types?
 
 A function in JavaScript is a reusable block of code that can take parameters and return values. Types include function declarations, function expressions, arrow functions, generator functions, and async functions. Functions are first-class citizens and can be used as callbacks, returned from other functions, or assigned to variables.
 
@@ -530,7 +532,7 @@ async function fetchData() {
 
 <div align="right"><b><a href="#javascript">↥ Back to top</a></b></div>
 
-### Q 20. What is a first class function?
+### Q 19. What is a first class function?
 
 In javaScript, functions can be stored as a variable or it can be passed as an argument or be returned by another function. That makes function first-class function in JavaScript.
 
@@ -565,7 +567,7 @@ function sayHello() {
 
 <div align="right"><b><a href="#javascript">↥ Back to top</a></b></div>
 
-### Q 21. What is a higher order function?
+### Q 20. What is a higher order function?
 
 A Higher-Order function is a function that receives a function as an argument or returns the function as output.
 
@@ -573,7 +575,7 @@ _**Example:**_, `.map()`, `.filter()`, `.forEach()` and `.reduce()` are some of 
 
 <div align="right"><b><a href="#javascript">↥ Back to top</a></b></div>
 
-### Q 24. What are callbacks?
+### Q 21. What are callbacks?
 
 A callback is a function that is passed as an argument to another function and that will be executed after another function gets executed.
 
@@ -599,7 +601,7 @@ operationOnSum(5, 5, multiplyBy2); // Outputs 20
 
 <div align="right"><b><a href="#javascript">↥ Back to top</a></b></div>
 
-### Q 25. What is a callback hell?
+### Q 22. What is a callback hell?
 
 Callback Hell happens when you have multiple nested callbacks which makes code hard to read and debug when dealing with asynchronous logic. The callback hell usually looks like a pyramid of doom.
 
@@ -671,7 +673,7 @@ doSomething(function(err, result1) {
 
 <div align="right"><b><a href="#javascript">↥ Back to top</a></b></div>
 
-### Q 8. What is currying?
+### Q 23. What is currying?
 
 Currying is a technique where a function with multiple arguments is transformed into a sequence of functions, each taking one argument at a time.
 Currying is mainly used to break down a function into reusable pieces and allow partial application.
@@ -696,7 +698,7 @@ console.log(addCurry(20)(20)(20)); // 60
 
 <div align="right"><b><a href="#javascript">↥ Back to top</a></b></div>
 
-### Q 23. What is recursion in a programming language?
+### Q 24. What is recursion in a programming language?
 
 Recursion is a method of performing an operation iterate by having a function call itself repeatedly until it reaches a result.
 
@@ -722,7 +724,7 @@ console.log(sum(5)); // 15
 
 <div align="right"><b><a href="#javascript">↥ Back to top</a></b></div>
 
-### Q 7. Explain call(), apply() and, bind() methods?
+### Q 25. Explain call(), apply() and, bind() methods?
 
 `call()`, `apply()`, and `bind()` are methods in JavaScript, which is used to invoke a function.
 
@@ -778,7 +780,7 @@ inviteEmployee2("Hello", "How are you?"); // Hello Jimmy Baily, How are you?
 
 <div align="right"><b><a href="#javascript">↥ Back to top</a></b></div>
 
-### Q 43. What is this?
+### Q 26. What is this?
 
 `this` in JavaScript refers to the execution context of a function, and its value depends on how the function is called.
 
@@ -789,7 +791,7 @@ inviteEmployee2("Hello", "How are you?"); // Hello Jimmy Baily, How are you?
 
 <div align="right"><b><a href="#javascript">↥ Back to top</a></b></div>
 
-### Q 19. What are Function Declaration vs Function Expression?
+### Q 27. What are Function Declaration vs Function Expression?
 
 **Function Declaration:** A Function Declaration defines a named function using the function keyword. It is fully hoisted, which means it can be called before or after its declaration.
 
@@ -817,7 +819,7 @@ greet();
 
 <div align="right"><b><a href="#javascript">↥ Back to top</a></b></div>
 
-### Q 19. What is arrow functions?
+### Q 28. What is arrow functions?
 
 An arrow function is a shorter syntax for writing function expressions. It does not have its own `this`, `arguments`, or `super`; instead, it inherits `this` from the surrounding scope. It also cannot be used as a constructor.
 
@@ -831,7 +833,7 @@ const arrowFunc3 = () => {}; // no parameters
 
 <div align="right"><b><a href="#javascript">↥ Back to top</a></b></div>
 
-### Q 35. What are the possible ways to create objects?
+### Q 29. What are the possible ways to create objects?
 
 _**Example:**_
 
@@ -868,7 +870,7 @@ let person = new Person("Alex");
 
 <div align="right"><b><a href="#javascript">↥ Back to top</a></b></div>
 
-### Q 48. What is Objects & Prototypes?
+### Q 30. What is Objects & Prototypes?
 
 An Object is a collection of key-value pairs (properties) and functions (methods). In JavaScript, every object is linked to another object called its Prototype, from which it can inherit properties and methods. This mechanism is known as Prototype Inheritance.
 
@@ -930,7 +932,7 @@ console.log(Person.prototype.__proto__ === Object.prototype); // true
 
 <div align="right"><b><a href="#javascript">↥ Back to top</a></b></div>
 
-### Q 38. What are classes in ES6?
+### Q 31. What are classes in ES6?
 
 In JavaScript, classes are a syntactical sugar over the prototype-based inheritance model. Introduced in ECMAScript 2015 (ES6), classes provide a more familiar and structured way to define object blueprints and create instances of those objects.
 
@@ -949,13 +951,13 @@ class Bike {
 
 <div align="right"><b><a href="#javascript">↥ Back to top</a></b></div>
 
-### Q 39. What is Module?
+### Q 32. What is Module?
 
 JavaScript modules are a way to organize and structure code into reusable units. They allow developers to separate code into individual files or modules, making it easier to manage, maintain, and scale large JavaScript applications. ES6 introduced native support for modules, providing a standardized syntax and mechanism for defining module dependencies and exports.
 
 <div align="right"><b><a href="#javascript">↥ Back to top</a></b></div>
 
-### Q 28. Explain arrays?
+### Q 33. Explain arrays?
 
 JavaScript array is an object that represents a collection of similar type of elements. It can holds values (of any type) not particularly in named properties/keys, but rather in numerically indexed positions.
 
@@ -998,7 +1000,7 @@ _**Example:**_
 
 <div align="right"><b><a href="#javascript">↥ Back to top</a></b></div>
 
-### Q 29. Write some array methods?
+### Q 34. Write some array methods?
 
 1. **array.join():** The join() method creates and returns a new string by concatenating all of the elements in an array.
 
@@ -1133,7 +1135,7 @@ console.log(pets.includes("at")); // Output: false
 
 <div align="right"><b><a href="#javascript">↥ Back to top</a></b></div>
 
-### Q 30. Write some string methods?
+### Q 35. Write some string methods?
 
 1. **string.charAt():** Returns the character at the specified index in the string.
 
@@ -1202,7 +1204,7 @@ console.log(str.trim()); // Output: "Hello World"
 
 <div align="right"><b><a href="#javascript">↥ Back to top</a></b></div>
 
-### Q 31. What is the difference between slice and splice?
+### Q 36. What is the difference between slice and splice?
 
 | Slice                                | Splice                                       |
 | ------------------------------------ | -------------------------------------------- |
@@ -1212,7 +1214,7 @@ console.log(str.trim()); // Output: "Hello World"
 
 <div align="right"><b><a href="#javascript">↥ Back to top</a></b></div>
 
-### Q 9. What is the rest parameter and spread operator?
+### Q 37. What is the rest parameter and spread operator?
 
 The rest parameter collects multiple arguments into an array inside a function, while the spread operator expands arrays or objects into individual elements. Both use the `...` syntax but serve opposite purposes.
 
@@ -1285,7 +1287,7 @@ The rest parameter collects multiple arguments into an array in function. The sp
 
 <div align="right"><b><a href="#javascript">↥ Back to top</a></b></div>
 
-### Q 12. What is destructuring?
+### Q 38. What is destructuring?
 
 Destructuring is a convenient way to extract multiple values from arrays or objects into variables. It makes code cleaner and more readable.
 
@@ -1306,7 +1308,7 @@ console.log(age); // 30
 
 <div align="right"><b><a href="#javascript">↥ Back to top</a></b></div>
 
-### Q 55. What is Optional Chaining `?` and Nullish Coalescing `??` ?
+### Q 39. What is Optional Chaining `?` and Nullish Coalescing `??` ?
 
 Optional Chaining `?` safely accesses nested properties without throwing errors if a value is null or undefined.
 
@@ -1382,7 +1384,7 @@ ES6 (ECMAScript 2015) is a significant update to the JavaScript language specifi
 
 <div align="right"><b><a href="#javascript">↥ Back to top</a></b></div>
 
-### Q 56. What are Polyfills and Babel?
+### Q 41. What are Polyfills and Babel?
 
 **Polyfills:**
 
@@ -1440,7 +1442,7 @@ var greet = function () {
 
 <div align="right"><b><a href="#javascript">↥ Back to top</a></b></div>
 
-### Q 10. What are Sets and WeakSet?
+### Q 42. What are Sets and WeakSet?
 
 1.  **Sets:** Sets are a new object type in ES6, that allow to create collections of unique values and it automatically removes duplicates. It can hold any data type, including primitives and objects.
 
@@ -1485,7 +1487,7 @@ var greet = function () {
 
 <div align="right"><b><a href="#javascript">↥ Back to top</a></b></div>
 
-### Q 11. What are Map and WeakMap?
+### Q 43. What are Map and WeakMap?
 
 1. **Map:** Map is a collection of key-value pairs where keys can be of any data type, including primitives and objects. It supports iteration
 
@@ -1521,7 +1523,7 @@ var greet = function () {
 
 <div align="right"><b><a href="#javascript">↥ Back to top</a></b></div>
 
-### Q 32. What is loop?
+### Q 44. What is loop?
 
 A loop in JavaScript is a programming construct that allows you to repeatedly execute a block of code multiple times until a specified condition is met. Loops are fundamental for iterating over arrays, processing data, and performing repetitive tasks efficiently. JavaScript provides several types of loops to suit different use cases:
 
@@ -1573,7 +1575,7 @@ for (let value of arr) {
 
 <div align="right"><b><a href="#javascript">↥ Back to top</a></b></div>
 
-### Q 33. What is the difference between for..in and for..of?
+### Q 45. What is the difference between for..in and for..of?
 
 - Use for...in to iterate over the keys of an object, including inherited properties.
 
@@ -1603,7 +1605,7 @@ for (let value of arr) {
 
 <div align="right"><b><a href="#javascript">↥ Back to top</a></b></div>
 
-### Q 13. What are generators?
+### Q 46. What are generators?
 
 A generator is a function that can stop midway and then continue from where it stopped. In short, a generator appears to be a function but it behaves like an `iterator`.
 
@@ -1624,7 +1626,7 @@ console.log(gen.next().value); // 40
 
 <div align="right"><b><a href="#javascript">↥ Back to top</a></b></div>
 
-### Q 26. What is a promise?
+### Q 47. What is a promise?
 
 Promise is used to handle asynchronous operations. It helps avoid callback hell and makes the code cleaner and easier to manage using `.then()`, `.catch()`, and `async/await`.
 
@@ -1704,7 +1706,7 @@ _These are the methods in promises:_
 
 <div align="right"><b><a href="#javascript">↥ Back to top</a></b></div>
 
-### Q 27. What is Promise APIs (all, allSettled, any, race)?
+### Q 48. What is Promise APIs (all, allSettled, any, race)?
 
 `Promise.all()` waits for all promises to succeed, `Promise.allSettled()` waits for all promises regardless of success or failure, `Promise.any()` returns the first successful result, and `Promise.race()` returns whichever promise settles first, whether it resolves or rejects.
 
@@ -1790,7 +1792,7 @@ _These are the methods in promises:_
 
 <div align="right"><b><a href="#javascript">↥ Back to top</a></b></div>
 
-### Q 34. What is Async/await?
+### Q 49. What is Async/await?
 
 Async/await is a feature in JavaScript that allows you to write asynchronous code in a synchronous-looking manner. It provides a more readable and understandable way to work with asynchronous operations, such as fetching data from a server, reading files, or making network requests.
 
@@ -1830,7 +1832,7 @@ getData();
 
 <div align="right"><b><a href="#javascript">↥ Back to top</a></b></div>
 
-### Q 42. What is the Event Loop?
+### Q 50. What is the Event Loop?
 
 Event-loop is a mechanism that handles asynchronous operations by continuos checking in the call stack and the task queue. When the call stack is empty, it pushes the tasks from the task queue to the call stack, enabling non-blocking, asynchronous execution.
 
@@ -1865,7 +1867,7 @@ The Event Loop is the process that continuously checks if the Call Stack is empt
 
 <div align="right"><b><a href="#javascript">↥ Back to top</a></b></div>
 
-### Q 15. What is the difference between window and document?
+### Q 51. What is the difference between window and document?
 
 | Window                                                                        | Document                                                                                      |
 | ----------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
@@ -1874,7 +1876,7 @@ The Event Loop is the process that continuously checks if the Call Stack is empt
 
 <div align="right"><b><a href="#javascript">↥ Back to top</a></b></div>
 
-### Q 49. What is DOM & Events?
+### Q 52. What is DOM & Events?
 
 The DOM (Document Object Model) represents an HTML document as a tree of objects, allowing JavaScript to dynamically manipulate content, structure, and style. Events are actions like clicks, key presses, or scrolls that JS can respond to via event listeners. Together, they make web pages interactive, and concepts like bubbling, capturing, and delegation are key for efficient event handling.
 
@@ -1905,7 +1907,7 @@ btn.addEventListener("click", function () {
 
 <div align="right"><b><a href="#javascript">↥ Back to top</a></b></div>
 
-### Q 52. What is Event Bubbling and Event Capturing?
+### Q 53. What is Event Bubbling and Event Capturing?
 
 Event propagation in JavaScript happens in 3 phases:
 
@@ -1949,7 +1951,7 @@ document.body.addEventListener(
 
 <div align="right"><b><a href="#javascript">↥ Back to top</a></b></div>
 
-### Q 53. What is Event Delegation?
+### Q 54. What is Event Delegation?
 
 Event Delegation is a technique where a parent element handles events for its child elements using event bubbling. Instead of attaching events to multiple child elements, we attach a single event listener to the parent.
 
@@ -1971,7 +1973,7 @@ document.getElementById("list").addEventListener("click", (event) => {
 
 <div align="right"><b><a href="#javascript">↥ Back to top</a></b></div>
 
-### Q 54. Difference between localStorage vs sessionStorage vs Cookies?
+### Q 55. Difference between localStorage vs sessionStorage vs Cookies?
 
 | Feature                 | localStorage    | sessionStorage          | Cookies                  |
 | ----------------------- | --------------- | ----------------------- | ------------------------ |
@@ -1983,7 +1985,7 @@ document.getElementById("list").addEventListener("click", (event) => {
 
 <div align="right"><b><a href="#javascript">↥ Back to top</a></b></div>
 
-### Q 44. What is Debouncing and Throttling?
+### Q 56. What is Debouncing and Throttling?
 
 **Debouncing:** Debouncing ensures that a function is invoked only after a certain period of inactivity.
 
@@ -2047,7 +2049,7 @@ Debouncing delays function execution until events stop firing, ideal for limitin
 
 <div align="right"><b><a href="#javascript">↥ Back to top</a></b></div>
 
-### Q 22. What is Object-Oriented Programming (OOP)?
+### Q 57. What is Object-Oriented Programming (OOP)?
 
 Object-Oriented Programming (OOP) is a programming paradigm that organizes code into objects, where each object contains properties (data) and methods (behavior). OOP helps build applications that are modular, reusable, maintainable, and scalable.
 
@@ -2193,15 +2195,7 @@ car1 and car2 are two different objects created from the same Car class.
 
 <div align="right"><b><a href="#javascript">↥ Back to top</a></b></div>
 
-### Q 22. What are the types of errors?
-
-<div align="right"><b><a href="#javascript">↥ Back to top</a></b></div>
-
-### Q 22. What are the types of errors?
-
-<div align="right"><b><a href="#javascript">↥ Back to top</a></b></div>
-
-### Q 22. What are the types of errors?
+### Q 58. What are the types of errors?
 
 Here are some common types of errors in JavaScript:
 
