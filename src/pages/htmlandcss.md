@@ -23,7 +23,7 @@ HTML stands for **_HyperText Markup Language_**. It is a standard text formattin
 
 ### Q 3. What are Semantic Elements?
 
-Semantic HTML elements are those that clearly describe their meaning in a human- and machine-readable way
+Semantic HTML uses HTML elements that clearly describe the meaning and purpose of the content they contain, making web pages more readable, accessible, SEO-friendly, and easier to maintain.
 
 - `<header>`
 - `<nav>`
