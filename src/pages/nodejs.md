@@ -752,6 +752,18 @@ Buffer.from() converts a string to binary data, and toString() converts it back 
 
 <div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
 
+### Q 17. Difference between Stream and Buffer?
+
+| Buffer                                               | Stream                                         |
+| ---------------------------------------------------- | ---------------------------------------------- |
+| Loads the entire data into memory before processing  | Processes data in small chunks                 |
+| Higher memory usage                                  | Low memory usage                               |
+| Slower for large files                               | Faster for large files                         |
+| Suitable for small files                             | Suitable for large files                       |
+| Processing starts only after the full data is loaded | Processing starts immediately as chunks arrive |
+
+<div align="right"><b><a href="#nodejs">↥ Back to top</a></b></div>
+
 ### Q 17. What is EventEmitter and how does it works?
 
 The EventEmitter is a class that provides communication/interaction between objects in Node.js. That allows objects to emit events and listen for events.
