@@ -300,7 +300,7 @@ Shallow copy copies only the first level of an object, while nested objects are 
    console.log(obj2); // { name: 'Nashir', address: { city: 'Mumbai' } }
    ```
 
-2. **Deep Copy:** A deep copy creates a completely new object, including all nested objects. No references are shared.
+2. **Deep Copy:** A deep copy creates a completely new object, including all nested objects. No references are shared but has limitations.
 
    ```javascript
    const obj1 = {
@@ -321,6 +321,63 @@ Shallow copy copies only the first level of an object, while nested objects are 
 
 - Spread operator `{...obj}` → shallow copy
 - `JSON.parse(JSON.stringify(obj))` → simple deep copy (but has limitations)
+
+- **Better Option for Deep Copy use `structuredClone()`:** Modern JavaScript provides `structuredClone()`.
+
+  ```js
+  const obj = {
+    name: "John",
+    date: new Date(),
+    map: new Map([["a", 1]]),
+    set: new Set([1, 2, 3]),
+  };
+
+  const clone = structuredClone(obj);
+  console.log(clone);
+  ```
+
+<div align="right"><b><a href="#javascript">↥ Back to top</a></b></div>
+
+### Q 15. What are the Disadvantages of `JSON.parse(JSON.stringify(obj))`?
+
+`JSON.parse(JSON.stringify())` works only for simple JSON-compatible objects. It removes `functions`, converts `Date` objects to strings, drops `undefined`, fails on circular references, and doesn't preserve special types like `Map`, `Set`, or class instances. The modern and preferred solution is `structuredClone()`, which performs a proper deep clone for most built-in JavaScript data types and supports circular references. For older environments, lodash.cloneDeep() is a common alternative.
+
+1. **Loses Functions:**
+
+   ```js
+   const obj = {
+     name: "John",
+     greet() {
+       console.log("Hello");
+     },
+   };
+
+   const clone = JSON.parse(JSON.stringify(obj));
+   console.log(clone.greet); // undefined
+   ```
+
+2. **Converts `Date` to String:**
+
+   ```js
+   const obj = {
+     created: new Date(),
+   };
+
+   const clone = JSON.parse(JSON.stringify(obj));
+   console.log(typeof clone.created); // string
+   ```
+
+3. **Cannot Handle `undefined`:**
+
+   ```js
+   const obj = {
+     name: "John",
+     age: undefined,
+   };
+
+   const clone = JSON.parse(JSON.stringify(obj));
+   console.log(clone); // { name: "John" }
+   ```
 
 <div align="right"><b><a href="#javascript">↥ Back to top</a></b></div>
 
@@ -1308,7 +1365,7 @@ console.log(age); // 30
 
 <div align="right"><b><a href="#javascript">↥ Back to top</a></b></div>
 
-### Q 39. What is Optional Chaining `?` and Nullish Coalescing `??` ?
+### Q 39. What is Optional Chaining `?` and Nullish Coalescing `??`?
 
 Optional Chaining `?` safely accesses nested properties without throwing errors if a value is null or undefined.
 
