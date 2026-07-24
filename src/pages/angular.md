@@ -2684,7 +2684,7 @@ Memory leaks occur when objects remain referenced and cannot be garbage collecte
 
 <div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
 
-### Q 64. What is circular dependencies and how do you avoid ?
+### Q 64. What is circular dependencies and how do you avoid?
 
 Circular dependency occurs when two or more modules, services, or components depend on each other directly or indirectly. It can lead to runtime errors, unexpected behavior, and make the code difficult to maintain. I avoid it by maintaining clear separation of responsibilities, using interfaces/abstractions, introducing mediator services, and following a layered architecture.
 
@@ -2845,7 +2845,42 @@ I would organize the application into Core, Shared, and Feature modules. Core co
 
 <div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
 
-### Q 72. How do you deploy the build?
+### Q 72. How to handle the global error?
+
+Angular provides a built-in ErrorHandler class to catch unexpected runtime errors across the application. Such as Component runtime errors, Template errors, and Unhandled JavaScript exceptions but it does not handle HTTP errors automatically.
+
+To handle API Errors Use an HTTP `Interceptor`.
+
+```ts
+// Step 1: Create a Global Error Handler
+import { ErrorHandler, Injectable } from "@angular/core";
+
+@Injectable()
+export class GlobalErrorHandler implements ErrorHandler {
+  handleError(error: any): void {
+    console.error(error);
+
+    // Send to Sentry / App Insights
+    // loggingService.log(error);
+
+    alert("Something went wrong");
+  }
+}
+
+// Step 2: Register It
+bootstrapApplication(AppComponent, {
+  providers: [
+    {
+      provide: ErrorHandler,
+      useClass: GlobalErrorHandler,
+    },
+  ],
+});
+```
+
+<div align="right"><b><a href="#angular">↥ Back to top</a></b></div>
+
+### Q 73. How do you deploy the build?
 
 **CI/CD Deployment Flow**
 
